@@ -10,6 +10,7 @@ export type CartItem = {
 export const cartItems = map<Record<string, CartItem>>({});
 
 export type ItemDisplayInfo = Pick<CartItem, "name" | "id">;
+
 export function addCartItem({ name, id }: ItemDisplayInfo) {
   console.log("Added to cart");
   const existingEntry = cartItems.get()[name];
