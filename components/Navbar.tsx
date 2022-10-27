@@ -37,8 +37,8 @@ export default function Navbar() {
         </div>
       </div>
       <div className={styles["s2h_logo_bar"]}>
-        <div className="s2h_logo_content">
-          <a href="#HOME" className="sh2_bar">
+        <div className={styles["s2h_logo_content"]}>
+          <a href="#HOME" className={styles["sh2_bar"]}>
             <Image src={s2hLogo} alt="Logo" className="s2h_logo" />
             <h3>Shoes2Hand</h3>
           </a>
