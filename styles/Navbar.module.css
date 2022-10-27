@@ -1,9 +1,16 @@
+#nav {
+  width: 1188px;
+  min-width: 1188px;
+  margin: 0 auto;
+}
+
 .links_list {
   display: flex;
   flex-direction: row;
   margin-inline: auto;
   font-size: small;
   place-content: center;
+  margin: 0 auto;
 }
 
 .links_list>div {
@@ -18,7 +25,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-right: 100px;
+  margin: 0 auto;
 }
 
 .sh2_bar {
