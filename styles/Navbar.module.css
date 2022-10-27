@@ -1,20 +1,20 @@
-/* .links_list {
-  margin: 10px auto 10px;
-  padding: 10px 0;
-  border-bottom: 1px solid #ddd;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-} */
+#nav {
+  width: 1188px;
+  min-width: 1188px;
+  margin: 0 auto;
+}
+
 .links_list {
   display: flex;
   flex-direction: row;
   margin-inline: auto;
   font-size: small;
   place-content: center;
+  margin: 0 auto;
 }
-.links_list > div{
-  margin:0.5rem;
+
+.links_list>div {
+  margin: 0.5rem;
   width: fit-content;
 }
 
@@ -25,7 +25,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-right: 100px;
+  margin: 0 auto;
 }
 
 .sh2_bar {
@@ -33,7 +33,7 @@
   margin-right: 64px;
 }
 
-.sh2_bar{
+.sh2_bar {
   display: flex;
   flex-direction: row;
 }

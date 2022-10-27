@@ -9,9 +9,8 @@ import styles from "../styles/Navbar.module.css";
 
 export default function Navbar() {
   return (
-    <div>
+    <div id="nav">
       <div className="top_links_bar" id="topActionLinks">
-        {/* {styles["links_list"]} */}
         <div className={styles["links_list"]}>
           <div className="top_link_items" id="topActionDownload">
             <a href="#">SAVE MORE ON APP</a>
