@@ -1,11 +1,3 @@
-/* .links_list {
-  margin: 10px auto 10px;
-  padding: 10px 0;
-  border-bottom: 1px solid #ddd;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-} */
 .links_list {
   display: flex;
   flex-direction: row;
@@ -13,8 +5,9 @@
   font-size: small;
   place-content: center;
 }
-.links_list > div{
-  margin:0.5rem;
+
+.links_list>div {
+  margin: 0.5rem;
   width: fit-content;
 }
 
@@ -33,7 +26,7 @@
   margin-right: 64px;
 }
 
-.sh2_bar{
+.sh2_bar {
   display: flex;
   flex-direction: row;
 }
