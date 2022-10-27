@@ -1,0 +1,39 @@
+/* .links_list {
+  margin: 10px auto 10px;
+  padding: 10px 0;
+  border-bottom: 1px solid #ddd;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+} */
+.links_list {
+  display: flex;
+  flex-direction: row;
+  margin-inline: auto;
+  font-size: small;
+  place-content: center;
+}
+.links_list > div{
+  margin:0.5rem;
+  width: fit-content;
+}
+
+
+.s2h_logo_bar {
+  padding: 10px auto 10px;
+  border-bottom: 1px solid #ddd;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-right: 100px;
+}
+
+.sh2_bar {
+  display: flex;
+  margin-right: 64px;
+}
+
+.sh2_bar{
+  display: flex;
+  flex-direction: row;
+}
