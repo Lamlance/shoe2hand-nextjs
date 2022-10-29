@@ -1,0 +1,39 @@
+#nav {
+  width: 1188px;
+  min-width: 1188px;
+  margin: 0 auto;
+}
+
+.links_list {
+  display: flex;
+  flex-direction: row;
+  margin-inline: auto;
+  font-size: small;
+  place-content: center;
+  margin: 0 auto;
+}
+
+.links_list>div {
+  margin: 0.5rem;
+  width: fit-content;
+}
+
+
+.s2h_logo_bar {
+  padding: 10px auto 10px;
+  border-bottom: 1px solid #ddd;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto;
+}
+
+.sh2_bar {
+  display: flex;
+  margin-right: 64px;
+}
+
+.sh2_bar {
+  display: flex;
+  flex-direction: row;
+}
