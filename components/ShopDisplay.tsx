@@ -16,7 +16,6 @@ class ShopDisplay extends React.Component<{}, {}> {
         {arr.map((item, index) => {
           return <ShopItem name={index.toString()} />;
         })}
-        <ShopCart />
       </div>
     );
   }

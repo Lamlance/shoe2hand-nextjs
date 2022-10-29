@@ -6,8 +6,11 @@ import search from "/public/search-32.png";
 import shoppingCart from "/public/shopping-cart-32.png";
 
 import styles from "../styles/Navbar.module.css";
+import { useStore } from "@nanostores/react";
+import { isCartOpen } from "./CartStore";
 
 export default function Navbar() {
+  const $isCartOpen = useStore(isCartOpen);
   return (
     <div id="nav">
       <div className="top_links_bar" id="topActionLinks">
@@ -56,7 +59,7 @@ export default function Navbar() {
           </form>
         </div>
         <div className="s2h_nav_cart">
-          <a href="#CART">
+          <a onClick={()=>{isCartOpen.set(!$isCartOpen)}}>
             <Image src={shoppingCart} alt="cart" />
           </a>
         </div>
