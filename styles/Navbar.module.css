@@ -1,7 +1,7 @@
 .nav {}
 
 .nav__bar {
-  margin: 16px 300px 16px;
+  margin: 2rem 10rem;
 }
 
 .top_banner {
@@ -12,6 +12,7 @@
 
 .top_link_items {
   color: #0f1568;
+  margin:0;
 }
 
 .top_link_items:hover {
@@ -40,6 +41,9 @@
   justify-content: space-around;
   align-items: center;
   margin: 0 auto;
+  /* display: grid;
+  grid-template-columns: 1fr 2fr 0.3fr 1fr;
+  place-items: center; */
 }
 
 .sh2_bar {
@@ -49,7 +53,7 @@
 }
 
 .layout_search_box {
-  margin-right: 200px;
+  /* margin-right: 200px; */
 }
 
 .sh2_bar:hover {
@@ -103,7 +107,6 @@
 .s2h_nav_cart {
   padding: 6px;
   cursor: pointer;
-  position: absolute;
   right: 630px;
 }
 

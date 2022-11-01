@@ -1,5 +1,6 @@
 import { useStore } from '@nanostores/react';
 import { useRouter } from 'next/router'
+import React from 'react';
 import { isCartOpen } from '../../components/CartStore';
 import ShopLayout from '../../components/layouts/ShopLayout';
 import ShopCart from '../../components/ShopCart';
