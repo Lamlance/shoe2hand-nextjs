@@ -8,7 +8,7 @@ class ShopDisplay extends React.Component<{}, {}> {
     super(props);
   }
   render(): React.ReactNode {
-    const arr = Array<number>(10);
+    const arr = Array<number>(20);
     arr.fill(0);
 
     return (
