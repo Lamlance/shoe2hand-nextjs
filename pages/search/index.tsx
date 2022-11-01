@@ -14,6 +14,7 @@ const brand = () => {
   return (<ShopLayout>
     <div className={styles["s2h_search_display"]}>
       <div style={{ gridArea: "products" }}>
+        <p>{brandName ? `Product of brand ${brandName}` : null}</p>
         <ShopDisplay />
       </div>
     </div>
