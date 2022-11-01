@@ -1,0 +1,8 @@
+.s2h_search_display{
+  margin-inline: 3rem;
+  border: 1px solid pink;
+  display: grid;
+  grid-template-columns: 0.4fr 1.6fr;
+  grid-template-areas:  
+    "filter products";
+}

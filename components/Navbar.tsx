@@ -11,8 +11,11 @@ import loupeSVG from "/public/loupe-search-svg.svg";
 // import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import styles from "../styles/Navbar.module.css";
+import { useStore } from "@nanostores/react";
+import { isCartOpen } from "./CartStore";
 
 export default function Navbar() {
+  const $isCartOpen = useStore(isCartOpen);
   return (
     <div className={styles["nav"]}>
       <div className={styles["top_banner"]}>
@@ -87,7 +90,7 @@ export default function Navbar() {
               </form>
             </div>
           </div>
-          <div className={styles["s2h_nav_cart"]}>
+          <div className={styles["s2h_nav_cart"]} onClick={()=>{isCartOpen.set(!$isCartOpen)}}>
             <a href="#CART">
               <Image src={shoppingCart} alt="cart" />
               {/* <FontAwesomeIcon icon={faCartShopping} /> */}
