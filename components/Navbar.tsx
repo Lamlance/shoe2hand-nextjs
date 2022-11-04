@@ -90,7 +90,12 @@ export default function Navbar() {
               </form>
             </div>
           </div>
-          <div className={styles["s2h_nav_cart"]} onClick={()=>{isCartOpen.set(!$isCartOpen)}}>
+          <div
+            className={styles["s2h_nav_cart"]}
+            onClick={() => {
+              isCartOpen.set(!$isCartOpen);
+            }}
+          >
             <a href="#CART">
               <Image src={shoppingCart} alt="cart" />
               {/* <FontAwesomeIcon icon={faCartShopping} /> */}

@@ -12,7 +12,7 @@
 
 .top_link_items {
   color: #0f1568;
-  margin:0;
+  margin: 0;
 }
 
 .top_link_items:hover {
@@ -35,15 +35,15 @@
 }
 
 .s2h_logo_bar {
-  padding: 10px auto 10px;
+  /* padding: 10px auto 10px;
   border-bottom: 1px solid #ddd;
   display: flex;
   justify-content: space-around;
   align-items: center;
-  margin: 0 auto;
-  /* display: grid;
-  grid-template-columns: 1fr 2fr 0.3fr 1fr;
-  place-items: center; */
+  margin: 0 auto; */
+  display: grid;
+  grid-template-columns: 1.5fr 2fr 0.25fr 1.25fr;
+  place-items: center;
 }
 
 .sh2_bar {
@@ -107,7 +107,7 @@
 .s2h_nav_cart {
   padding: 6px;
   cursor: pointer;
-  right: 630px;
+  /* right: 630px; */
 }
 
 .s2h_nav_cart:hover {
