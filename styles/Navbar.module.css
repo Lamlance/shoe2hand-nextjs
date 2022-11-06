@@ -1,7 +1,23 @@
-#nav {
-  width: 1188px;
-  min-width: 1188px;
-  margin: 0 auto;
+.nav {}
+
+.nav__bar {
+  margin: 2rem 10rem;
+}
+
+.top_banner {
+  width: 100vw;
+  height: 100px;
+  background-color: red;
+}
+
+.top_link_items {
+  color: #0f1568;
+  margin: 0;
+}
+
+.top_link_items:hover {
+  transition: 0.35s ease-in-out;
+  transform: scale(1.1);
 }
 
 .links_list {
@@ -14,26 +30,87 @@
 }
 
 .links_list>div {
-  margin: 0.5rem;
+  margin: .5rem 1.5rem;
   width: fit-content;
 }
 
-
 .s2h_logo_bar {
-  padding: 10px auto 10px;
+  /* padding: 10px auto 10px;
   border-bottom: 1px solid #ddd;
   display: flex;
-  justify-content: center;
+  justify-content: space-around;
   align-items: center;
-  margin: 0 auto;
+  margin: 0 auto; */
+  display: grid;
+  grid-template-columns: 1.5fr 2fr 0.25fr 1.25fr;
+  place-items: center;
 }
 
 .sh2_bar {
   display: flex;
   margin-right: 64px;
+  position: relative;
 }
 
-.sh2_bar {
+.layout_search_box {
+  /* margin-right: 200px; */
+}
+
+.sh2_bar:hover {
+  transition: 0.35s ease-in-out;
+  transform: scale(1.1);
+}
+
+.search_box {
   display: flex;
-  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+
+/* .search_box:hover {
+  transition: 0.35s ease-in-out;
+  transform: scale(1.1);
+} */
+
+.search_box__bar>input[type=search] {
+  width: 500px;
+  padding: 12px;
+  background-color: #f1f1f1;
+  border: none;
+  border-top-left-radius: 5px;
+  border-bottom-left-radius: 5px;
+  position: relative;
+}
+
+.search_box__bar>input[type=search]:focus {
+  outline: none;
+}
+
+.search_box__btn>.btn_search {
+  border: none;
+  background-color: #5F6F94;
+  padding: 6px 10px;
+  cursor: pointer;
+  border-top-right-radius: 5px;
+  border-bottom-right-radius: 5px;
+  opacity: 0.8;
+}
+
+.search_box__btn>.btn_search:hover {
+  transition: 0.35s ease-in-out;
+  transform: scale(1.1);
+  border-top-left-radius: 5px;
+  border-bottom-left-radius: 5px;
+  opacity: 1;
+}
+
+.s2h_nav_cart {
+  padding: 6px;
+  cursor: pointer;
+  /* right: 630px; */
+}
+
+.s2h_nav_cart:hover {
+  transition: 0.35s ease-in-out;
+  transform: scale(1.1);
 }
