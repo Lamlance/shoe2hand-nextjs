@@ -11,16 +11,8 @@ datasource db {
 model BRAND {
   brandID   Int     @id @default(autoincrement())
   brandName String? @db.VarChar(50)
-}
 
-model CUSTOMER {
-  customerID        Int       @id @default(autoincrement())
-  customerFullname  String?   @db.VarChar(100)
-  customerDob       DateTime? @db.DateTime(0)
-  customerEmail     String?   @db.VarChar(50)
-  customerPhone     String?   @db.VarChar(10)
-  customerAddress   String?   @db.VarChar(200)
-  customerLastLogin DateTime? @db.DateTime(0)
+  productOfBrand PRODUCT[]
 }
 
 model PRODUCT {
@@ -35,8 +27,11 @@ model PRODUCT {
   productRating         Float?    @db.Float
   productIsHiden        Boolean?
   productCreatedOn      DateTime? @db.DateTime(0)
-  shopID                Int?
-  brandID               Int?
+  shopID                Int 
+  brandID               Int @default(0)
+
+  shopBelongedTo SHOP @relation(fields: [shopID],references: [shopID],onDelete: Cascade)
+  brandBelongedTo BRAND @relation(fields: [brandID],references: [brandID])
 }
 
 model SHOP {
@@ -46,7 +41,22 @@ model SHOP {
   shopEmail     String?   @db.VarChar(50)
   shopPhone     String?   @db.VarChar(10)
   shopAddress   String?   @db.VarChar(200)
-  shopOwner     Int?
+  shopOwner     Int  @unique //Thêm cái này do mỗi customer chỉ có 1 shop
   shopRating    Float?    @db.Float
   shopIsHidden  Boolean?
+
+  owner CUSTOMER @relation(fields: [shopOwner],references: [customerID],onDelete: Cascade)
+  hasProduct PRODUCT[]
+}
+
+model CUSTOMER {
+  customerID        Int       @id @default(autoincrement())
+  customerFullname  String?   @db.VarChar(100)
+  customerDob       DateTime? @db.DateTime(0)
+  customerEmail     String?   @db.VarChar(50)
+  customerPhone     String?   @db.VarChar(10)
+  customerAddress   String?   @db.VarChar(200)
+  customerLastLogin DateTime? @db.DateTime(0) 
+
+  shopOwned SHOP?
 }
