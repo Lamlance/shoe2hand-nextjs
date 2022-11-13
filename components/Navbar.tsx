@@ -58,37 +58,25 @@ export default function Navbar() {
               <h3>Shoes2hand</h3>
             </a>
           </div>
-          <div className={styles["s2h_nav_search"]}>
-            {/* <form action="" method="GET">
-            <input
-              type="search"
-              placeholder="Search in Shoes2Hand"
-              name="q"
-              id="q"
-            />
-            <button type="submit" className={styles["btn-search"]}>
-              <Image src={search} alt="search" />
-            </button>
-          </form> */}
-            <div className={styles["layout_search_box"]}>
-              <form action="" method="GET">
-                <div className={styles["search_box"]}>
-                  <div className={styles["search_box__bar"]}>
-                    <input
-                      type="search"
-                      name="q"
-                      id="q"
-                      placeholder="Seach in Shoes2hand..."
-                    />
-                  </div>
-                  <div className={styles["search_box__btn"]}>
-                    <button type="submit" className={styles["btn_search"]}>
-                      <Image src={search} alt="search" />
-                    </button>
-                  </div>
-                </div>
-              </form>
-            </div>
+          <div className={styles["layout_search_box"]}>
+            <form
+              action=""
+              method="GET"
+              style={{ width: "100%", height: "100%" }}
+              onSubmit={(e) => {
+                e.preventDefault();
+              }}
+            >
+              <input
+                type="text"
+                name="q"
+                id="q"
+                placeholder="Seach in Shoes2hand..."
+              />
+              <button className={styles["btn_search"]}>
+                <Image src={search} alt="search" />
+              </button>
+            </form>
           </div>
           <div
             className={styles["s2h_nav_cart"]}
