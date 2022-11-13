@@ -3,9 +3,7 @@ import type { NextApiRequest, NextApiResponse } from 'next'
 
 const prisma = new PrismaClient();
 
-interface Data{
-  name:String
-}
+
 
 export default async function handler(
   req: NextApiRequest,
