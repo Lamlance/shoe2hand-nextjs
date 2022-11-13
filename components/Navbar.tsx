@@ -59,8 +59,20 @@ export default function Navbar() {
             </a>
           </div>
           <div className={styles["layout_search_box"]}>
-            <form action="" method="GET" style={{ width: "100%",height:"100%"}} onSubmit={(e)=>{e.preventDefault()}}>
-              <input type="text" name="q" id="q" placeholder="Seach in Shoes2hand..." />
+            <form
+              action=""
+              method="GET"
+              style={{ width: "100%", height: "100%" }}
+              onSubmit={(e) => {
+                e.preventDefault();
+              }}
+            >
+              <input
+                type="text"
+                name="q"
+                id="q"
+                placeholder="Seach in Shoes2hand..."
+              />
               <button className={styles["btn_search"]}>
                 <Image src={search} alt="search" />
               </button>
