@@ -15,25 +15,29 @@ class ShopDisplay extends React.Component<{}, ShopDisplayState> {
       items:[]
     }
   }
-  componentDidMount(): void {
-      fetch("/api/test/allProducts").then((res)=>{
-        res.json().then((data)=>{
-          this.setState({items:data})
-        })
-      });
-      
-  }
+  // componentDidMount(): void {
+  //     fetch("/api/test/allProducts").then((res)=>{
+  //       res.json().then((data)=>{
+  //         this.setState({items:data})
+  //       })
+  //     });  
+  // }
   render(): React.ReactNode {
     const arr = Array<number>(20);
     arr.fill(0);
 
     return (
       <div className={styles["ShopDisplay"]}>
-        {this.state.items ? this.state.items.map((item,index)=>{
+        {/* {this.state.items ? this.state.items.map((item,index)=>{
           return(<ShopItem 
             name={item.productTitle ? item.productTitle : index.toString()}
             price={item.productPrice}/>)
-        }) : "No item"}
+        }) : "No item"} */}
+        {
+          arr.map((item,index)=>{
+            return(<ShopItem name={`Item ${index}`} price={null} />)
+          })
+        }
       </div>
     );
   }
