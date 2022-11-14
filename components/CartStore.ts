@@ -6,13 +6,13 @@ export type CartItem = {
   name: string;
   quantity: number;
 };
-
+export const isCartOpen = atom(false);
 export const cartItems = map<Record<string, CartItem>>({});
 
 export type ItemDisplayInfo = Pick<CartItem, "name" | "id">;
 
 export function addCartItem({ name, id }: ItemDisplayInfo) {
-  console.log("Added to cart");
+  isCartOpen.set(true);
   const existingEntry = cartItems.get()[name];
   if (existingEntry) {
     cartItems.setKey(name, {

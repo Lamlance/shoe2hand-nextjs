@@ -1,10 +1,11 @@
 import { useStore } from "@nanostores/react";
 import { cartItems } from "./CartStore";
+import styles from "../styles/ShopCart.module.css";
 
 export default function ShopCart() {
   const $cartItems = useStore(cartItems);
   return (
-    <div>
+    <div className={styles["sideBar"]}>
       {Object.values($cartItems).length ? (
         <ul>
           {Object.values($cartItems).map((item, index) => {
