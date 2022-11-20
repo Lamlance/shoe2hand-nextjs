@@ -12,7 +12,6 @@ function Home() {
   return (
     <ShopLayout>
       <ShopDisplay />
-      {$isCartOpen ? (<ShopCart />) : null}
     </ShopLayout>
   );
 }
