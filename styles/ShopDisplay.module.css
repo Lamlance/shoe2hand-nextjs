@@ -5,4 +5,9 @@
     row-gap: 1rem;
     margin-inline: 3rem;
     place-items:center;
+    list-style-type: none;
+    padding: 0;
+}
+.ShopDisplay > li{
+    width: 100%;
 }

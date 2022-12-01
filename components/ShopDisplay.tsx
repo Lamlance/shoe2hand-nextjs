@@ -27,7 +27,7 @@ class ShopDisplay extends React.Component<{}, ShopDisplayState> {
     arr.fill(0);
 
     return (
-      <div className={styles["ShopDisplay"]}>
+      <ul className={styles["ShopDisplay"]}>
         {/* {this.state.items ? this.state.items.map((item,index)=>{
           return(<ShopItem 
             name={item.productTitle ? item.productTitle : index.toString()}
@@ -35,10 +35,12 @@ class ShopDisplay extends React.Component<{}, ShopDisplayState> {
         }) : "No item"} */}
         {
           arr.map((item,index)=>{
-            return(<ShopItem name={`Item ${index}`} price={null} />)
+            return(<li key={index}>
+            <ShopItem name={`Item ${index}`} price={null} />
+            </li>)
           })
         }
-      </div>
+      </ul>
     );
   }
 }
