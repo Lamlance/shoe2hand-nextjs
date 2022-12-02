@@ -11,8 +11,6 @@ datasource db {
 model BRAND {
   brandID   Int     @id @default(autoincrement())
   brandName String? @db.VarChar(50)
-
-  productOfBrand PRODUCT[]
 }
 
 model PRODUCT {
@@ -27,26 +25,24 @@ model PRODUCT {
   productRating         Float?    @db.Float
   productIsHiden        Boolean?
   productCreatedOn      DateTime? @db.DateTime(0)
-  shopID                Int 
-  brandID               Int @default(0)
+  shopID                Int
+  brandID               Int?
 
-  shopBelongedTo SHOP @relation(fields: [shopID],references: [shopID],onDelete: Cascade)
-  brandBelongedTo BRAND @relation(fields: [brandID],references: [brandID])
+  // shopBelongedTo SHOP @relation(fields: [shopID],references: [shopID])
 }
 
 model SHOP {
   shopID        Int       @id @default(autoincrement())
   shopName      String?   @db.VarChar(100)
   shopCreatedOn DateTime? @db.DateTime(0)
-  shopEmail     String?   @db.VarChar(50)
-  shopPhone     String?   @db.VarChar(10)
   shopAddress   String?   @db.VarChar(200)
-  shopOwner     Int  @unique //Thêm cái này do mỗi customer chỉ có 1 shop
+  shopOwner     Int?
   shopRating    Float?    @db.Float
   shopIsHidden  Boolean?
+  shopAvatar    String?   @db.Text
 
-  owner CUSTOMER @relation(fields: [shopOwner],references: [customerID],onDelete: Cascade)
-  hasProduct PRODUCT[]
+  // owner CUSTOMER @relation(fields: [shopID],references: [customerID]) 
+  // products PRODUCT[]
 }
 
 model CUSTOMER {
@@ -56,7 +52,23 @@ model CUSTOMER {
   customerEmail     String?   @db.VarChar(50)
   customerPhone     String?   @db.VarChar(10)
   customerAddress   String?   @db.VarChar(200)
-  customerLastLogin DateTime? @db.DateTime(0) 
+  customerLastLogin DateTime? @db.DateTime(0)
+  customerPassword  String?   @db.VarChar(50)
 
-  shopOwned SHOP?
+  // shopOwned SHOP?
+}
+
+
+
+
+model ADMIN {
+  adminID       Int     @id @default(autoincrement())
+  adminPassword String? @db.VarChar(50)
+  adminName     String? @db.VarChar(100)
+}
+
+model COUNPON {
+  counponCode     String  @id @db.VarChar(10)
+  counponUsage    String? @db.VarChar(100)
+  counponDiscount Float?  @db.Float
 }
