@@ -59,7 +59,6 @@ const ProductDetail = () =>{
 
     if(dataChange < maxProduct && dataChange > 0){
       setProductAmount(dataChange)
-
     }
   }
 
@@ -98,6 +97,9 @@ const ProductDetail = () =>{
             <button>Buy now</button>
           </div>
         </div>
+      </div>
+      <div style={{backgroundColor:"red",minHeight:"20vh",width:"100%"}}>
+        Shop Detail
       </div>
       <div>
         <p>{fetchedData.desc}</p>

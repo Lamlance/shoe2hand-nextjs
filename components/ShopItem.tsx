@@ -1,4 +1,5 @@
 import { Decimal } from "@prisma/client/runtime";
+import Link from "next/link";
 import React, { createRef, useRef } from "react";
 import styles from "../styles/ShopItem.module.css";
 import { addCartItem, ItemDisplayInfo } from "./CartStore";
@@ -26,23 +27,25 @@ class ShopItem extends React.Component<ShopItemData, {}> {
       const itemInfo: ItemDisplayInfo = {
         name: this.props.name,
         id: this.props.name,
-        quantity:1
+        quantity: 1
       };
       addCartItem(itemInfo);
     }
   }
   render(): React.ReactNode {
     return (
-      <div className={styles["ShopItemWrapper"]}>
-        <img alt={"Product img desc"}></img>
-        <h3>{this.props.name} {this.props.price ? `${this.props.price}VND` : "Free"}</h3>
+      <div className={styles["s2h_ShopItemWrapper"]}>
+        <Link href="/detail">
+          <div className={styles["s2h_BreifInfo"]}>
+            <img alt={"Product img desc"}></img>
+            <h3>{this.props.name} {this.props.price ? `${this.props.price}VND` : "Free"}</h3>
+          </div>
+        </Link >
         <button
           ref={this.addCartButton}
           onClick={() => {
             this.addToCartHandler();
-          }}
-        >
-          Add to cart
+          }}>Add to cart
         </button>
       </div>
     );

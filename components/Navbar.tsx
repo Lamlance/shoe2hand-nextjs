@@ -86,7 +86,7 @@ export default function Navbar() {
               isCartOpen.set(!$isCartOpen);
             }}
           >
-            <a href="#CART">
+            <a>
               <Image src={shoppingCart} alt="cart" />
               {/* <FontAwesomeIcon icon={faCartShopping} /> */}
             </a>
