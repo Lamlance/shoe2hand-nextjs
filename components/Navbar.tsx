@@ -10,9 +10,10 @@ import loupeSVG from "/public/loupe-search-svg.svg";
 // import { faCartShopping } from "@fortawesome/free-solid-svg-icons";
 // import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-import styles from "../styles/Navbar.module.css";
+import styles from "../styles/Navbar.module.scss";
 import { useStore } from "@nanostores/react";
 import { isCartOpen } from "./CartStore";
+import Link from "next/link";
 
 export default function Navbar() {
   const $isCartOpen = useStore(isCartOpen);
@@ -26,7 +27,8 @@ export default function Navbar() {
         <div className={styles["top_links_bar"]} id="topActionLinks">
           <div className={styles["links_list"]}>
             <div className={styles["top_link_items"]} id="topActionDownload">
-              <a href="#">SAVE MORE ON APP</a>
+              {/* <a href="/ProductDetail">SAVE MORE ON APP</a> */}
+              <Link href={"/ProductDetail"}>SAVE MORE ON APP</Link>
             </div>
             <div className={styles["top_link_items"]} id="topActionSell">
               <a href="#">SELL ON SHOES2HAND</a>
@@ -53,16 +55,17 @@ export default function Navbar() {
         </div>
         <div className={styles["s2h_logo_bar"]}>
           <div className={styles["s2h_logo_content"]}>
-            <a href="#HOME" className={styles["sh2_bar"]}>
-              <Image src={s2hLogo} alt="Logo" className={styles["s2h_logo"]} />
-              <h3>Shoes2hand</h3>
-            </a>
+            <Link href={"/"} >
+              <a className={styles["sh2_bar"]}>
+                <Image src={s2hLogo} alt="Logo" className={styles["s2h_logo"]} />
+                <h3>Shoes2hand</h3>
+              </a>
+            </Link>
           </div>
           <div className={styles["layout_search_box"]}>
             <form
               action=""
               method="GET"
-              style={{ width: "100%", height: "100%" }}
               onSubmit={(e) => {
                 e.preventDefault();
               }}
@@ -73,13 +76,12 @@ export default function Navbar() {
                 id="q"
                 placeholder="Seach in Shoes2hand..."
               />
-              <button className={styles["btn_search"]}>
+              <button>
                 <Image src={search} alt="search" />
               </button>
             </form>
           </div>
-          <div
-            className={styles["s2h_nav_cart"]}
+          <div className={styles["s2h_nav_cart"]}
             onClick={() => {
               isCartOpen.set(!$isCartOpen);
             }}

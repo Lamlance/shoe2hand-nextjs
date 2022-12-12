@@ -26,8 +26,8 @@ class ShopItem extends React.Component<ShopItemData, {}> {
       const itemInfo: ItemDisplayInfo = {
         name: this.props.name,
         id: this.props.name,
+        quantity:1
       };
-
       addCartItem(itemInfo);
     }
   }

@@ -6,8 +6,8 @@
     margin-inline: 3rem;
     place-items:center;
     list-style-type: none;
-    padding: 0;
 }
-.ShopDisplay > li{
+.ShopDisplay >li{
+    padding: 0;
     width: 100%;
 }
