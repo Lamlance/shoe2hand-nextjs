@@ -8,5 +8,6 @@
     list-style-type: none;
 }
 .ShopDisplay >li{
+    padding: 0;
     width: 100%;
 }

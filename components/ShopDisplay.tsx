@@ -36,7 +36,7 @@ class ShopDisplay extends React.Component<{}, ShopDisplayState> {
         {
           arr.map((item,index)=>{
             return(<li key={index}>
-              <ShopItem name={`Item ${index}`} price={null} />
+            <ShopItem name={`Item ${index}`} price={null} />
             </li>)
           })
         }
