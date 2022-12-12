@@ -17,8 +17,8 @@ export default async function handler(
   res: NextApiResponse
 ) {
   const itemPerPage = 3;
-  // const prisma = new PrismaClient();
-  // await prisma.$connect();
+  const prisma = new PrismaClient();
+  await prisma.$connect();
 
 
   const param = (req.method == "GET") ? req.query : req.body;
@@ -35,11 +35,12 @@ export default async function handler(
   }
   handleBrand(handleQueryArray(brand),queryObj);
   handleMinMaxPrice(handleQuery(min),handleQuery(max),queryObj);
+
   // prisma.pRODUCT.findMany({
   //   where: {
   //     brandID: 1,
   //     AND: [{ productPrice: { lte: 10 } }, { productPrice: { gte: 100 } }],
-  //     OR:[{brandID:1}],
+  //     OR:[{brandID:1},{brandId: 2}],
   //     shopID: 1,
   //     productTitle:{
   //       contains:"ABC"

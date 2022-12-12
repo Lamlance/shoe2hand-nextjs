@@ -1,0 +1,60 @@
+datasource db {
+  provider     = "mysql"
+  url          = env("DATABASE_URL")
+  relationMode = "prisma"
+}
+
+model ADMIN {
+  adminID       Int     @id @default(autoincrement())
+  adminPassword String? @db.VarChar(50)
+  adminName     String? @db.VarChar(100)
+}
+
+model BRAND {
+  brandID   Int     @id @default(autoincrement())
+  brandName String? @db.VarChar(50)
+}
+
+model COUNPON {
+  counponCode     String  @id @db.VarChar(10)
+  counponUsage    String? @db.VarChar(100)
+  counponDiscount Float?  @db.Float
+}
+
+model CUSTOMER {
+  customerID        Int       @id @default(autoincrement())
+  customerFullname  String?   @db.VarChar(100)
+  customerDob       DateTime? @db.DateTime(0)
+  customerEmail     String?   @db.VarChar(50)
+  customerPhone     String?   @db.VarChar(10)
+  customerAddress   String?   @db.VarChar(200)
+  customerLastLogin DateTime? @db.DateTime(0)
+  customerPassword  String?   @db.VarChar(50)
+}
+
+model PRODUCT {
+  productID             Int       @id @default(autoincrement())
+  productTitle          String?   @db.VarChar(100)
+  productDescription    String?   @db.VarChar(1000)
+  productQuantity       Int?
+  productPrice          Decimal?  @db.Decimal(18, 0)
+  productPromotionPrice Decimal?  @db.Decimal(18, 0)
+  productImg            String?   @db.VarChar(250)
+  productListImg        String?   @db.Text
+  productRating         Float?    @db.Float
+  productIsHiden        Boolean?
+  productCreatedOn      DateTime? @db.DateTime(0)
+  shopID                Int
+  brandID               Int?
+}
+
+model SHOP {
+  shopID        Int       @id @default(autoincrement())
+  shopName      String?   @db.VarChar(100)
+  shopCreatedOn DateTime? @db.DateTime(0)
+  shopAddress   String?   @db.VarChar(200)
+  shopOwner     Int?
+  shopRating    Float?    @db.Float
+  shopIsHidden  Boolean?
+  shopAvatar    String?   @db.Text
+}
