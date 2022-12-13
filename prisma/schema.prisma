@@ -1,7 +1,93 @@
-datasource db {
-  provider     = "cockroachdb"
-  url          = env("DATABASE_URL")
-}
 generator client {
   provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "cockroachdb"
+  url      = env("DATABASE_URL")
+}
+
+model BRAND {
+  brandId   Int       @id @default(sequence())
+  brandName String?
+  PRODUCT   PRODUCT[]
+}
+
+model PRODUCT {
+  productId   Int      @id @default(sequence())
+  title       String
+  description String?
+  quantity    Int
+  price       Int
+  image       String[]
+  isHidden    Boolean  @default(false)
+  rating      Float?
+  shopId      Int
+  brandId     Int      @default(0)
+  BRAND       BRAND    @relation(fields: [brandId], references: [brandId])
+  SHOP        SHOP     @relation(fields: [shopId], references: [shopId])
+  ORDERDETAIL       ORDERDETAIL[]
+  REVIEW       REVIEW[]
+}
+
+model SHOP {
+  shopId   Int       @id @default(sequence())
+  shopName String
+  isHidden Boolean   @default(false)
+  ownerId  Int       @unique
+  PRODUCT  PRODUCT[]
+  USER     USER      @relation(fields: [ownerId], references: [userId])
+  ORDER   ORDER[]
+}
+
+model USER {
+  userId    Int       @id @default(sequence())
+  userName  String
+  birthDay  DateTime?
+  email     String    @unique
+  phone     String?
+  address   String?
+  lastLogin DateTime?
+  avatarUrl String?
+  SHOP      SHOP?
+  ORDER      ORDER[]
+  REVIEW  REVIEW[]
+}
+
+model ADMIN {
+  adminID    Int       @id @default(sequence())
+  adminName  String
+}
+
+model ORDER {
+  orderId   Int       @id @default(sequence())
+  date  DateTime?
+  bill Int
+  deliveringStatus String?
+  userId Int
+  shopId Int
+  SHOP        SHOP     @relation(fields: [shopId], references: [shopId])
+  USER        USER      @relation(fields: [userId], references: [userId])
+  ORDERDETAIL ORDERDETAIL[]
+}
+
+
+model ORDERDETAIL {
+ orderdetailId Int @id @default(sequence())
+ productId Int 
+ orderId Int
+ quantity Int
+ PRODUCT PRODUCT @relation(fields: [productId], references: [productId])
+ ORDER ORDER @relation(fields: [orderId], references: [orderId])
+}
+
+model REVIEW {
+ reviewId Int @id @default(sequence())
+ productId Int 
+ customerId Int
+ date DateTime?
+ rating Float
+ comment String?
+ PRODUCT PRODUCT @relation(fields: [productId], references: [productId])
+ CUSTOMER        USER      @relation(fields: [customerId], references: [userId])
 }
