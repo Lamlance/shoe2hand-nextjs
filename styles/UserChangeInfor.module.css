@@ -1,46 +1,27 @@
+/* Change infor */
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&family=Roboto:ital,wght@0,400;0,700;1,400;1,700&display=swap');
 
 .container {
   font-family: 'Poppins', sans-serif;
-
-  display: flex;
-  justify-content: space-between;
-  margin: 5em 9em;
 }
 
-/* Change infor */
 .user_infor {
   margin-bottom: 3em;
-  display: flex;
-  justify-content: center;
-  align-items: center;
 }
 
-.user_infor>h3 {
-  font-size: 1.3em;
-  font-weight: 400;
-}
-
-/* .user_infor>.user_image {
+.user_infor>.user_image {
   position: relative;
 }
 
 .user_infor>h3 {
-  align-items: center;
-} */
+  position: absolute;
+}
 
 .sidebar_display {
   margin-right: 10em;
 }
 
 /* Sidebar navigation */
-
-.sidebar_navigation {
-  width: 18em;
-  border: #ccc solid 1px;
-  border-radius: 5px;
-}
-
 .sidebar_navigation>ul>li {
   margin-bottom: .1em;
   padding: .8em 0em;
@@ -97,41 +78,4 @@
 
 .mgl5 {
   margin-left: 5em;
-}
-
-/* Invoice */
-.user_invoice_information {
-  margin-top: 2em;
-  width: 100%;
-}
-
-.tab_navigation {
-  margin-left: 10em;
-}
-
-.tab_button>button {
-  font-size: 1em;
-  padding: 1em;
-  background-color: #fff;
-  border: none;
-}
-
-.tab_button>button:not(:first-child) {
-  margin-left: 4.5em;
-}
-
-.tab_button>button:hover {
-  cursor: pointer;
-}
-
-/* Cart */
-
-
-
-.active {
-  display: block;
-}
-
-.unactive {
-  display: none;
 }
