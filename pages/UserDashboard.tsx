@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { createRef, useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import Navbar from "../components/Navbar";
 import userImage from "/public/logo-64.png";
@@ -18,9 +18,37 @@ function changeViewHandler() {}
 
 export default function UserDashboard() {
   const [isActive, setIsActive] = useState(false);
-  // const handleClick = event => {
-  //   setIsActive(current => !current);
-  // };
+  const changeInfo = createRef<HTMLDivElement>();
+  const invoice = createRef<HTMLDivElement>();
+  const cart = createRef<HTMLDivElement>();
+
+  const tabPanel = [changeInfo,invoice,cart]
+  
+  useEffect(()=>{
+    handleChangeTab(0);
+  },[]);
+
+  const handleChangeTab = (id:number)=>{
+    console.log("Select",id);
+    tabPanel.forEach((tab,index)=>{
+      if(tab.current){
+        tab.current.style.display = (id == index) ? "block" : "none";
+      }
+    })
+  }
+
+  const handleClick = () => {
+    setIsActive(!isActive);
+  };
+
+  const belongs = [
+    {
+      belongTo:"AAA"
+    },
+    {
+      belongTo:"BBB"
+    }
+  ]
   return (
     <div>
       {/* <Navbar /> */}
@@ -28,11 +56,7 @@ export default function UserDashboard() {
         <div className={styles["sidebar"]}>
           <div className={styles["user_infor"]}>
             {/* test image */}
-            <Image
-              src={userImage}
-              alt="user_image"
-              className={styles["user_image"]}
-            />
+            <Image src={userImage} alt="user_image" className={styles["user_image"]}/>
 
             <h3
               className={`${styles["user_login_name"]} ${styles["inline_block"]}`}
@@ -42,42 +66,43 @@ export default function UserDashboard() {
           </div>
           <div className={styles["sidebar_navigation"]}>
             <ul>
-              <li>Thay đổi thông tin tài khoản</li>
-              <li>Đơn mua</li>
-              <li>Giỏ hàng</li>
+              <li onClick={()=>{handleChangeTab(0)}}>Thay đổi thông tin tài khoản</li>
+              <li onClick={()=>{handleChangeTab(1)}}>Đơn mua</li>
+              <li onClick={()=>{handleChangeTab(2)}}>Giỏ hàng</li>
             </ul>
           </div>
         </div>
         <div className={styles["sidebar_display"]}>
-          <div
-            className={`${styles["user_change_acount_information"]} ${styles["unactive"]}`}
-          >
+          <div ref={changeInfo}  className={`${styles["user_change_acount_information"]}`}>
             <UserChangeInfor />
           </div>
-          <div
-            className={`${styles["user_invoice_information"]} ${styles["active"]}`}
-          >
+
+          <div ref={invoice}  className={`${styles["user_invoice_information"]}`}>
             <div className={styles["tab_navigation"]}>
               <div className={styles["tab_button"]}>
-                <button>Chờ xác nhận</button>
-                <button>Đang giao</button>
-                <button>Đã giao</button>
-                <button>Đã huỷ</button>
+                <button onClick={()=>{handleClick()}} >Chờ xác nhận</button>
+                <button onClick={()=>{handleClick()}} >Đang giao</button>
+                <button onClick={()=>{handleClick()}} >Đã giao</button>
+                <button onClick={()=>{handleClick()}} >Đã huỷ</button>
 
-                <div
-                  className={`${styles["user_invoice_information"]} ${styles["active"]}`}
-                >
-                  <Invoice />
-                </div>
+                <ul className={`${styles["user_invoice_information"]} ${styles["active"]}`}>
+                  {
+                    belongs.map((item,index)=>{
+                      const belong = item.belongTo;
+                      return (<li key={index}>
+                      <Invoice belongTo={belong} item={[{name:"So1",price:1000},{name:"Item2",price:20000}]} />
+                      </li>)
+                    })
+                  }
+                </ul>
               </div>
             </div>
           </div>
 
-          <div
-            className={`${styles["user_cart_information"]} ${styles["unactive"]}`}
-          >
+          <div ref={cart}  className={`${styles["user_cart_information"]}`}>
             <CartItems />
           </div>
+
         </div>
       </div>
     </div>
