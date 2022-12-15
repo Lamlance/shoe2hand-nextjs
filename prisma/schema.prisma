@@ -55,7 +55,7 @@ model USER {
 }
 
 model ADMIN {
-  adminID    Int       @id @default(sequence())
+  adminId   Int       @id @default(sequence())
   adminName  String
 }
 
