@@ -8,8 +8,7 @@ export default async function handler(
   if (req.query.password && req.query.password === "lam123") {
     const client = new PrismaClient();
     await client.$connect();
-    const getData = await client.bRAND.findMany({
-      take:30
+    const getData = await client.sHOP.findMany({
     });
     client.$disconnect();
     res.status(200).json(getData);

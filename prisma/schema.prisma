@@ -14,20 +14,20 @@ model BRAND {
 }
 
 model PRODUCT {
-  productId   Int      @id @default(sequence())
+  productId   Int           @id @default(sequence())
   title       String
   description String?
   quantity    Int
   price       Int
   image       String[]
-  isHidden    Boolean  @default(false)
+  isHidden    Boolean       @default(false)
   rating      Float?
   shopId      Int
-  brandId     Int      @default(0)
-  BRAND       BRAND    @relation(fields: [brandId], references: [brandId])
-  SHOP        SHOP     @relation(fields: [shopId], references: [shopId])
-  ORDERDETAIL       ORDERDETAIL[]
-  REVIEW       REVIEW[]
+  brandId     Int           @default(0)
+  ORDERDETAIL ORDERDETAIL[]
+  BRAND       BRAND         @relation(fields: [brandId], references: [brandId],onDelete: Cascade)
+  SHOP        SHOP          @relation(fields: [shopId], references: [shopId],onDelete: Cascade)
+  REVIEW      REVIEW[]
 }
 
 model SHOP {
@@ -35,9 +35,9 @@ model SHOP {
   shopName String
   isHidden Boolean   @default(false)
   ownerId  Int       @unique
+  ORDER    ORDER[]
   PRODUCT  PRODUCT[]
-  USER     USER      @relation(fields: [ownerId], references: [userId])
-  ORDER   ORDER[]
+  USER     USER      @relation(fields: [ownerId], references: [userId],onDelete: Cascade)
 }
 
 model USER {
@@ -49,45 +49,44 @@ model USER {
   address   String?
   lastLogin DateTime?
   avatarUrl String?
+  ORDER     ORDER[]
+  REVIEW    REVIEW[]
   SHOP      SHOP?
-  ORDER      ORDER[]
-  REVIEW  REVIEW[]
 }
 
 model ADMIN {
-  adminId   Int       @id @default(sequence())
-  adminName  String
+  adminId   Int    @id @default(sequence())
+  adminName String
 }
 
 model ORDER {
-  orderId   Int       @id @default(sequence())
-  date  DateTime?
-  bill Int
+  orderId          Int           @id @default(sequence())
+  date             DateTime?
+  bill             Int
   deliveringStatus String?
-  userId Int
-  shopId Int
-  SHOP        SHOP     @relation(fields: [shopId], references: [shopId])
-  USER        USER      @relation(fields: [userId], references: [userId])
-  ORDERDETAIL ORDERDETAIL[]
+  userId           Int
+  shopId           Int
+  SHOP             SHOP          @relation(fields: [shopId], references: [shopId],onDelete: Cascade)
+  USER             USER          @relation(fields: [userId], references: [userId],onDelete: Cascade)
+  ORDERDETAIL      ORDERDETAIL[]
 }
 
-
 model ORDERDETAIL {
- orderdetailId Int @id @default(sequence())
- productId Int 
- orderId Int
- quantity Int
- PRODUCT PRODUCT @relation(fields: [productId], references: [productId])
- ORDER ORDER @relation(fields: [orderId], references: [orderId])
+  orderdetailId Int     @id @default(sequence())
+  productId     Int
+  orderId       Int
+  quantity      Int
+  ORDER         ORDER   @relation(fields: [orderId], references: [orderId],onDelete: Cascade)
+  PRODUCT       PRODUCT @relation(fields: [productId], references: [productId],onDelete: Cascade)
 }
 
 model REVIEW {
- reviewId Int @id @default(sequence())
- productId Int 
- customerId Int
- date DateTime?
- rating Float
- comment String?
- PRODUCT PRODUCT @relation(fields: [productId], references: [productId])
- CUSTOMER        USER      @relation(fields: [customerId], references: [userId])
+  reviewId   Int       @id @default(sequence())
+  productId  Int
+  customerId Int
+  date       DateTime?
+  rating     Float
+  comment    String?
+  CUSTOMER   USER      @relation(fields: [customerId], references: [userId],onDelete: Cascade)
+  PRODUCT    PRODUCT   @relation(fields: [productId], references: [productId],onDelete: Cascade)
 }

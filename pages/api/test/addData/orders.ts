@@ -384,7 +384,7 @@ const orderData = [
     bill: 60,
     deliveringStatus: "Delivered",
     userId: 26,
-    shopId: 12,
+    shopId: 14,
   },
   {
     orderId: 49,
@@ -404,10 +404,14 @@ const orderData = [
   },
 ];
 
+
+
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<any>
 ) {
+  
+
   if (req.query.password && req.query.password === "lam123") {
     const client = new PrismaClient();
     await client.$connect();

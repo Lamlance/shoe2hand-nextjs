@@ -9,7 +9,6 @@ export default async function handler(
     const client = new PrismaClient();
     await client.$connect();
     const getData = await client.uSER.findMany({
-      take: 3,
     });
     client.$disconnect();
     res.status(200).json(getData);

@@ -360,9 +360,12 @@ export default async function handler(
 ) {
   if (req.query.password && req.query.password === "lam123") {
     const client = new PrismaClient();
+
+    const littleData = userData.slice(0,11)
+
     await client.$connect();
     const addData = await client.uSER.createMany({
-      data: userData,
+      data: littleData,
       skipDuplicates: true,
     });
     client.$disconnect();
