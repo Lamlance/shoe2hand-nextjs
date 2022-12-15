@@ -233,3 +233,26 @@ const productData: {
     brandId: 0,
   },
 ];
+
+export default async function handler(
+  req: NextApiRequest,
+  res: NextApiResponse<any>
+) {
+  if (req.query.password && req.query.password === "lam123") {
+    const client = new PrismaClient();
+    await client.$connect();
+    const addData = await client.pRODUCT.createMany({
+      data: productData,
+      skipDuplicates: true,
+    });
+    client.$disconnect();
+    res.status(200).json({
+      addCount: addData.count,
+    });
+    return;
+  }
+  res.status(200).json({
+    addCount: 0,
+    error: "Wrong params",
+  });
+}
