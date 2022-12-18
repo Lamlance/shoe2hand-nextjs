@@ -1,4 +1,4 @@
-import { myPrismaClient } from "../../../_app";
+import { myPrismaClient } from "../../../../helper/prismaClient";
 import type { NextApiRequest, NextApiResponse } from "next";
 //10 reviews
 const reviewData = [

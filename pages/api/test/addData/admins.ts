@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import { myPrismaClient } from "../../../_app";
+import { myPrismaClient } from "../../../../helper/prismaClient";
 //5 admins
 const adminData = [
   {

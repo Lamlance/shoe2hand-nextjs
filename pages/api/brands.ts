@@ -1,11 +1,10 @@
-import { PrismaClient } from '@prisma/client'
 import type { NextApiRequest, NextApiResponse } from 'next'
 import { BRAND } from '@prisma/client';
+import { myPrismaClient } from '../../helper/prismaClient';
 
 export default async function handler(req:NextApiRequest,res:NextApiResponse<BRAND[]>){
-  const prisma = new PrismaClient();
-  await prisma.$connect();
-  const brands = await prisma.bRAND.findMany({});
+  await myPrismaClient.$connect();
+  const brands = await myPrismaClient.bRAND.findMany({});
 
   res.status(200).json(brands);
 }

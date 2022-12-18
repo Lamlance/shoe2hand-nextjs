@@ -3,7 +3,6 @@ import type { AppProps } from 'next/app'
 import { UserProvider } from '@auth0/nextjs-auth0/client';
 import { PrismaClient } from '@prisma/client';
 
-const client = new PrismaClient();
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
@@ -14,4 +13,3 @@ function MyApp({ Component, pageProps }: AppProps) {
 }
 //Lam edit
 export default MyApp
-export {client as myPrismaClient}

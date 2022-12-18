@@ -1,8 +1,7 @@
 import { handleAuth, handleCallback } from '@auth0/nextjs-auth0';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { atom } from "nanostores";
-import { PrismaClient } from '@prisma/client';
-
+import { myPrismaClient } from '../../../helper/prismaClient';
 
 // interface userData {
 //   userId:number,
@@ -11,18 +10,17 @@ import { PrismaClient } from '@prisma/client';
 // export const userInfo_inDB = atom<userData | null>(null);
 
 
-const afterCallback = (
+const afterCallback = async (
   req: NextApiRequest, res: NextApiResponse, session: any, state?: {}) => {
 
   console.log(session.user.email);
-  const client = new PrismaClient();
   console.log("Connect to db");
 
-  client.$connect();
+  await myPrismaClient.$connect();
 
   console.log("Connected to db");
 
-  let savedUser = client.uSER.findFirst({
+  let savedUser = myPrismaClient.uSER.findFirst({
     where: {
       email: session.user.email
     },
@@ -32,7 +30,7 @@ const afterCallback = (
   })
 
   if (!savedUser) {
-    savedUser = client.uSER.create({
+    savedUser = myPrismaClient.uSER.create({
       data: {
         email: session.user.email,
         userName: session.user.nickname || session.user.name

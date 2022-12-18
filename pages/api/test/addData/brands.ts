@@ -1,4 +1,4 @@
-import { myPrismaClient } from "../../../_app";
+import { myPrismaClient } from "../../../../helper/prismaClient";
 import type { NextApiRequest, NextApiResponse } from 'next'
 
 const brandData: { brandId: number, brandName: string }[] = [

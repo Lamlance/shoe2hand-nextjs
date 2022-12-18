@@ -1,5 +1,4 @@
-import { myPrismaClient } from '../_app';
-
+import { myPrismaClient } from '../../helper/prismaClient'
 import type { NextApiRequest, NextApiResponse } from 'next'
 import { handleQuery, handleQueryArray } from '../../helper/queryHelper'
 
