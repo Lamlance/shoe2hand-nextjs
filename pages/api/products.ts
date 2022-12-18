@@ -1,80 +1,73 @@
 import { PrismaClient } from '@prisma/client'
 import type { NextApiRequest, NextApiResponse } from 'next'
+import { handleQuery, handleQueryArray } from '../../helper/queryHelper'
 
 interface QueryObj {
   skip: number | 0,
   take: number,
   where: {
     brandID?: number,
-    AND?: [{productPrice: { lte: number }}?, {productPrice: { gte: number }}?],
-    OR?:{[index: number]:{brandID:Number}}
+    AND: [
+      {price: { lte: number }}?, 
+      {price: { gte: number }}?,
+      {title:{contains:string}}?,
+      {isHidden: boolean}?,
+      {quantity:{gte:number}}?
+    ],
+    OR?:{[index: number]:{brandId:Number}}
     shopID?: number
   }
 }
 
+interface ProductRespond {
+  productId:number,
+  price:number,
+  title:string,
+}
+export type {ProductRespond}
+
+
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse
+  res: NextApiResponse<ProductRespond[]>
 ) {
-  const itemPerPage = 3;
+  const itemPerPage = 10;
   const prisma = new PrismaClient();
   await prisma.$connect();
 
 
   const param = (req.method == "GET") ? req.query : req.body;
-  const { brand,min,max } = param;
+  const { brand,min,max,name } = param;
 
   const queryObj:QueryObj = {
     take:itemPerPage,
     skip:0,
-    where: {}
+    where: {
+      AND:[{isHidden:false},{quantity:{gte:1}}]
+    }
   }
+  
   const pageNumber = Number.parseInt(handleQuery(param.page))
   if(!isNaN(pageNumber)){
     queryObj.skip = pageNumber*itemPerPage
   }
   handleBrand(handleQueryArray(brand),queryObj);
   handleMinMaxPrice(handleQuery(min),handleQuery(max),queryObj);
+  handleName(handleQuery(name),queryObj);
+  const ans = await prisma.pRODUCT.findMany({
+    ...queryObj,
+    select:{
+      price:true,
+      quantity:true,
+      productId:true,
+      title:true  
+    }
+  });
 
-  // prisma.pRODUCT.findMany({
-  //   where: {
-  //     brandID: 1,
-  //     AND: [{ productPrice: { lte: 10 } }, { productPrice: { gte: 100 } }],
-  //     OR:[{brandID:1},{brandId: 2}],
-  //     shopID: 1,
-  //     productTitle:{
-  //       contains:"ABC"
-  //     }
-  //   }
-  // });
-
-  res.status(200).json(queryObj)
+  res.status(200).json(ans)
 }
 
-function handleQuery(query: string | string[] | undefined ){
-  if(!query){
-    return "";
-  }
-  if( typeof query == "string"){
-    return query
-  }
-  if(Array.isArray(query) && query.length >= 1){
-    return query[0];
-  }
-  return query.toString();
-}
-function handleQueryArray(query: string | string[] | undefined ){
-  if(!query){
-    return [];
-  }
-  if( typeof query == "string"){
-    return [query]
-  }
-  if(Array.isArray(query) && query.length >= 1){
-    return query;
-  }
-  return [];
-}
+
 
 function handleBrand(brandQuery: string[] , queryObj: QueryObj) {
   const brandIdList = handleQueryArray(brandQuery);
@@ -84,11 +77,12 @@ function handleBrand(brandQuery: string[] , queryObj: QueryObj) {
       if(!queryObj.where.OR){
         queryObj.where.OR = []
       }
-      queryObj.where.OR[index] = {brandID:brandId}      
+      queryObj.where.OR[index] = {brandId:brandId}      
     }
   })
   return queryObj;
 }
+
 function handleMinMaxPrice(minQuery: string,maxQuery:string, queryObj: QueryObj){
   const minPrice = Number.parseInt(minQuery);
   const maxPrice = Number.parseInt(maxQuery);
@@ -97,11 +91,22 @@ function handleMinMaxPrice(minQuery: string,maxQuery:string, queryObj: QueryObj)
   };
 
   if(!isNaN(minPrice)){
-    queryObj.where.AND.push({productPrice: { gte: minPrice }})
+    queryObj.where.AND.push({price: { gte: minPrice }})
   }
   if(!isNaN(maxPrice)){
-    queryObj.where.AND.push({productPrice: { lte: maxPrice }})
+    queryObj.where.AND.push({price: { lte: maxPrice }})
   }
 
   return queryObj;
+}
+
+function handleName(name:string,queryObj:QueryObj){
+  if(!queryObj.where.AND){
+    queryObj.where.AND = []
+  };
+  queryObj.where.AND.push({title:{contains:name}});
+}
+
+function GET(){
+  
 }

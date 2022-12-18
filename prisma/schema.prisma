@@ -1,7 +1,92 @@
-datasource db {
-  provider     = "cockroachdb"
-  url          = env("DATABASE_URL")
-}
 generator client {
   provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "cockroachdb"
+  url      = env("DATABASE_URL")
+}
+
+model BRAND {
+  brandId   Int       @id @default(sequence())
+  brandName String?
+  PRODUCT   PRODUCT[]
+}
+
+model PRODUCT {
+  productId   Int           @id @default(sequence())
+  title       String
+  description String?
+  quantity    Int
+  price       Int
+  image       String[]
+  isHidden    Boolean       @default(false)
+  rating      Float?
+  shopId      Int
+  brandId     Int           @default(0)
+  ORDERDETAIL ORDERDETAIL[]
+  BRAND       BRAND         @relation(fields: [brandId], references: [brandId], onDelete: Cascade)
+  SHOP        SHOP          @relation(fields: [shopId], references: [shopId], onDelete: Cascade)
+  REVIEW      REVIEW[]
+}
+
+model SHOP {
+  shopId   Int       @id @default(sequence())
+  shopName String
+  isHidden Boolean   @default(false)
+  ownerId  Int       @unique
+  ORDER    ORDER[]
+  PRODUCT  PRODUCT[]
+  USER     USER      @relation(fields: [ownerId], references: [userId], onDelete: Cascade)
+}
+
+model USER {
+  userId    Int       @id @default(sequence())
+  userName  String
+  birthDay  DateTime?
+  email     String    @unique
+  phone     String?
+  address   String?
+  lastLogin DateTime?
+  avatarUrl String?
+  ORDER     ORDER[]
+  REVIEW    REVIEW[]
+  SHOP      SHOP?
+}
+
+model ADMIN {
+  adminId   Int    @id @default(sequence())
+  adminName String
+}
+
+model ORDER {
+  orderId          Int           @id @default(sequence())
+  date             DateTime?
+  bill             Int
+  deliveringStatus String?
+  userId           Int
+  shopId           Int
+  SHOP             SHOP          @relation(fields: [shopId], references: [shopId], onDelete: Cascade)
+  USER             USER          @relation(fields: [userId], references: [userId], onDelete: Cascade)
+  ORDERDETAIL      ORDERDETAIL[]
+}
+
+model ORDERDETAIL {
+  orderdetailId Int     @id @default(sequence())
+  productId     Int
+  orderId       Int
+  quantity      Int
+  ORDER         ORDER   @relation(fields: [orderId], references: [orderId], onDelete: Cascade)
+  PRODUCT       PRODUCT @relation(fields: [productId], references: [productId], onDelete: Cascade)
+}
+
+model REVIEW {
+  reviewId   Int       @id @default(sequence())
+  productId  Int
+  customerId Int
+  date       DateTime?
+  rating     Float
+  comment    String?
+  CUSTOMER   USER      @relation(fields: [customerId], references: [userId], onDelete: Cascade)
+  PRODUCT    PRODUCT   @relation(fields: [productId], references: [productId], onDelete: Cascade)
 }
