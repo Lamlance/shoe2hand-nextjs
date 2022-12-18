@@ -1,0 +1,102 @@
+.root {
+  text-decoration: none;
+  font-size: 50px;
+}
+
+.container {
+  background-color: rgb(239, 65, 65);
+}
+
+.invoice_status_filter_lable {
+  margin-right: 1rem;
+}
+
+.invoice_status_filter {
+  padding: 1rem;
+}
+
+.invoice_status_box {
+  padding: 1rem;
+  margin-top: 1rem;
+
+  background-color: rgb(242, 77, 77);
+}
+
+.list_boxes {
+  background-color: rgb(235, 181, 159);
+  padding: 1rem;
+}
+
+.invoice_status_header {
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  display: inline-flex;
+}
+
+.btn {
+  min-width: 5rem;
+  height: 2rem;
+  text-decoration: none;
+  border: none;
+  border-radius: 0.2rem;
+  margin-right: 0.5rem;
+  margin-left: 0.5rem;
+  padding: 0 0.4rem;
+  outline: none;
+  cursor: pointer;
+  color: black;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 10vh;
+}
+
+.container span {
+  margin-right: 0.5rem;
+}
+
+.invoice_status_header_left {
+  display: inline-flex;
+
+}
+
+.invoice_status_header_right {
+  margin-left: 55vw;
+}
+
+.btn.btn--primary {
+  background-color: red;
+  color: white;
+}
+
+.product {
+  width: 100%;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  display: inline-flex;
+  background-color: rgb(239, 124, 124);
+}
+
+.product_detail span {
+
+  margin-left: 1rem;
+  display: flex;
+}
+
+.product img {
+  max-width: 5rem;
+}
+
+
+.product_price {
+  margin-left: 60vw;
+
+  padding: 0.2rem;
+  background-color: rgb(242, 77, 77);
+}
+
+.btn:hover {
+  background-color: red;
+  color: white;
+  transition: .3s ease-in-out;
+}
