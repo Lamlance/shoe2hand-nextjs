@@ -1,4 +1,4 @@
-import { prisma, PrismaClient } from "@prisma/client";
+import { myPrismaClient } from "../../../_app";
 import type { NextApiRequest, NextApiResponse } from "next";
 
 export default async function handler(
@@ -6,14 +6,12 @@ export default async function handler(
   res: NextApiResponse<any>
 ) {
   if (req.query.password && req.query.password === "lam123") {
-    const client = new PrismaClient();
-    await client.$connect();
-    const delUser = await client.uSER.deleteMany();
-    const delProduct = await client.uSER.deleteMany({});
-    const delOrder = await client.oRDER.deleteMany({});
-    const delDetail = await client.oRDERDETAIL.deleteMany({});
+    await myPrismaClient.$connect();
+    const delUser = await myPrismaClient.uSER.deleteMany();
+    const delProduct = await myPrismaClient.uSER.deleteMany({});
+    const delOrder = await myPrismaClient.oRDER.deleteMany({});
+    const delDetail = await myPrismaClient.oRDERDETAIL.deleteMany({});
 
-    client.$disconnect();
     res.status(200).json({
       ...delUser,...delProduct,...delOrder,...delDetail
       ,});

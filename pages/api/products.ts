@@ -1,4 +1,5 @@
-import { PrismaClient } from '@prisma/client'
+import { myPrismaClient } from '../_app';
+
 import type { NextApiRequest, NextApiResponse } from 'next'
 import { handleQuery, handleQueryArray } from '../../helper/queryHelper'
 
@@ -32,8 +33,7 @@ export default async function handler(
   res: NextApiResponse<ProductRespond[]>
 ) {
   const itemPerPage = 10;
-  const prisma = new PrismaClient();
-  await prisma.$connect();
+  await myPrismaClient.$connect();
 
 
   const param = (req.method == "GET") ? req.query : req.body;
@@ -54,7 +54,7 @@ export default async function handler(
   handleBrand(handleQueryArray(brand),queryObj);
   handleMinMaxPrice(handleQuery(min),handleQuery(max),queryObj);
   handleName(handleQuery(name),queryObj);
-  const ans = await prisma.pRODUCT.findMany({
+  const ans = await myPrismaClient.pRODUCT.findMany({
     ...queryObj,
     select:{
       price:true,

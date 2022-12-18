@@ -10,6 +10,7 @@
     "localPrismaPull": "dotenv -e .env.local -- npx prisma db pull"
   },
   "dependencies": {
+    "@auth0/nextjs-auth0": "^2.0.1",
     "@nanostores/react": "^0.4.0",
     "@prisma/client": "^4.7.1",
     "nanostores": "^0.7.0",

@@ -1,4 +1,4 @@
-import { prisma, PrismaClient } from "@prisma/client";
+import { myPrismaClient } from "../../../_app";
 import type { NextApiRequest, NextApiResponse } from "next";
 //50 users
 const userData = [
@@ -359,16 +359,14 @@ export default async function handler(
   res: NextApiResponse<any>
 ) {
   if (req.query.password && req.query.password === "lam123") {
-    const client = new PrismaClient();
 
     const littleData = userData.slice(0,11)
 
-    await client.$connect();
-    const addData = await client.uSER.createMany({
+    await myPrismaClient.$connect();
+    const addData = await myPrismaClient.uSER.createMany({
       data: littleData,
       skipDuplicates: true,
     });
-    client.$disconnect();
     res.status(200).json({
       addCount: addData.count,
     });

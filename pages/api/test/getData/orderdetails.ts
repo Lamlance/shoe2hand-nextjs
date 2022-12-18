@@ -1,17 +1,15 @@
-import { PrismaClient } from "@prisma/client";
 import type { NextApiRequest, NextApiResponse } from "next";
+import { myPrismaClient } from "../../../_app";
 
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<any>
 ) {
   if (req.query.password && req.query.password === "lam123") {
-    const client = new PrismaClient();
-    await client.$connect();
-    const getData = await client.oRDERDETAIL.findMany({
+    await myPrismaClient.$connect();
+    const getData = await myPrismaClient.oRDERDETAIL.findMany({
       take: 3,
     });
-    client.$disconnect();
     res.status(200).json(getData);
     return;
   }

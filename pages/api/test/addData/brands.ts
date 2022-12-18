@@ -1,4 +1,4 @@
-import { PrismaClient } from '@prisma/client'
+import { myPrismaClient } from "../../../_app";
 import type { NextApiRequest, NextApiResponse } from 'next'
 
 const brandData: { brandId: number, brandName: string }[] = [
@@ -29,13 +29,11 @@ export default async function handler(
   res: NextApiResponse<any>
 ) {
   if (req.query.password && req.query.password === "lam123") {
-    const client = new PrismaClient();
-    await client.$connect();
-    const addData = await client.bRAND.createMany({
+    await myPrismaClient.$connect();
+    const addData = await myPrismaClient.bRAND.createMany({
       data: brandData,
       skipDuplicates: true
     });
-    client.$disconnect();
     res.status(200).json({
       addCount: addData.count
     })
