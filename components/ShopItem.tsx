@@ -38,7 +38,8 @@ class ShopItem extends React.Component<ShopItemData, {}> {
         <Link href="/detail">
           <div className={styles["s2h_BreifInfo"]}>
             <img alt={"Product img desc"}></img>
-            <h3>{this.props.name} {this.props.price ? `${this.props.price}VND` : "Free"}</h3>
+            <p>{this.props.name}</p>
+            <p>{this.props.price ? `${this.props.price}VND` : "Free"}</p>
           </div>
         </Link >
         <button

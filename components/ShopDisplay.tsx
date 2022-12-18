@@ -15,13 +15,9 @@ class ShopDisplay extends React.Component<{}, ShopDisplayState> {
       items:[]
     }
   }
-  // componentDidMount(): void {
-  //     fetch("/api/test/allProducts").then((res)=>{
-  //       res.json().then((data)=>{
-  //         this.setState({items:data})
-  //       })
-  //     });  
-  // }
+
+  
+
   render(): React.ReactNode {
     const arr = Array<number>(20);
     arr.fill(0);
