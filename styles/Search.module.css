@@ -6,3 +6,7 @@
   grid-template-areas:  
     "filter products";
 }
+.s2h_filter_wrape{
+  grid-area: filter;
+  background-color: antiquewhite;
+}

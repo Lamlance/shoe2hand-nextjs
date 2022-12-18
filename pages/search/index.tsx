@@ -18,6 +18,11 @@ const brand = () => {
         <p>{brandName ? `Product of brand ${brandName}` : null}</p>
         <ShopDisplay />
       </div>
+      <div className={styles["s2h_filter_wrape"]}>
+        <form>
+          
+        </form>
+      </div>
     </div>
     {$isCartOpen ? (<ShopCart />) : null}
   </ShopLayout>)
