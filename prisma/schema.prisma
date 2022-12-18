@@ -25,8 +25,8 @@ model PRODUCT {
   shopId      Int
   brandId     Int           @default(0)
   ORDERDETAIL ORDERDETAIL[]
-  BRAND       BRAND         @relation(fields: [brandId], references: [brandId],onDelete: Cascade)
-  SHOP        SHOP          @relation(fields: [shopId], references: [shopId],onDelete: Cascade)
+  BRAND       BRAND         @relation(fields: [brandId], references: [brandId], onDelete: Cascade)
+  SHOP        SHOP          @relation(fields: [shopId], references: [shopId], onDelete: Cascade)
   REVIEW      REVIEW[]
 }
 
@@ -37,7 +37,7 @@ model SHOP {
   ownerId  Int       @unique
   ORDER    ORDER[]
   PRODUCT  PRODUCT[]
-  USER     USER      @relation(fields: [ownerId], references: [userId],onDelete: Cascade)
+  USER     USER      @relation(fields: [ownerId], references: [userId], onDelete: Cascade)
 }
 
 model USER {
@@ -66,8 +66,8 @@ model ORDER {
   deliveringStatus String?
   userId           Int
   shopId           Int
-  SHOP             SHOP          @relation(fields: [shopId], references: [shopId],onDelete: Cascade)
-  USER             USER          @relation(fields: [userId], references: [userId],onDelete: Cascade)
+  SHOP             SHOP          @relation(fields: [shopId], references: [shopId], onDelete: Cascade)
+  USER             USER          @relation(fields: [userId], references: [userId], onDelete: Cascade)
   ORDERDETAIL      ORDERDETAIL[]
 }
 
@@ -76,8 +76,8 @@ model ORDERDETAIL {
   productId     Int
   orderId       Int
   quantity      Int
-  ORDER         ORDER   @relation(fields: [orderId], references: [orderId],onDelete: Cascade)
-  PRODUCT       PRODUCT @relation(fields: [productId], references: [productId],onDelete: Cascade)
+  ORDER         ORDER   @relation(fields: [orderId], references: [orderId], onDelete: Cascade)
+  PRODUCT       PRODUCT @relation(fields: [productId], references: [productId], onDelete: Cascade)
 }
 
 model REVIEW {
@@ -87,6 +87,6 @@ model REVIEW {
   date       DateTime?
   rating     Float
   comment    String?
-  CUSTOMER   USER      @relation(fields: [customerId], references: [userId],onDelete: Cascade)
-  PRODUCT    PRODUCT   @relation(fields: [productId], references: [productId],onDelete: Cascade)
+  CUSTOMER   USER      @relation(fields: [customerId], references: [userId], onDelete: Cascade)
+  PRODUCT    PRODUCT   @relation(fields: [productId], references: [productId], onDelete: Cascade)
 }
