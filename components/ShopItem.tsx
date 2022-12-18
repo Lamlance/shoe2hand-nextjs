@@ -2,7 +2,7 @@ import { Decimal } from "@prisma/client/runtime";
 import Link from "next/link";
 import React, { createRef, useRef } from "react";
 import styles from "../styles/ShopItem.module.css";
-import { addCartItem, ItemDisplayInfo } from "./CartStore";
+import { addCartItem, ItemDisplayInfo } from "../helper/CartStore";
 
 // interface ShopItemProps{
 //     id:string,

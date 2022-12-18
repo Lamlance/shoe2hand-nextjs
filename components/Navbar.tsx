@@ -12,7 +12,7 @@ import loupeSVG from "/public/loupe-search-svg.svg";
 
 import styles from "../styles/Navbar.module.scss";
 import { useStore } from "@nanostores/react";
-import { isCartOpen } from "./CartStore";
+import { isCartOpen } from "../helper/CartStore";
 import Link from "next/link";
 
 export default function Navbar() {

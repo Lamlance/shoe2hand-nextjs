@@ -6,7 +6,7 @@ import ShopItem from "../components/ShopItem";
 import ShopLayout from "../components/layouts/ShopLayout";
 import ShopCart from "../components/ShopCart";
 
-import { isCartOpen } from "../components/CartStore";
+import { isCartOpen } from "../helper/CartStore";
 import { useStore } from "@nanostores/react";
 import { useEffect, useState } from "react";
 import { ProductRespond } from "./api/products";

@@ -1,5 +1,5 @@
 import { useRef, useState } from "react";
-import { addCartItem, ItemDisplayInfo } from "../components/CartStore";
+import { addCartItem, ItemDisplayInfo } from "../helper/CartStore";
 import ShopLayout from "../components/layouts/ShopLayout";
 import styles from "../styles/ProductDetail.module.scss";
 

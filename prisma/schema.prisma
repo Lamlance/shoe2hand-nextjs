@@ -49,6 +49,7 @@ model USER {
   address   String?
   lastLogin DateTime?
   avatarUrl String?
+  uuid String?
   ORDER     ORDER[]
   REVIEW    REVIEW[]
   SHOP      SHOP?

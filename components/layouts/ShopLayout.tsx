@@ -1,6 +1,6 @@
 import { useStore } from "@nanostores/react";
 import { SERVER_PROPS_ID } from "next/dist/shared/lib/constants";
-import { isCartOpen } from "../CartStore";
+import { isCartOpen } from "../../helper/CartStore";
 import Navbar from "../Navbar";
 import ShopCart from "../ShopCart";
 

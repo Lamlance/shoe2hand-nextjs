@@ -3,42 +3,51 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import { atom } from "nanostores";
 import { myPrismaClient } from '../../../helper/prismaClient';
 
-// interface userData {
-//   userId:number,
-//   shopId?:number
-// }
-// export const userInfo_inDB = atom<userData | null>(null);
+import { userInfo_inDB } from '../../../helper/userInfo_inDB';
+import { useStore } from '@nanostores/react';
 
 
-const afterCallback = async (
+const afterCallback = (
   req: NextApiRequest, res: NextApiResponse, session: any, state?: {}) => {
 
-  console.log(session.user.email);
-  console.log("Connect to db");
-
-  await myPrismaClient.$connect();
-
-  console.log("Connected to db");
-
-  let savedUser = myPrismaClient.uSER.findFirst({
-    where: {
-      email: session.user.email
-    },
-    select: {
-      userId: true
-    }
-  })
-
-  if (!savedUser) {
-    savedUser = myPrismaClient.uSER.create({
-      data: {
-        email: session.user.email,
-        userName: session.user.nickname || session.user.name
+  myPrismaClient.$connect().then(()=>{
+    const savedUser = myPrismaClient.uSER.findFirst({
+      where: {
+        OR:[
+          {email:{equals:session.user.email}},
+          {uuid: {contains: session.user.sub}}
+        ]
+      },
+      select: {
+        userId: true,
+        uuid:true
       }
     })
-  }
-
-  console.log(savedUser)
+    savedUser.then((savedData)=>{
+      if (!savedData || savedData == null) {
+        const newUser = myPrismaClient.uSER.create({
+          data: {
+            email: session.user.email,
+            userName: session.user.nickname || session.user.name,
+            uuid: session.user.sub
+          },
+          select:{
+            userId:true
+          }
+        })
+      }else if( session.user.sub && ( !savedData.uuid || !savedData.uuid.includes(session.user.sub) )){
+        const newUUID = savedData.uuid ? savedData.uuid.concat(` , ${session.user.sub}`) : <string>session.user.sub;
+        const updateUser = myPrismaClient.uSER.update({
+          where:{
+            userId: savedData.userId
+          },
+          data:{
+            uuid: newUUID
+          }
+        })
+      }
+    })
+  });
 
   return session;
 }

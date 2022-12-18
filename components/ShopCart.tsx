@@ -1,5 +1,5 @@
 import { useStore } from "@nanostores/react";
-import { cartItems } from "./CartStore";
+import { cartItems } from "../helper/CartStore";
 import styles from "../styles/ShopCart.module.css";
 
 export default function ShopCart() {
