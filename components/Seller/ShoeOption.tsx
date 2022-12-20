@@ -1,7 +1,10 @@
 import { PRODUCT } from "@prisma/client";
 import { createRef, FormEvent, useEffect, useRef, useState } from "react";
 import styles from "/styles/seller/ShoeOption.module.css"
-import { SellerProductAPI_POST, SellerProductAPI_GET, SellerProductAPI_PUT } from "../../pages/api/seller/product";
+import { 
+  SellerProductAPI_POST, SellerProductAPI_GET, 
+  SellerProductAPI_PUT, SellerProductAPI_DELETE 
+} from "../../pages/api/seller/product";
 
 
 interface ShoeOptionProps {
@@ -65,7 +68,13 @@ function ShoeOption({ userId, shopId }: ShoeOptionProps) {
         switchFormInput(false);
         return;
       }
-      oldState[newData.selectIndex] = newData.data;
+      const productId = newData.data.productId;
+      const data = newData.data;
+      oldState.forEach((item,index)=>{
+        if(item.productId === productId){
+          oldState[index] = data;
+        }
+      })
       setProduct(oldState);
     } catch (error) { console.log(error) }
     return;
@@ -111,6 +120,23 @@ function ShoeOption({ userId, shopId }: ShoeOptionProps) {
         selectId: selectId
       })
     });
+    try {
+      const deletedData:SellerProductAPI_DELETE = await fetchResult.json();
+      const oldState = (products) ? [...products] : null
+
+      if (oldState == null || (typeof deletedData.data === "string") ) {
+        switchFormInput(false);
+        return;
+      }
+
+      const productId = deletedData.data.productId;
+
+      const newData = oldState.filter((item)=>{
+        return(item.productId !== productId)
+      });
+      setProduct(newData);
+
+    } catch (error) {console.log(error)}
   }
 
   const hadleFormSubmit = async (event: FormEvent<HTMLFormElement>) => {
@@ -132,7 +158,7 @@ function ShoeOption({ userId, shopId }: ShoeOptionProps) {
 
     //DELETE DATA
     if (delCheck) {
-      console.log("DELETE to time")
+      handelForSubmitDELETE();
       switchFormInput(false);
       isExecuting.current = false;
       return;
@@ -197,7 +223,7 @@ function ShoeOption({ userId, shopId }: ShoeOptionProps) {
 
   return (<div className={styles["s2h_seller_shoe_option_wrap"]}>
     <ul className={styles["s2h_seller_shoe_option_select"]}>
-      <li><button onClick={(event) => { handleRefreshData() }} >REFRESH</button></li>
+      <li onClick={(event) => { handleRefreshData() }}>REFRESH</li>
       <li onClick={() => { selectId.current = -1 }}>ADD NEW SHOES</li>
       {products?.map((item, index) => {
         return (<li key={index} onClick={() => { handelProductSelect(index) }}>{item.title}</li>)
