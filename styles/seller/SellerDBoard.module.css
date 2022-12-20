@@ -1,8 +1,9 @@
 .s2h_seller_dboard_wrapper{
   width: 100vw;
   display: grid;
-  grid-template-columns: 0.5fr 0.5fr 2fr;
+  grid-template-columns: 0.5fr 2.5fr;
   border: 1px solid red;
+  grid-template-areas: "option slect detail";
   
 }
 .s2h_seller_dboard_wrapper > *{
@@ -15,10 +16,13 @@
   list-style-type: none;
   padding: 0;
 }
+
+/* OPTION SELECT */
 .s2h_seller_dboard_option_select{
   overflow-y: scroll;
+  grid-area: option;
 }
-.s2h_seller_dboard_option_select > li{
+.s2h_seller_dboard_option_select  li{
   height: 3rem;
   margin: 1rem 0.5rem 1rem 0;
   cursor: pointer;
@@ -26,7 +30,7 @@
   display: grid;
   place-items: center;
 }
-.s2h_seller_dboard_option_select > li:hover{
+.s2h_seller_dboard_option_select  li:hover{
   box-shadow: 0.2rem 0.2rem gray;
 }
 .s2h_seller_shoes_option_ul{

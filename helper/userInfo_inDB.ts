@@ -1,7 +1,8 @@
+import { SHOP, USER } from "@prisma/client";
 import { atom } from "nanostores";
 
 interface userData {
-  userId:number,
-  shopId?:number
+  user: USER,
+  shop?: SHOP
 }
 export const userInfo_inDB = atom<userData | null>(null);

@@ -53,15 +53,7 @@ export default async function handler(
   handleBrand(handleQueryArray(brand),queryObj);
   handleMinMaxPrice(handleQuery(min),handleQuery(max),queryObj);
   handleName(handleQuery(name),queryObj);
-  const ans = await myPrismaClient.pRODUCT.findMany({
-    ...queryObj,
-    select:{
-      price:true,
-      quantity:true,
-      productId:true,
-      title:true  
-    }
-  });
+  const ans = await myPrismaClient.pRODUCT.findMany(queryObj);
 
   res.status(200).json(ans)
 }

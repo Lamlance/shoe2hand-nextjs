@@ -1,6 +1,6 @@
 
 function handleQuery(query: string | string[] | undefined ){
-  if(!query){
+  if( query === undefined ){
     return "";
   }
   if( typeof query == "string"){
