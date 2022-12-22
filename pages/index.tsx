@@ -30,13 +30,13 @@ function Home() {
     return json;
   }
 
-  useEffect(() => {
-    const productFetch = fetchProduct();
-    productFetch.then((data)=>{
-      setProducts(data);
-    })
+  // useEffect(() => {
+  //   const productFetch = fetchProduct();
+  //   productFetch.then((data)=>{
+  //     setProducts(data);
+  //   })
 
-  },[])
+  // },[])
 
 
 
@@ -51,7 +51,6 @@ function Home() {
           })
         }
       </ul>
-      {$isCartOpen ? (<ShopCart />) : null}
     </ShopLayout>
   );
 }

@@ -1,4 +1,4 @@
-import { PRODUCT } from "@prisma/client";
+import { PRODUCT, SHOP, USER } from "@prisma/client";
 import { createRef, FormEvent, useEffect, useRef, useState } from "react";
 import styles from "/styles/seller/ShoeOption.module.css"
 import { 
@@ -8,11 +8,11 @@ import {
 
 
 interface ShoeOptionProps {
-  userId: number | null,
-  shopId: number | null
+  userData: USER | null,
+  shopData: SHOP | null
 }
 
-function ShoeOption({ userId, shopId }: ShoeOptionProps) {
+function ShoeOption({ userData, shopData }: ShoeOptionProps) {
   const [products, setProduct] = useState<PRODUCT[]>();
   const selectId = useRef<number>(-1);
   const isExecuting = useRef<boolean>(false);
@@ -20,9 +20,12 @@ function ShoeOption({ userId, shopId }: ShoeOptionProps) {
   const formRef = createRef<HTMLFormElement>();
   const deleteCheck = createRef<HTMLInputElement>();
 
-  if (!userId || !shopId) {
+  if (!userData || !shopData) {
     return (<h1>LOADING ....</h1>)
   }
+
+  const userId = userData.userId;
+  const shopId = shopData.shopId;
 
   const handleRefreshData = async () => {
     if (isExecuting.current) {

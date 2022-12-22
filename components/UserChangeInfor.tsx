@@ -25,38 +25,18 @@ export default function UserChangeInfor() {
         </div>
         <div className={styles["user_change_information_form_layout"]}>
           <div className={styles["user_change_information_form"]}>
-            <form
-              action=""
-              method="GET"
-              style={{ width: "100%", height: "100%" }}
-            >
+            <form action="" method="GET" style={{ width: "100%", height: "100%" }}>
               <div>
-                <label htmlFor="username">
-                  Tên đăng nhập
-                  <input
-                    type="text"
-                    name="user_login_name"
-                    id="user_login_name"
-                    value={UserInformation.userLoginName}
-                  />
+                <label htmlFor="username">Tên đăng nhập
+                  <input type="text" name="user_login_name" id="user_login_name" value={UserInformation.userLoginName}/>
                 </label>
-                <div
-                  className={`${styles["user_name_display"]} ${styles["inline_block"]} ${styles["mgl5"]}`}
-                ></div>
+                <div className={`${styles["user_name_display"]} ${styles["inline_block"]} ${styles["mgl5"]}`}></div>
               </div>
               <div>
-                <label htmlFor="user_name_display">
-                  Tên
-                  <input
-                    type="text"
-                    name="user_name_display"
-                    id="user_name_display"
-                    value={UserInformation.userName}
-                  />
+                <label htmlFor="user_name_display">Tên
+                  <input type="text" name="user_name_display" id="user_name_display" value={UserInformation.userName}/>
                 </label>
-                <div
-                  className={`${styles["user_name_display"]} ${styles["inline_block"]} ${styles["mgl5"]}`}
-                ></div>
+                <div className={`${styles["user_name_display"]} ${styles["inline_block"]} ${styles["mgl5"]}`}></div>
               </div>
               <div>
                 <label htmlFor="user_password">
