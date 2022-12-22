@@ -9,25 +9,33 @@ let Items = {
   price: "100.000",
 };
 
-export default function Invoice() {
+interface InvoiceProps {
+  belongTo: string,
+  item: {
+    name: string,
+    price: number
+  }[]
+}
+
+export default function Invoice(props: InvoiceProps) {
   return (
     <div className={styles["container"]}>
       <form action="">
         <div className={styles["title"]}>
-          <div>{Items.belongTo}</div>
+          <div>{props.belongTo}</div>
           <div>{Items.status}</div>
         </div>
-        <div className={styles["content"]}>
-          <div>
-            {Items.itemName}{" "}
-            {/* <Image
-              src={userImage}
-              alt="user_image"
-              className={styles["user_image"]}
-            /> */}
-          </div>
-          <div>{Items.price}</div>
-        </div>
+        <ul className={styles["content"]}>
+          {
+            props.item.map((iteminfo) => {
+              return (<li>
+                <div>{iteminfo.name}{" "}</div>
+                <div>{iteminfo.price}</div>
+              </li>);
+            })
+          }
+
+        </ul>
         <button className={styles["reorder"]}>Đặt Lại</button>
       </form>
     </div>
