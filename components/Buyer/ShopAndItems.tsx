@@ -20,7 +20,6 @@ export default function ShopAndItems() {
       <div className={styles["main"]}>
         <div className={styles["shop"]}>
           <div className={`${styles["check_box"]} ${styles["content"]}`}>
-            <input className={styles["checkbox_input"]} type="checkbox" />
             <a href={shopInfor.link} className={styles["shop_link"]}>
               <div className={styles["shop_label"]}>{shopInfor.label}</div>
               <span className={styles["shop_name"]}>{shopInfor.name}</span>

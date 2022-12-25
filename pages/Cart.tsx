@@ -1,8 +1,8 @@
-import styles from "../styles/Checkout.module.css";
+import styles from "../styles/Cart.module.css";
 
 import ShopAndItems from "../components/Buyer/ShopAndItems";
 
-export default function Checkout() {
+export default function Cart() {
   return (
     <div className={styles["container"]}>
       <div className={styles["main"]}>
@@ -11,6 +11,7 @@ export default function Checkout() {
             <input className={styles["checkbox_input"]} type="checkbox" />
             <div className={styles["column_product"]}>Sản Phẩm</div>
           </div>
+          <div className={styles["column_price"]}>Size</div>
           <div className={styles["column_price"]}>Đơn Giá</div>
           <div className={styles["column_quantity"]}>Số Lượng</div>
           <div className={styles["column_total_price"]}>Số Tiền</div>
@@ -18,6 +19,8 @@ export default function Checkout() {
         </div>
 
         <ShopAndItems />
+
+        <div className={styles["makepayment_sticky"]}></div>
       </div>
     </div>
   );
