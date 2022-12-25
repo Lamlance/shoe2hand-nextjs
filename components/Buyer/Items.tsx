@@ -1,4 +1,4 @@
-import styles from "../styles/Items.module.css";
+import styles from "/styles/Items.module.css";
 import Image from "next/image";
 import shoesImage from "/public/jordan1.png";
 

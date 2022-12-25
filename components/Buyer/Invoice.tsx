@@ -1,6 +1,6 @@
 import Image from "next/image";
 import userImage from "/public/logo-64.png";
-import styles from "../styles/Invoice.module.css";
+import styles from "/styles/Invoice.module.css";
 
 let Items = {
   belongTo: "AAA shop",
@@ -10,11 +10,11 @@ let Items = {
 };
 
 interface InvoiceProps {
-  belongTo: string,
+  belongTo: string;
   item: {
-    name: string,
-    price: number
-  }[]
+    name: string;
+    price: number;
+  }[];
 }
 
 export default function Invoice(props: InvoiceProps) {
@@ -26,15 +26,17 @@ export default function Invoice(props: InvoiceProps) {
           <div>{Items.status}</div>
         </div>
         <ul className={styles["content"]}>
-          {
-            props.item.map((iteminfo) => {
-              return (<li>
-                <div>{iteminfo.name}{" "}</div>
+          {props.item.map((iteminfo, index) => {
+            return (
+              <li key={index}>
+                <div>
+                  {iteminfo.name}
+                  {""}
+                </div>
                 <div>{iteminfo.price}</div>
-              </li>);
-            })
-          }
-
+              </li>
+            );
+          })}
         </ul>
         <button className={styles["reorder"]}>Đặt Lại</button>
       </form>

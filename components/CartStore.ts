@@ -1,5 +1,5 @@
 import { atom, map } from "nanostores";
-import type { ShopItemData } from "./ShopItem";
+import type { ShopItemData } from "./Buyer/ShopItem";
 
 export type CartItem = {
   id: string;

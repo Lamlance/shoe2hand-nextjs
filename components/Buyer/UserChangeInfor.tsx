@@ -1,6 +1,6 @@
 import Image from "next/image";
 import userImage from "/public/logo-64.png";
-import styles from "../styles/UserChangeInfor.module.css";
+import styles from "/styles/UserChangeInfor.module.css";
 
 const UserInformation = {
   userLoginName: "hanphu",

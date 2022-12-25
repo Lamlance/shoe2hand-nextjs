@@ -1,6 +1,6 @@
 import styles from "../styles/Checkout.module.css";
 
-import ShopAndItems from "../components/ShopAndItems";
+import ShopAndItems from "../components/Buyer/ShopAndItems";
 
 export default function Checkout() {
   return (

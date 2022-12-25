@@ -1,8 +1,8 @@
-import styles from "../styles/ShopAndItems.module.css";
+import styles from "/styles/ShopAndItems.module.css";
 import Image from "next/image";
 import userImage from "/public/logo-64.png";
 
-import Navbar from "./Navbar";
+import Navbar from "../Navbar";
 import Items from "./Items";
 
 const shopInfor = {

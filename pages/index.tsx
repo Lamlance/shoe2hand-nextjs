@@ -10,10 +10,10 @@ function Home() {
   const $isCartOpen = useStore(isCartOpen);
 
   return (
-      <ShopLayout>
-        <ShopDisplay />
-        {$isCartOpen ? (<ShopCart />):null}
-      </ShopLayout>
+    <ShopLayout>
+      <ShopDisplay />
+      {$isCartOpen ? <ShopCart /> : null}
+    </ShopLayout>
   );
 }
 //LÂM chỉnh sửa :))
