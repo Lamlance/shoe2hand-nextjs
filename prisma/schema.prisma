@@ -64,12 +64,20 @@ model ORDER {
   orderId          Int           @id @default(sequence())
   date             DateTime?
   bill             Int
-  deliveringStatus String?
+  deliveringStatus DeliverStats @default(WAITING)
   userId           Int
   shopId           Int
   SHOP             SHOP          @relation(fields: [shopId], references: [shopId], onDelete: Cascade)
   USER             USER          @relation(fields: [userId], references: [userId], onDelete: Cascade)
   ORDERDETAIL      ORDERDETAIL[]
+}
+
+enum DeliverStats { 
+  WAITING
+  CONFIRMED
+  DELIVERING
+  DELIVERED
+  CANCELED
 }
 
 model ORDERDETAIL {

@@ -1,27 +1,58 @@
-import { useUser } from '@auth0/nextjs-auth0/client';
+import { createRef, useEffect, useRef, useState } from "react";
+import Image from "next/image";
+import Navbar from "../../components/Navbar";
+import userImage from "/public/logo-64.png";
+
+import styles from "../../styles/UserDashboard.module.css";
+
+import Invoice from "../../components/Invoice";
+import CartItems from "../../components/CartItems";
+import UserChangeInfor from "../../components/UserChangeInfor";
+import { useUser } from "@auth0/nextjs-auth0/client";
 import { withPageAuthRequired } from '@auth0/nextjs-auth0/client';
-import { useStore } from '@nanostores/react';
-import { USER } from '@prisma/client';
-import { CSSProperties, useState } from 'react';
-import CartItems from '../../components/CartItems';
-import ShopCart from '../../components/ShopCart';
-import { CartItem, cartItems, deleteProduct, deleteCartItemByShopId } from '../../helper/CartStore';
-import { userInfo_inDB } from '../../helper/userInfo_inDB';
-import { OrderDetailResult } from '../api/buyer/order';
+import { useStore } from "@nanostores/react";
+import { userInfo_inDB } from "../../helper/userInfo_inDB";
+import { DeliverStats, USER } from "@prisma/client";
+import { OrderDetailResult } from "../api/buyer/order";
+// const UserDisplay = {
+//   userDisplayName: "Happy Guy",
+//   userImage: "/public/logo-64.png",
+// };
 
 
-import styles from "/styles/buyer/Buyer.module.css"
+function UserDashboard() {
+  // const [isActive, setIsActive] = useState(false);
+  const [orders,setOrders] = useState<OrderDetailResult[]>([]);
 
-function CartList() {
-  // const $cartItems = ;
-  const $cartItems = useStore(cartItems);
   const $userInfo_inDB = useStore(userInfo_inDB);
-  const [orders, setOrders] = useState<OrderDetailResult[]>();
+
+  const changeInfo = createRef<HTMLDivElement>();
+  const invoice = createRef<HTMLDivElement>();
+  const cart = createRef<HTMLDivElement>();
 
   const { user, error, isLoading } = useUser();
 
-  if (isLoading) return <div>Loading...</div>;
-  if (error) return <div>{error.message}</div>;
+  const tabPanel = [changeInfo, invoice, cart]
+
+  if(isLoading){
+    return(<h1>...LOADING</h1>)
+  }
+
+  if(error){
+    return(<h1>{error.message}</h1>)
+  }
+
+  const handleChangeTab = (id: number) => {
+    tabPanel.forEach((tab, index) => {
+      if (tab.current) {
+        tab.current.style.display = (id == index) ? "block" : "none";
+      }
+    })
+  }
+
+  useEffect(() => {
+    handleChangeTab(0);
+  }, []);
 
   if (!$userInfo_inDB || !$userInfo_inDB.user) {
     fetch("/api/user",
@@ -45,99 +76,80 @@ function CartList() {
       })
   }
 
-  const makeOrderHandler = async (orderDetail: CartItem) => {
-    if (!orderDetail) {
-      return;
-    }
-
-    const data: CartItem = JSON.parse(JSON.stringify(orderDetail));
-    deleteCartItemByShopId(orderDetail.shopId);
-
-    $userInfo_inDB?.user
-    const orderFetch = await fetch("/api/buyer/order", {
-      method: 'POST', // *GET, POST, PUT, DELETE, etc.
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      referrerPolicy: 'no-referrer',
-      body: JSON.stringify({
-        userId: $userInfo_inDB?.user.userId,
-        shopId: data.shopId,
-        product: data.products
-      })
-    })
-    try {
-      const orderData: OrderDetailResult = await orderFetch.json();
-      setOrders([
-        ...(orders ? orders : []),
-        orderData
-      ])
-    } catch (error) {
-      console.log(error);
-    }
+  if(!$userInfo_inDB || !$userInfo_inDB.user){
+    return(<h1>...LOADING USER DATA</h1>)
   }
 
-  const getOrders = async () => {
-    if (!$userInfo_inDB || !$userInfo_inDB.user){
-      return;
-    }
+  
 
-    const fetchData = await fetch(`/api/buyer/order?userId=${$userInfo_inDB.user.userId}`);
+  const handleClick = () => {
+    // setIsActive(!isActive);
+  };
+
+  const getOrders = async (filter:(DeliverStats | null)) => {
+    const fetchData = await fetch(`/api/buyer/order?userId=${$userInfo_inDB.user.userId}`)
     try {
-      const orders:OrderDetailResult[] = await fetchData.json();
-      setOrders(orders);
+      const data:OrderDetailResult[] = await fetchData.json();
+      setOrders(data);
     } catch (error) {
       
     }
   }
 
-  return (<div className={styles["buyer_wrapper"]}>
+  return (
     <div>
-      <h1>{$userInfo_inDB?.user.userId}</h1>
-      <ul>
-        {
-          Object.values($cartItems).map((shop, index) => {
-            return (<li>
-              <p>{`Shop ID: ${shop.shopId}`}</p>
-              <span><button onClick={() => { makeOrderHandler(shop) }}>ORDER</button></span>
-              <ul>
-                {
-                  shop.products.map((pInfo) => {
-                    return (<li>
-                      {`ID:${pInfo.id} - ${pInfo.title}: ${pInfo.quantity}`}
-                      <span><button onClick={() => { deleteProduct(shop.shopId, pInfo.id) }} >DELETE</button></span>
-                    </li>)
-                  })
-                }
-              </ul>
-            </li>)
-          })
-        }
-      </ul>
-    </div>
+      {/* <Navbar /> */}
+      <div className={styles["container"]}>
+        <div className={styles["sidebar"]}>
+          <div className={styles["user_infor"]}>
+            {/* test image */}
+            <Image src={userImage} alt="user_image" className={styles["user_image"]} />
+            <h3 className={`${styles["user_login_name"]} ${styles["inline_block"]}`}>
+              {$userInfo_inDB?.user.userName}
+            </h3>
+          </div>
+          <div className={styles["sidebar_navigation"]}>
+            <ul>
+              <li onClick={() => { handleChangeTab(0) }}>Thay đổi thông tin tài khoản</li>
+              <li onClick={() => { handleChangeTab(1);getOrders(null) }}>Đơn mua</li>
+              <li onClick={() => { handleChangeTab(2) }}>Giỏ hàng</li>
+            </ul>
+          </div>
+        </div>
+        <div className={styles["sidebar_display"]}>
+          <div ref={changeInfo} className={`${styles["user_change_acount_information"]}`}>
+            <UserChangeInfor />
+          </div>
 
-    <div>
-      Order
-      <button onClick={()=>{getOrders()}}> REFRESH </button>
-      <ul>
-        {
-          orders?.map((o) => {
-            return (<li key={`Order:${o.orderId}`}>
-              <p>{`Order ID: ${o.orderId}`}</p>
-              <ul>
+          <div ref={invoice} className={`${styles["user_invoice_information"]}`}>
+            <div className={styles["tab_navigation"]}>
+              <div className={styles["tab_button"]}>
+                <button onClick={() => { handleClick() }} >Chờ xác nhận</button>
+                <button onClick={() => { handleClick() }} >Đang giao</button>
+                <button onClick={() => { handleClick() }} >Đã giao</button>
+                <button onClick={() => { handleClick() }} >Đã huỷ</button>
+              </div>
+              <ul className={`${styles["user_invoice_information"]} ${styles["active"]}`}>
                 {
-                  o.ORDERDETAIL.map((detail,index) => {
-                    return (<li key={`Detail:${o.orderId}-${index}`}>
-                      {`${detail.PRODUCT.title} - ${detail.quantity}`}
+                  orders.map((order,index)=>{
+                    return(<li key={`Order:${index}`}>
+                      <Invoice {...order} />
                     </li>)
                   })
+                  // Invoice
                 }
               </ul>
-            </li>)
-          })
-        }
-      </ul>
+            </div>
+          </div>
+
+          <div ref={cart} className={`${styles["user_cart_information"]}`}>
+            <CartItems />
+          </div>
+
+        </div>
+      </div>
     </div>
-  </div>)
+  );
 }
-export default withPageAuthRequired(CartList);
+
+export default withPageAuthRequired(UserDashboard)

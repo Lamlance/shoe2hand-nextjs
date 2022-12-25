@@ -1,5 +1,5 @@
 import { withApiAuthRequired, getSession } from '@auth0/nextjs-auth0';
-import { ORDERDETAIL } from '@prisma/client';
+import { DeliverStats, ORDERDETAIL } from '@prisma/client';
 import type { NextApiRequest, NextApiResponse } from 'next'
 import { ProductInfo } from '../../../helper/CartStore';
 import { myPrismaClient } from '../../../helper/prismaClient';
@@ -144,13 +144,14 @@ async function POST(req: OrderNextApiRequest) {
 
 async function GetOrderById(userIdData: number, orderIdData: number) {
   await myPrismaClient.$connect();
-  const orderResult:(OrderDetailResult|null) = await myPrismaClient.oRDER.findFirst({
+  const orderResult: (OrderDetailResult | null) = await myPrismaClient.oRDER.findFirst({
     where: {
       orderId: orderIdData,
       userId: userIdData
     },
     select: {
       orderId: true,
+      deliveringStatus:true,
       SHOP: {
         select: {
           shopName: true
@@ -170,13 +171,17 @@ async function GetOrderById(userIdData: number, orderIdData: number) {
   })
   return orderResult;
 }
-async function GetOrder(userIdData: number,page:number = 0) {
+async function GetOrder(userIdData: number, page: number = 0) {
   await myPrismaClient.$connect();
-  const orders:(OrderDetailResult[])  = await myPrismaClient.oRDER.findMany({
-    skip: 10* page,
+  const orders:OrderDetailResult[] = await myPrismaClient.oRDER.findMany({
+    skip: 10 * page,
     take: 10,
+    orderBy:[
+      {date:"desc"}
+    ],
     select: {
       orderId: true,
+      deliveringStatus: true,
       SHOP: {
         select: {
           shopName: true
@@ -209,7 +214,7 @@ async function GET(req: OrderNextApiRequest) {
 
   if (isNaN(orderIdData)) {
     const pageNumber = isNaN(pageData) ? 0 : pageData;
-    const orders = await GetOrder(userIdData,pageNumber);
+    const orders = await GetOrder(userIdData, pageNumber);
     return orders;
   }
 
@@ -219,17 +224,17 @@ async function GET(req: OrderNextApiRequest) {
 }
 
 export interface OrderDetailResult {
+  orderId: number;
   SHOP: {
     shopName: string;
   };
   ORDERDETAIL: {
+    quantity: number;
     PRODUCT: {
       title: string;
     };
-    quantity: number;
   }[];
-  orderId: number;
-
+  deliveringStatus: DeliverStats;
 }
 
 

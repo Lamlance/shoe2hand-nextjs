@@ -22,6 +22,7 @@
 .content {
   display: flex;
   justify-content: space-between;
+  flex-direction: column;
   border: #ccc solid 1px;
   padding: .8em;
 }
