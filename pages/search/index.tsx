@@ -9,7 +9,7 @@ import styles from "/styles/Search.module.css"
 
 const brand = () => {
   const router = useRouter();
-  const { brandName } = router.query
+  const { brandName } = router.query;
   const $isCartOpen = useStore(isCartOpen);
 
   console.log($isCartOpen)
