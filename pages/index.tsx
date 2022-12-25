@@ -2,7 +2,7 @@ import ShopDisplay from "../components/ShopDisplay";
 import Navbar from "../components/Navbar";
 import styles from "../styles/ShopDisplay.module.css";
 
-import ShopItem from "../components/ShopItem";
+import ShopItem from "../components/Buyer/ShopItem";
 import ShopLayout from "../components/layouts/ShopLayout";
 import ShopCart from "../components/ShopCart";
 

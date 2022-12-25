@@ -1,42 +1,40 @@
 import Image from "next/image";
 import userImage from "/public/logo-64.png";
-import styles from "/styles/Invoice.module.css";
+import styles from "../../styles/Invoice.module.css";
+import { OrderDetailResult } from "../../pages/api/buyer/order";
 
-let Items = {
-  belongTo: "AAA shop",
-  status: "Đã giao",
-  itemName: "Giày X",
-  price: "100.000",
-};
+// let Items = {
+//   belongTo: "AAA shop",
+//   status: "Đã giao",
+//   itemName: "Giày X",
+//   price: "100.000",
+// };
 
 interface InvoiceProps {
-  belongTo: string;
+  belongTo: string,
   item: {
-    name: string;
-    price: number;
-  }[];
+    name: string,
+    price: number
+  }[]
 }
 
-export default function Invoice(props: InvoiceProps) {
+export default function Invoice(props: OrderDetailResult) {
   return (
     <div className={styles["container"]}>
       <form action="">
         <div className={styles["title"]}>
-          <div>{props.belongTo}</div>
-          <div>{Items.status}</div>
+          <div>{props.SHOP.shopName}</div>
+          <div>{props.deliveringStatus}</div>
         </div>
         <ul className={styles["content"]}>
-          {props.item.map((iteminfo, index) => {
-            return (
-              <li key={index}>
-                <div>
-                  {iteminfo.name}
-                  {""}
-                </div>
-                <div>{iteminfo.price}</div>
-              </li>
-            );
-          })}
+          {
+            props.ORDERDETAIL.map((iteminfo) => {
+              return (<li>
+                <div>{`${iteminfo.PRODUCT.title} x${iteminfo.quantity}`}</div>
+              </li>);
+            })
+          }
+
         </ul>
         <button className={styles["reorder"]}>Đặt Lại</button>
       </form>

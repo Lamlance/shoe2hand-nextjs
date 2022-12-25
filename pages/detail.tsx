@@ -63,15 +63,6 @@ const ProductDetail = () =>{
   }
 
   function addToCartHandler(){
-    if(!fetchedData){
-      return
-    }
-    const data:ItemDisplayInfo = {
-      name:fetchedData.name,
-      id:"0",
-      quantity:productAmount
-    }
-    addCartItem(data,true);
   }
 
   return(<ShopLayout>

@@ -5,9 +5,9 @@ import userImage from "/public/logo-64.png";
 
 import styles from "../../styles/UserDashboard.module.css";
 
-import Invoice from "../../components/Invoice";
+import Invoice from "../../components/Buyer/Invoice";
 import CartItems from "../../components/CartItems";
-import UserChangeInfor from "../../components/UserChangeInfor";
+import UserChangeInfor from "../../components/Buyer/UserChangeInfor";
 import { useUser } from "@auth0/nextjs-auth0/client";
 import { withPageAuthRequired } from '@auth0/nextjs-auth0/client';
 import { useStore } from "@nanostores/react";
@@ -50,10 +50,6 @@ function UserDashboard() {
     })
   }
 
-  useEffect(() => {
-    handleChangeTab(0);
-  }, []);
-
   if (!$userInfo_inDB || !$userInfo_inDB.user) {
     fetch("/api/user",
       {
@@ -85,7 +81,8 @@ function UserDashboard() {
   const handleClick = () => {
     // setIsActive(!isActive);
   };
-
+  handleChangeTab(0);
+  
   const getOrders = async (filter:(DeliverStats | null)) => {
     const fetchData = await fetch(`/api/buyer/order?userId=${$userInfo_inDB.user.userId}`)
     try {
