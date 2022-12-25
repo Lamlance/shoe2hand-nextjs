@@ -79,11 +79,13 @@ export default async function handler(
   }
 
   if (ans.AND.length == 0 && ans.OR.length == 0) {
-    const newAns = {
+    const products = await myPrismaClient.pRODUCT.findMany({
       take: itemPerPage,
       skip: 0,
-    }
-    const products = await myPrismaClient.pRODUCT.findMany(newAns);
+      where:{
+        quantity: { gt: 0 } 
+      }
+    });
     res.status(200).json(products);
     return;
   }
@@ -98,12 +100,13 @@ export default async function handler(
       take: itemPerPage,
       skip: 0,
       where: {
-        AND:[
+        AND: [
           (priceObj.AND[0] ? priceObj.AND[0] : {}),
-          (priceObj.AND[1] ? priceObj.AND[1] : {})
+          (priceObj.AND[1] ? priceObj.AND[1] : {}),
+          { quantity: { gt: 0 } }
         ],
         ...(nameObj ? nameObj : {}),
-        
+
       }
     });
 
@@ -116,6 +119,7 @@ export default async function handler(
       take: itemPerPage,
       skip: 0,
       where: {
+        AND: [{ quantity: { gt: 0 } }],
         ...brandObj
       }
     });
@@ -127,18 +131,19 @@ export default async function handler(
   const products = await myPrismaClient.pRODUCT.findMany({
     take: itemPerPage,
     skip: 0,
-    include:{
-      SHOP:{
-        select:{
+    include: {
+      SHOP: {
+        select: {
           shopName: true
         }
       }
     },
     where: {
       ...brandObj,
-      AND:[
+      AND: [
         (priceObj.AND[0] ? priceObj.AND[0] : {}),
-        (priceObj.AND[1] ? priceObj.AND[1] : {})
+        (priceObj.AND[1] ? priceObj.AND[1] : {}),
+        { quantity: { gt: 0 } }
       ],
       ...(nameObj ? nameObj : {}),
     }

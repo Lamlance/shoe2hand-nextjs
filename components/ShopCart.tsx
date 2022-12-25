@@ -1,6 +1,6 @@
 import { useStore } from "@nanostores/react";
 import Link from "next/link";
-import { cartItems, deleteCartItemByShopId } from "../helper/CartStore";
+import { cartItems } from "../helper/CartStore";
 import styles from "../styles/ShopCart.module.css";
 
 export default function ShopCart() {
@@ -25,7 +25,7 @@ export default function ShopCart() {
         {
           Object.values($cartItems).map((shop, index) => {
             return (<li>
-              <p onClick={()=>{deleteCartItemByShopId(shop.shopId)}}>{`Shop ID: ${shop.shopId}`}</p>
+              <p>{`Shop ID: ${shop.shopId}`}</p>
               <ul>
                 {
                   shop.products.map((pInfo) => {

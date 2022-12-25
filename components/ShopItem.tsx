@@ -13,7 +13,8 @@ interface ShopItemData {
   id: number;
   title:string;
   price: Decimal | null;
-  shopId:number
+  shopId:number,
+  quantity:number
 }
 
 class ShopItem extends React.Component<ShopItemData,{}> {
@@ -43,6 +44,7 @@ class ShopItem extends React.Component<ShopItemData,{}> {
             <img alt={"Product img desc"}></img>
             <p>{this.props.title}</p>
             <p>{this.props.price ? `${this.props.price}VND` : "Free"}</p>
+            <p>Remain:{this.props.quantity}</p>
           </div>
         </Link >
         <button

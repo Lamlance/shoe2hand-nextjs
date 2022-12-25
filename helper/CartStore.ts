@@ -1,3 +1,4 @@
+import { useStore } from "@nanostores/react";
 import { atom, map } from "nanostores";
 import type { ShopItemData } from "../components/ShopItem";
 
@@ -49,9 +50,30 @@ export function addCartItem(shopId: number, productData: ProductInfo, replaceFla
 }
 
 export function deleteCartItemByShopId(shopId: number) {
-  if (cartItems.get()[shopId]) {
+  if(cartItems.get()[shopId]){
     const newCart = cartItems.get();
-    delete newCart[shopId]
-    cartItems.set(newCart);
+    delete newCart[shopId];
+    cartItems.set( JSON.parse(JSON.stringify(newCart)) );
   }
+}
+
+export function deleteProduct(shopId:number,productId:number){
+  if(!cartItems.get()[shopId]){
+    return;
+  }
+
+  const newProducts:ProductInfo[] = [];
+  cartItems.get()[shopId].products.forEach((item)=>{
+    if(item.id !== productId){
+      newProducts.push(item);
+    }
+  })
+  if(newProducts.length === 0){
+    deleteCartItemByShopId(shopId);
+    return;
+  }
+  cartItems.setKey(shopId,{
+    shopId: shopId,
+    products: newProducts
+  })
 }

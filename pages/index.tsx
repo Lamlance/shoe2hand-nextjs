@@ -46,7 +46,10 @@ function Home() {
         {
           products.map((item, index) => {
             return (<li key={index}>
-              <ShopItem id={item.productId} title={item.title} price={null} shopId={item.shopId}   />
+              <ShopItem
+                id={item.productId} title={item.title} price={null}
+                shopId={item.shopId} quantity={item.quantity}
+              />
             </li>)
           })
         }
