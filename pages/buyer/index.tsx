@@ -5,7 +5,7 @@ import userImage from "/public/logo-64.png";
 
 import styles from "../../styles/UserDashboard.module.css";
 
-import Invoice from "../../components/Buyer/Invoice";
+import Order from "../../components/Buyer/Order";
 import CartItems from "../../components/CartItems";
 import UserChangeInfor from "../../components/Buyer/UserChangeInfor";
 import { useUser } from "@auth0/nextjs-auth0/client";
@@ -131,7 +131,7 @@ function UserDashboard() {
                 {
                   orders.map((order,index)=>{
                     return(<li key={`Order:${index}`}>
-                      <Invoice {...order} />
+                      <Order {...order} />
                     </li>)
                   })
                   // Invoice
