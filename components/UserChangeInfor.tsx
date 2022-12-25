@@ -28,13 +28,13 @@ export default function UserChangeInfor() {
             <form action="" method="GET" style={{ width: "100%", height: "100%" }}>
               <div>
                 <label htmlFor="username">Tên đăng nhập
-                  <input type="text" name="user_login_name" id="user_login_name" value={UserInformation.userLoginName}/>
+                  <input type="text" name="user_login_name" id="user_login_name" defaultValue={UserInformation.userLoginName}/>
                 </label>
                 <div className={`${styles["user_name_display"]} ${styles["inline_block"]} ${styles["mgl5"]}`}></div>
               </div>
               <div>
                 <label htmlFor="user_name_display">Tên
-                  <input type="text" name="user_name_display" id="user_name_display" value={UserInformation.userName}/>
+                  <input type="text" name="user_name_display" id="user_name_display" defaultValue={UserInformation.userName}/>
                 </label>
                 <div className={`${styles["user_name_display"]} ${styles["inline_block"]} ${styles["mgl5"]}`}></div>
               </div>
@@ -45,7 +45,7 @@ export default function UserChangeInfor() {
                     type="password"
                     name="user_passowrd"
                     id="user_password"
-                    value={UserInformation.userPassword}
+                    defaultValue={UserInformation.userPassword}
                   />
                 </label>
                 <div
@@ -59,7 +59,7 @@ export default function UserChangeInfor() {
                     type="text"
                     name="email"
                     id="email"
-                    value={UserInformation.userEmail}
+                    defaultValue={UserInformation.userEmail}
                     pattern="[^@\s]+@[^@\s]+\.[^@\s]+"
                     title="Invalid email address"
                   />
@@ -75,7 +75,7 @@ export default function UserChangeInfor() {
                     type="text"
                     name="phone_number"
                     id="phone_number"
-                    value={UserInformation.userPhoneNumber}
+                    defaultValue={UserInformation.userPhoneNumber}
                   />
                 </label>
                 <div className={styles["inline_block"]}></div>

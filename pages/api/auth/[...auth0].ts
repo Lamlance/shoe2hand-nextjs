@@ -9,21 +9,23 @@ import { useStore } from '@nanostores/react';
 
 const afterCallback = (
   req: NextApiRequest, res: NextApiResponse, session: any, state?: {}) => {
-
-  myPrismaClient.$connect().then(()=>{
+  if (!session.user || !session) {
+    return session;
+  }
+  myPrismaClient.$connect().then(() => {
     const savedUser = myPrismaClient.uSER.findFirst({
       where: {
-        OR:[
-          {email:{equals:session.user.email}},
-          {uuid: {contains: session.user.sub}}
+        OR: [
+          { email: { equals: session.user.email } },
+          { uuid: { contains: session.user.sub } }
         ]
       },
       select: {
         userId: true,
-        uuid:true
+        uuid: true
       }
     })
-    savedUser.then((savedData)=>{
+    savedUser.then((savedData) => {
       if (!savedData || savedData == null) {
         const newUser = myPrismaClient.uSER.create({
           data: {
@@ -31,17 +33,17 @@ const afterCallback = (
             userName: session.user.nickname || session.user.name,
             uuid: session.user.sub
           },
-          select:{
-            userId:true
+          select: {
+            userId: true
           }
         })
-      }else if( session.user.sub && ( !savedData.uuid || !savedData.uuid.includes(session.user.sub) )){
+      } else if (session.user.sub && (!savedData.uuid || !savedData.uuid.includes(session.user.sub))) {
         const newUUID = savedData.uuid ? savedData.uuid.concat(` , ${session.user.sub}`) : <string>session.user.sub;
         const updateUser = myPrismaClient.uSER.update({
-          where:{
+          where: {
             userId: savedData.userId
           },
-          data:{
+          data: {
             uuid: newUUID
           }
         })
@@ -58,7 +60,17 @@ export default handleAuth({
     try {
       await handleCallback(req, res, { afterCallback });
     } catch (err) {
-      res.status(500).end();
+      // console.error("Status:", "-", err);
+      res
+        .redirect(
+          `${process.env.AUTH0_ISSUER_BASE_URL}/v2/logout?${new URLSearchParams(
+            {
+              client_id: process.env.AUTH0_CLIENT_ID as string,
+              returnTo: process.env.AUTH0_BASE_URL as string,
+            }
+          )}`
+        )
+        .end();
     }
   }
 });

@@ -2,7 +2,7 @@ import { Decimal } from "@prisma/client/runtime";
 import Link from "next/link";
 import React, { createRef, useRef } from "react";
 import styles from "../styles/ShopItem.module.css";
-import { addCartItem, ItemDisplayInfo } from "../helper/CartStore";
+import { addCartItem, ItemDisplayInfo, ProductInfo } from "../helper/CartStore";
 
 // interface ShopItemProps{
 //     id:string,
@@ -10,26 +10,29 @@ import { addCartItem, ItemDisplayInfo } from "../helper/CartStore";
 //     price:Currency<number>;
 // }
 interface ShopItemData {
-  name: string;
+  id: number;
+  title:string;
   price: Decimal | null;
+  shopId:number
 }
 
-class ShopItem extends React.Component<ShopItemData, {}> {
+class ShopItem extends React.Component<ShopItemData,{}> {
   addCartButton: React.RefObject<HTMLButtonElement>;
 
-  constructor(props: ShopItemData) {
+  constructor(props:ShopItemData) {
     super(props);
     this.addCartButton = createRef<HTMLButtonElement>();
     this.addToCartHandler = this.addToCartHandler.bind(this);
   }
+
   addToCartHandler() {
     if (this.addCartButton.current) {
-      const itemInfo: ItemDisplayInfo = {
-        name: this.props.name,
-        id: this.props.name,
-        quantity: 1
+      const itemInfo: ProductInfo = {
+        title: this.props.title,
+        id: this.props.id,
+        quantity: 1,
       };
-      addCartItem(itemInfo);
+      addCartItem(this.props.shopId,itemInfo);
     }
   }
   render(): React.ReactNode {
@@ -38,7 +41,7 @@ class ShopItem extends React.Component<ShopItemData, {}> {
         <Link href="/detail">
           <div className={styles["s2h_BreifInfo"]}>
             <img alt={"Product img desc"}></img>
-            <p>{this.props.name}</p>
+            <p>{this.props.title}</p>
             <p>{this.props.price ? `${this.props.price}VND` : "Free"}</p>
           </div>
         </Link >

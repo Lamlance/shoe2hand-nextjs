@@ -2,102 +2,203 @@ import { myPrismaClient } from '../../helper/prismaClient'
 import type { NextApiRequest, NextApiResponse } from 'next'
 import { handleQuery, handleQueryArray } from '../../helper/queryHelper'
 
-interface QueryObj {
-  skip: number | 0,
-  take: number,
-  where: {
-    brandID?: number,
-    AND: [
-      {price: { lte: number }}?, 
-      {price: { gte: number }}?,
-      {title:{contains:string}}?,
-      {isHidden: boolean}?,
-      {quantity:{gte:number}}?
-    ],
-    OR?:{[index: number]:{brandId:Number}}
-    shopID?: number
-  }
-}
+// interface QueryObj {
+//   skip: number | 0,
+//   take: number,
+//   where: {
+//     brandID?: number,
+//     AND: [
+//       {price: { lte: number }}?, 
+//       {price: { gte: number }}?,
+//       {title:{contains:string}}?,
+//       {isHidden: boolean}?,
+//       {quantity:{gte:number}}?
+//     ],
+//     OR?:{[index: number]:{brandId:Number}}
+//     shopID?: number
+//   }
+// }
 
 interface ProductRespond {
-  productId:number,
-  price:number,
-  title:string,
+  productId: number,
+  price: number,
+  title: string,
+  shopId: number
 }
-export type {ProductRespond}
+export type { ProductRespond }
 
+interface BrandObj {
+  OR: { brandId: number }[]
+}
+interface PriceObj {
+  AND: [
+    { price: { gte: number } }?,
+    { price: { lte: number } }?
+  ]
+}
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<ProductRespond[]>
+  res: NextApiResponse
 ) {
   const itemPerPage = 10;
   await myPrismaClient.$connect();
 
 
-  const param = (req.method == "GET") ? req.query : req.body;
-  const { brand,min,max,name } = param;
+  const param = req.query;
+  const { brand, min, max, name } = param;
 
-  const queryObj:QueryObj = {
-    take:itemPerPage,
-    skip:0,
-    where: {
-      AND:[{isHidden:false},{quantity:{gte:1}}]
-    }
+  let queryObj = {
+    take: itemPerPage,
+    skip: 0,
   }
-  
+
   const pageNumber = Number.parseInt(handleQuery(param.page))
-  if(!isNaN(pageNumber)){
-    queryObj.skip = pageNumber*itemPerPage
+  if (!isNaN(pageNumber)) {
+    queryObj.skip = pageNumber * itemPerPage
   }
-  handleBrand(handleQueryArray(brand),queryObj);
-  handleMinMaxPrice(handleQuery(min),handleQuery(max),queryObj);
-  handleName(handleQuery(name),queryObj);
-  const ans = await myPrismaClient.pRODUCT.findMany(queryObj);
 
-  res.status(200).json(ans)
+  const brandObj = handleBrand(handleQueryArray(brand));
+  const priceObj = handleMinMaxPrice(handleQuery(min), handleQuery(max));
+  const nameObj = handleName(handleQuery(name));
+
+
+
+  // const ans = await myPrismaClient.pRODUCT.findMany({
+  //   where: {
+
+  //   }
+  // });
+
+  const ans = {
+    take: itemPerPage,
+    skip: 0,
+    ...brandObj,
+    ...priceObj,
+    ...nameObj
+  }
+
+  if (ans.AND.length == 0 && ans.OR.length == 0) {
+    const newAns = {
+      take: itemPerPage,
+      skip: 0,
+    }
+    const products = await myPrismaClient.pRODUCT.findMany(newAns);
+    res.status(200).json(products);
+    return;
+  }
+
+  if (ans.AND.length != 0 && ans.OR.length == 0) {
+    console.log({
+      ...(nameObj ? nameObj : {}),
+      ...(priceObj.AND[0] ? priceObj.AND[0] : {}),
+      ...(priceObj.AND[1] ? priceObj.AND[1] : {})
+    })
+    const products = await myPrismaClient.pRODUCT.findMany({
+      take: itemPerPage,
+      skip: 0,
+      where: {
+        AND:[
+          (priceObj.AND[0] ? priceObj.AND[0] : {}),
+          (priceObj.AND[1] ? priceObj.AND[1] : {})
+        ],
+        ...(nameObj ? nameObj : {}),
+        
+      }
+    });
+
+    res.status(200).json(products);
+    return;
+  }
+
+  if (ans.AND.length == 0 && ans.OR.length != 0) {
+    const products = await myPrismaClient.pRODUCT.findMany({
+      take: itemPerPage,
+      skip: 0,
+      where: {
+        ...brandObj
+      }
+    });
+    res.status(200).json(products);
+
+    return;
+  }
+
+  const products = await myPrismaClient.pRODUCT.findMany({
+    take: itemPerPage,
+    skip: 0,
+    include:{
+      SHOP:{
+        select:{
+          shopName: true
+        }
+      }
+    },
+    where: {
+      ...brandObj,
+      AND:[
+        (priceObj.AND[0] ? priceObj.AND[0] : {}),
+        (priceObj.AND[1] ? priceObj.AND[1] : {})
+      ],
+      ...(nameObj ? nameObj : {}),
+    }
+  });
+
+  res.status(200).json(products);
 }
 
 
 
-function handleBrand(brandQuery: string[] , queryObj: QueryObj) {
+function handleBrand(brandQuery: string[]) {
   const brandIdList = handleQueryArray(brandQuery);
-  brandIdList.forEach((brand,index)=>{
-    const brandId = Number.parseInt(brand);
-    if(!isNaN(brandId)){
-      if(!queryObj.where.OR){
-        queryObj.where.OR = []
-      }
-      queryObj.where.OR[index] = {brandId:brandId}      
+  const queryObj: BrandObj = {
+    OR: []
+  };
+
+  brandIdList.forEach((brand, index) => {
+    if (typeof brand === "number") {
+      queryObj.OR.push({ brandId: brand });
+      return;
+    }
+
+    const brandIdNumber = Number.parseInt(brand);
+    if (!isNaN(brandIdNumber)) {
+      queryObj.OR.push({ brandId: brandIdNumber });
+
     }
   })
+
   return queryObj;
 }
 
-function handleMinMaxPrice(minQuery: string,maxQuery:string, queryObj: QueryObj){
+function handleMinMaxPrice(minQuery: string, maxQuery: string) {
   const minPrice = Number.parseInt(minQuery);
   const maxPrice = Number.parseInt(maxQuery);
-  if(!queryObj.where.AND){
-    queryObj.where.AND = []
-  };
 
-  if(!isNaN(minPrice)){
-    queryObj.where.AND.push({price: { gte: minPrice }})
-  }
-  if(!isNaN(maxPrice)){
-    queryObj.where.AND.push({price: { lte: maxPrice }})
+  const priceObj: PriceObj = {
+    AND: [
+    ]
   }
 
-  return queryObj;
+  if (!isNaN(minPrice)) {
+    priceObj.AND.push({ price: { gte: minPrice } })
+  }
+  if (!isNaN(maxPrice)) {
+    priceObj.AND.push({ price: { lte: maxPrice } })
+  }
+
+  return priceObj;
 }
 
-function handleName(name:string,queryObj:QueryObj){
-  if(!queryObj.where.AND){
-    queryObj.where.AND = []
-  };
-  queryObj.where.AND.push({title:{contains:name}});
+function handleName(name: string) {
+  if (name) {
+    return {
+      AND: [{ title: { contains: name } }]
+    }
+  }
+  return null;
 }
 
-function GET(){
-  
+function GET() {
+
 }

@@ -1,0 +1,8 @@
+.buyer_wrapper{
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  column-gap: 0.5rem;
+}
+.buyer_wrapper > div {
+  margin: 1rem;
+}

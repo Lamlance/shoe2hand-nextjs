@@ -9,11 +9,11 @@ import ShopCart from "../components/ShopCart";
 import { isCartOpen } from "../helper/CartStore";
 import { useStore } from "@nanostores/react";
 import { useEffect, useState } from "react";
-import { ProductRespond } from "./api/products";
+import { PRODUCT } from "@prisma/client";
 
 function Home() {
   const $isCartOpen = useStore(isCartOpen);
-  const [products,setProducts] = useState<ProductRespond[]>([]);
+  const [products, setProducts] = useState<PRODUCT[]>([]);
 
 
   const fetchProduct = async () => {
@@ -24,19 +24,19 @@ function Home() {
         'Content-Type': 'application/json'
       },
     })
-    
+
     const json = await rawResponse.json();
     console.log(json);
     return json;
   }
 
-  // useEffect(() => {
-  //   const productFetch = fetchProduct();
-  //   productFetch.then((data)=>{
-  //     setProducts(data);
-  //   })
+  useEffect(() => {
+    const productFetch = fetchProduct();
+    productFetch.then((data) => {
+      setProducts(data);
+    })
 
-  // },[])
+  }, [])
 
 
 
@@ -44,9 +44,9 @@ function Home() {
     <ShopLayout>
       <ul className={styles["ShopDisplay"]}>
         {
-          products.map((item,index)=>{
-            return(<li key={index}>
-              <ShopItem name={`${item.title}`} price={item.price} />
+          products.map((item, index) => {
+            return (<li key={index}>
+              <ShopItem id={item.productId} title={item.title} price={null} shopId={item.shopId}   />
             </li>)
           })
         }
