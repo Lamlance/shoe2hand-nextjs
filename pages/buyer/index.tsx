@@ -34,6 +34,14 @@ function UserDashboard() {
 
   const tabPanel = [changeInfo, invoice, cart]
 
+  const handleChangeTab = (id: number) => {
+    tabPanel.forEach((tab, index) => {
+      if (tab.current) {
+        tab.current.style.display = (id == index) ? "block" : "none";
+      }
+    })
+  }
+
   if(isLoading){
     return(<h1>...LOADING</h1>)
   }
@@ -42,13 +50,7 @@ function UserDashboard() {
     return(<h1>{error.message}</h1>)
   }
 
-  const handleChangeTab = (id: number) => {
-    tabPanel.forEach((tab, index) => {
-      if (tab.current) {
-        tab.current.style.display = (id == index) ? "block" : "none";
-      }
-    })
-  }
+  
 
   if (!$userInfo_inDB || !$userInfo_inDB.user) {
     fetch("/api/user",
@@ -81,8 +83,7 @@ function UserDashboard() {
   const handleClick = () => {
     // setIsActive(!isActive);
   };
-  handleChangeTab(0);
-  
+
   const getOrders = async (filter:(DeliverStats | null)) => {
     const fetchData = await fetch(`/api/buyer/order?userId=${$userInfo_inDB.user.userId}`)
     try {
@@ -118,7 +119,7 @@ function UserDashboard() {
             <UserChangeInfor />
           </div>
 
-          <div ref={invoice} className={`${styles["user_invoice_information"]}`}>
+          <div style={{display:"none"}} ref={invoice} className={`${styles["user_invoice_information"]}`}>
             <div className={styles["tab_navigation"]}>
               <div className={styles["tab_button"]}>
                 <button onClick={() => { handleClick() }} >Chờ xác nhận</button>
@@ -139,7 +140,7 @@ function UserDashboard() {
             </div>
           </div>
 
-          <div ref={cart} className={`${styles["user_cart_information"]}`}>
+          <div style={{display:"none"}} ref={cart} className={`${styles["user_cart_information"]}`}>
             <CartItems />
           </div>
 
