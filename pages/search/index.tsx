@@ -4,7 +4,7 @@ import React from 'react';
 import { isCartOpen } from '../../helper/CartStore';
 import ShopLayout from '../../components/layouts/ShopLayout';
 import ShopCart from '../../components/ShopCart';
-import ShopDisplay from '../../components/ShopDisplay';
+import ShopDisplay from '../../components/Buyer/ShopDisplay';
 import styles from "/styles/Search.module.css"
 
 const brand = () => {

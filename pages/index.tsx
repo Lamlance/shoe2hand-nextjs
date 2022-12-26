@@ -1,4 +1,4 @@
-import ShopDisplay from "../components/ShopDisplay";
+import ShopDisplay from "../components/Buyer/ShopDisplay";
 import Navbar from "../components/Navbar";
 import styles from "../styles/ShopDisplay.module.css";
 

@@ -21,6 +21,7 @@
   margin: 0.5rem;
   border: 0.3rem solid red;
 }
+
 /* FORM */
 .s2h_seller_shoe_option_form{
   grid-area: form;
@@ -42,4 +43,13 @@
 
 .s2h_seller_shoe_option_form > input{
   padding: 0.5rem;
+}
+
+.s2h_seller_order_option_form{
+  background-color: aqua;
+  padding: 1.5rem;
+}
+.s2h_seller_order_option_form > ul > li >div{
+  display: grid;
+  grid-template-columns: 1.5fr 0.5fr 1fr;
 }

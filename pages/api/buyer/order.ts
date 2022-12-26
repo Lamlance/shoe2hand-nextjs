@@ -171,7 +171,7 @@ async function GetOrderById(userIdData: number, orderIdData: number) {
   })
   return orderResult;
 }
-async function GetOrder(userIdData: number, page: number = 0) {
+async function GetOrder(userIdData: number, filter:string, page: number = 0) {
   await myPrismaClient.$connect();
   const orders:OrderDetailResult[] = await myPrismaClient.oRDER.findMany({
     skip: 10 * page,
@@ -202,11 +202,12 @@ async function GetOrder(userIdData: number, page: number = 0) {
   return orders;
 }
 async function GET(req: OrderNextApiRequest) {
-  const { userId, orderId, page } = req.query;
+  const { userId, orderId, page,filter } = req.query;
 
   const userIdData = Number.parseInt(handleQuery(userId));
   const orderIdData = Number.parseInt(handleQuery(orderId));
   const pageData = Number.parseInt(handleQuery(page));
+  const filterData = handleQuery(filter);
 
   if (isNaN(userIdData)) {
     return null;
@@ -214,7 +215,7 @@ async function GET(req: OrderNextApiRequest) {
 
   if (isNaN(orderIdData)) {
     const pageNumber = isNaN(pageData) ? 0 : pageData;
-    const orders = await GetOrder(userIdData, pageNumber);
+    const orders = await GetOrder(userIdData,filterData,pageNumber);
     return orders;
   }
 

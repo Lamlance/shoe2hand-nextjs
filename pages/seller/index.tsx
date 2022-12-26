@@ -11,6 +11,7 @@ import { USER, SHOP } from "@prisma/client";
 
 import ShoeOption from "../../components/Seller/ShoeOption";
 import ShopInfo from "../../components/Seller/ShopInfo";
+import OrderOption from "../../components/Seller/ShopOrder";
 
 const SellerDBoard = () => {
   // const [selectedOption, setSelectedOption] = useState(0);
@@ -81,6 +82,10 @@ const SellerDBoard = () => {
     userData: ($userInfo_inDB && $userInfo_inDB.user) ? $userInfo_inDB.user : null,
     shopData: ($userInfo_inDB && $userInfo_inDB.shop) ? $userInfo_inDB.shop : null
   });
+  const orderOption = OrderOption({
+    userData: ($userInfo_inDB && $userInfo_inDB.user) ? $userInfo_inDB.user : null,
+    shopData: ($userInfo_inDB && $userInfo_inDB.shop) ? $userInfo_inDB.shop : null
+  })
 
   return (<div >
     <h1>
@@ -101,8 +106,9 @@ const SellerDBoard = () => {
       </div>
 
       <ul ref={optDisplayList}>
-        <li className={"js-select-display"}>{shopInfo}</li>
-        <li className={"js-select-display"}>{shoeOption}</li>
+        <li  className={"js-select-display"}>{shopInfo}</li>
+        <li style={{display:"none"}} className={"js-select-display"}>{shoeOption}</li>
+        <li style={{display:"none"}} className={"js-select-display"}>{orderOption}</li>
       </ul>
 
     </div>

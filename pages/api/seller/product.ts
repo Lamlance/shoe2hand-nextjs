@@ -18,7 +18,7 @@ interface SellerProductAPI_GET{
 
 export type {SellerProductAPI_PUT,SellerProductAPI_POST,SellerProductAPI_GET,SellerProductAPI_DELETE}
 
-async function validateUser(email:string,uuid:string) {
+export async function validateUser(email:string,uuid:string) {
   await myPrismaClient.$connect();
   const user = await myPrismaClient.uSER.findFirst({
     where:{
@@ -34,7 +34,7 @@ async function validateUser(email:string,uuid:string) {
   return user;
 }
 
-async function validateShop(shopId:number,userid:number) {
+export async function validateShop(shopId:number,userid:number) {
   await myPrismaClient.$connect();
   const shop = await myPrismaClient.sHOP.findFirst({
     where:{

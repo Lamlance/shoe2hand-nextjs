@@ -1,18 +1,19 @@
 import { PRODUCT, SHOP, USER } from "@prisma/client";
 import { createRef, FormEvent, useEffect, useRef, useState } from "react";
 import styles from "/styles/seller/ShoeOption.module.css"
+
 import { 
   SellerProductAPI_POST, SellerProductAPI_GET, 
   SellerProductAPI_PUT, SellerProductAPI_DELETE 
 } from "../../pages/api/seller/product";
 
 
-interface ShoeOptionProps {
+export interface ShopData {
   userData: USER | null,
   shopData: SHOP | null
 }
 
-function ShoeOption({ userData, shopData }: ShoeOptionProps) {
+function ShoeOption({ userData, shopData }: ShopData) {
   const [products, setProduct] = useState<PRODUCT[]>();
   const selectId = useRef<number>(-1);
   const isExecuting = useRef<boolean>(false);

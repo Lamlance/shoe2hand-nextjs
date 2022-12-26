@@ -23,6 +23,7 @@ import { OrderDetailResult } from "../api/buyer/order";
 function UserDashboard() {
   // const [isActive, setIsActive] = useState(false);
   const [orders,setOrders] = useState<OrderDetailResult[]>([]);
+  const orderFilter = useRef<DeliverStats>("WAITING");
 
   const $userInfo_inDB = useStore(userInfo_inDB);
 
