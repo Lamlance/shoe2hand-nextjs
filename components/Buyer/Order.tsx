@@ -11,11 +11,11 @@ import { OrderDetailResult } from "../../pages/api/buyer/order";
 // };
 
 interface InvoiceProps {
-  belongTo: string,
+  belongTo: string;
   item: {
-    name: string,
-    price: number
-  }[]
+    name: string;
+    price: number;
+  }[];
 }
 
 export default function Order(props: OrderDetailResult) {
@@ -27,14 +27,13 @@ export default function Order(props: OrderDetailResult) {
           <div>{props.deliveringStatus}</div>
         </div>
         <ul className={styles["content"]}>
-          {
-            props.ORDERDETAIL.map((iteminfo) => {
-              return (<li>
+          {props.ORDERDETAIL.map((iteminfo, index) => {
+            return (
+              <li key={index}>
                 <div>{`${iteminfo.PRODUCT.title} x${iteminfo.quantity}`}</div>
-              </li>);
-            })
-          }
-
+              </li>
+            );
+          })}
         </ul>
         <button className={styles["reorder"]}>Đặt Lại</button>
       </form>

@@ -1,6 +1,6 @@
 import Image from "next/image";
-import Navbar from "../components/Navbar";
-import styles from "../styles/UserInvoiceDisplay.module.css";
+import Navbar from "../../components/Navbar";
+import styles from "../../styles/UserInvoiceDisplay.module.css";
 const invoiceStatus = {
   All: "All",
   ToConfirm: "To Confirm",

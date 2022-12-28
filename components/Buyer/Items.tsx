@@ -32,12 +32,8 @@ export default function Items() {
               </a>
             </div>
             <div className={styles["item_content_display"]}>
-              <div className={styles["item_size"]}>{ItemInfo.size}</div>
               <div className={styles["item_price"]}>{ItemInfo.price}</div>
               <div className={styles["item_quantity"]}>{ItemInfo.quantity}</div>
-              <div className={styles["item_total_price"]}>
-                {ItemInfo.totalPrice}
-              </div>
               <div className={styles["item_manipulation"]}>Xoá</div>
             </div>
           </div>
