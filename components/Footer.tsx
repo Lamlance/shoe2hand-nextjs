@@ -1,7 +1,9 @@
 import React from "react";
 import Image from "next/image";
 import instagram from "/public/instagram.svg";
+
 import facebook from "/public/facebook.svg";
+
 import youtube from "/public/youtube.svg";
 import s2hLogo from "/public/logo-64.png";
 

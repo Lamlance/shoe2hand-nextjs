@@ -1,31 +1,64 @@
+@import url('https://fonts.googleapis.com/css2?family=Lexend+Mega:wght@400;500;600;700&family=Poppins:wght@300;400;600&family=Roboto:ital,wght@0,400;0,700;1,400;1,700&display=swap');
+
 .s2h_ShopItemWrapper {
-    display: grid;
-    grid-template-columns: 1fr;
-    grid-template-rows: 2.5fr 0.5fr;
-    border: 1px solid red;
-    background-color: whitesmoke;
-    cursor: pointer;
-    margin: 0.2rem;
-    height: 100%;
+	font-family: 'Poppins', sans-serif;
+	display: grid;
+	grid-template-columns: 1fr;
+	grid-template-rows: 2.5fr 0.5fr;
+	background-color: whitesmoke;
+	cursor: pointer;
+	margin: 0.2rem;
+	height: 100%;
+	overflow-wrap: break-word;
 }
-.s2h_ShopItemWrapper:hover{
-    border: 4px solid red;  
-    margin: 0;
+
+.s2h_ShopItemWrapper .test_shoe:hover {
+	scale: 1.1;
+	transition: .3s ease-in-out;
 }
+
 .s2h_ShopItemWrapper img {
-    border: 1px solid black;
-    min-height: 180px;
-    width: 100%;
+	min-height: 180px;
+	width: 100%;
 }
 
 .s2h_ShopItemWrapper p {
-    max-height: 4em;
-    margin: 0.5rem;
-    word-wrap: break-word;
-
-    overflow: hidden;
+	max-height: 4em;
+	margin: 0.5rem;
+	word-wrap: break-word;
+	overflow: hidden;
+	text-align: center;
 }
-.s2h_BreifInfo{
-    display: flex;
-    flex-direction: column;
+
+.price {
+	color: #B20A0A;
+	font-weight: 600;
+}
+
+.s2h_BreifInfo {
+	display: flex;
+	flex-direction: column;
+}
+
+/* .btn_add_to_cart:hover,
+.btn_add_to_cart:active {
+	transition: 0.3s ease-in-out;
+	background-color: initial;
+	background-position: 0 0;
+	color: #FF4742;
+} */
+
+.s2h_ShopItemWrapper>.btn_add_to_cart {
+	border: none;
+	border-radius: 10px;
+	font-size: 18px;
+}
+
+.s2h_ShopItemWrapper>.btn_add_to_cart:hover {
+	cursor: pointer;
+	transition: 0.3s ease-in-out;
+	background-color: initial;
+	background-position: 0 0;
+	color: #fff;
+	background-color: #FF4742;
 }

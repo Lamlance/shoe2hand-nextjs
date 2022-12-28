@@ -77,6 +77,15 @@
   align-items: center;
 }
 
+/* .logo {
+  background-color: #7E7E7E;
+  border-radius: 50px;
+} */
+
+.logo:hover {
+  cursor: pointer;
+}
+
 .sh2_bar:hover {
   cursor: pointer;
 }

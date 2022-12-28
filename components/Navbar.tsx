@@ -47,7 +47,7 @@ export default function Navbar() {
                 placeholder="Seach in Shoes2hand..."
               />
               <button>
-                <Image src={loupe} alt="search" width={32} height={32} />
+                <Image src={loupe} alt="search" width={28} height={28} />
               </button>
             </form>
           </div>
@@ -58,7 +58,7 @@ export default function Navbar() {
             }}
           >
             <a>
-              <Image src={shoppingCart} alt="cart" />
+              <Image src={shoppingCart} alt="cart" width={28} height={28} />
             </a>
           </div>
           <div className={styles["s2h_header_banner"]}>

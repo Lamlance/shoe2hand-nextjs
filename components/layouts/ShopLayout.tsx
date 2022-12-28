@@ -11,7 +11,6 @@ export default function ShopLayout({ children }: any) {
     <>
       <Navbar />
       {$isCartOpen ? <ShopCart /> : null}
-      <hr />
       {children}
 
       <Footer />
