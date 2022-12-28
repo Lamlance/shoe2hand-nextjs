@@ -5,6 +5,7 @@ import { isCartOpen } from "../../helper/CartStore";
 import ShopLayout from "../../components/layouts/ShopLayout";
 import ShopCart from "../../components/ShopCart";
 import ShopDisplay from "../../components/ShopDisplay";
+// import Footer from "../../components/Footer";
 import styles from "/styles/Search.module.css";
 
 const brand = () => {
@@ -27,6 +28,7 @@ const brand = () => {
         <Cart />
       </div>
       {$isCartOpen ? <ShopCart /> : null}
+      {/* <Footer /> */}
     </ShopLayout>
   );
 };

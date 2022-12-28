@@ -1,6 +1,8 @@
 import { createRef, useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import Navbar from "../../components/Navbar";
+import Footer from "../../components/Footer";
+
 import userImage from "/public/logo-64.png";
 
 import styles from "../../styles/UserDashboard.module.css";
@@ -204,6 +206,7 @@ function UserDashboard() {
           </div>
         </div>
       </div>
+      <Footer />
     </div>
   );
 }

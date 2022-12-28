@@ -2,10 +2,13 @@
 
 .nav {
   font-family: 'Poppins', sans-serif;
+  background-color: #f1f1f1;
+  padding: .8em 0;
+  margin-bottom: 3em;
 }
 
 .nav__bar {
-  margin: 1rem .5rem;
+  // margin: 1rem .5rem;
 
   @media (max-width:600px) {
     margin:0;
@@ -13,36 +16,36 @@
 
 }
 
-.top_banner {
-  width: 100vw;
-  height: 5em;
-  background-color: red;
-}
+// .top_banner {
+//   width: 100vw;
+//   height: 5em;
+//   background-color: red;
+// }
 
-.top_link_items {
-  color: #0f1568;
-  margin: 0;
-}
+// .top_link_items {
+//   color: #0f1568;
+//   margin: 0;
+// }
 
-.top_link_items:hover {
-  transition: 0.3s ease-in-out;
-  transform: scale(1.1);
-}
+// .top_link_items:hover {
+//   transition: 0.3s ease-in-out;
+//   transform: scale(1.1);
+// }
 
-.links_list {
-  display: flex;
-  flex-direction: row;
-  margin-inline: auto;
-  font-size: small;
-  place-content: center;
-  margin: 0 auto;
-  flex-wrap: wrap;
-}
+// .links_list {
+//   display: flex;
+//   flex-direction: row;
+//   margin-inline: auto;
+//   font-size: small;
+//   place-content: center;
+//   margin: 0 auto;
+//   flex-wrap: wrap;
+// }
 
-.links_list>div {
-  margin: .5rem 1.5rem;
-  width: fit-content;
-}
+// .links_list>div {
+//   margin: .5rem 1.5rem;
+//   width: fit-content;
+// }
 
 .s2h_logo_bar {
   /* display: flex;
@@ -97,26 +100,34 @@ a.sh2_bar>h3 {
 .layout_search_box>form>button {
   // border: 1px solid #5F6F94;
   // background-color: #5F6F94;
+  position: absolute;
+  background-color: #fff;
   padding: 0 1em 0 0;
   border: none;
   width: 3.4em;
   height: 3.4em;
   cursor: pointer;
-  border-radius: 10%;
-  border-top-left-radius: 0;
-  border-bottom-left-radius: 0;
+  border-top-right-radius: 50px;
+  border-bottom-right-radius: 50px;
   z-index: 1;
+  margin-left: 38em;
 }
 
 .layout_search_box > form > input[type=text] {
-  width: 100%;
+  border-top-left-radius: 50px;
+  border-bottom-left-radius: 50px;
+  border-top-right-radius: 50px;
+  border-bottom-right-radius: 50px;
+  position: relative;
+  width: 120%;
   height: 2.2em;
   z-index: 0;
-  background-color: #f1f1f1;
+  background-color: #fff;
   border: none;
   position: relative;
   outline: none;
-  padding: .5rem;
+  padding: .7rem;
+  margin-left: 5em;
 }
 
 // .sh2_bar:hover {
@@ -126,12 +137,9 @@ a.sh2_bar>h3 {
 
 .s2h_nav_cart {
   cursor: pointer;
-  flex-basis: 10%;
   justify-self: left;
-}
-
-.s2h_nav_cart {
   width: fit-content;
+  margin-top: .2em;
 }
 
 .s2h_nav_cart:hover {
@@ -179,7 +187,7 @@ a.sh2_bar>h3 {
 
 .open_shop {
   margin-right: .8em;
-  height: 46px;
+  // height: 46px;
 }
 
 .open_shop:hover, .login:hover,

@@ -67,7 +67,7 @@ export default function Navbar() {
             </button>
             <button className={styles["login"]}>
               <div>
-                <Image src={user} alt="login" />
+                {/* <Image src={user} alt="login" /> */}
 
                 <p>Đăng Nhập</p>
               </div>
