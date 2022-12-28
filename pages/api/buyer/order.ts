@@ -67,7 +67,10 @@ const createOrderDetail = async (orderId: number, proudctId: number, quantity: n
       }
     })
 
-    return orderDetail;
+    return{
+      bill: product.price * quantity,
+      data:orderDetail
+    } ;
   } catch (error) {
     return null;
   }
@@ -78,7 +81,7 @@ const createOrderDetail = async (orderId: number, proudctId: number, quantity: n
 async function handler(req: OrderNextApiRequest, res: NextApiResponse) {
   switch (req.method) {
     case "POST": {
-      const order = await POST(req);
+      const order:(OrderDetailResult | null) = await POST(req);
       if (!order) {
         res.status(404);
         return;
@@ -111,7 +114,8 @@ async function POST(req: OrderNextApiRequest) {
     data: {
       bill: 0,
       userId: userData.userId,
-      shopId: shoppData.shopId
+      shopId: shoppData.shopId,
+      date: new Date()
     }
   })
 
@@ -119,7 +123,7 @@ async function POST(req: OrderNextApiRequest) {
     return null;
   }
 
-  const orderDeatilPromise: Promise<ORDERDETAIL | null>[] = [];
+  const orderDeatilPromise: Promise<{bill: number,data: ORDERDETAIL} | null>[] = [];
 
   product.forEach((productInfo) => {
     orderDeatilPromise.push(createOrderDetail(order.orderId, productInfo.id, productInfo.quantity, shoppData.shopId));
@@ -137,9 +141,41 @@ async function POST(req: OrderNextApiRequest) {
     return null;
   }
 
-  const orderDetail = GetOrderById(userData.userId, order.orderId);
+  let totalBill = 0;
+  filter.forEach(item=>{
+    totalBill += (item) ? item.bill : 0;
+  })
 
-  return orderDetail;
+  const updateData = await myPrismaClient.oRDER.update({
+    where:{
+      orderId: order.orderId
+    },
+    data:{
+      bill: totalBill
+    },
+    select: {
+      orderId: true,
+      deliveringStatus:true,
+      SHOP: {
+        select: {
+          shopName: true
+        }
+      },
+      ORDERDETAIL: {
+        select: {
+          PRODUCT: {
+            select: {
+              title: true
+            }
+          },
+          quantity: true
+        }
+      }
+    }
+  })
+
+
+  return updateData;
 }
 
 async function GetOrderById(userIdData: number, orderIdData: number) {

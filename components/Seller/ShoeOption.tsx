@@ -1,4 +1,4 @@
-import { PRODUCT, SHOP, USER } from "@prisma/client";
+import { BRAND, PRODUCT, SHOP, USER } from "@prisma/client";
 import { createRef, FormEvent, useEffect, useRef, useState } from "react";
 import styles from "/styles/seller/ShoeOption.module.css"
 
@@ -14,12 +14,19 @@ export interface ShopData {
 }
 
 function ShoeOption({ userData, shopData }: ShopData) {
-  const [products, setProduct] = useState<PRODUCT[]>();
+  const [products, setProduct] = useState<PRODUCT[]>([]);
+  const [brands,setBrands] = useState<BRAND[]>([]);
   const selectId = useRef<number>(-1);
   const isExecuting = useRef<boolean>(false);
 
   const formRef = createRef<HTMLFormElement>();
   const deleteCheck = createRef<HTMLInputElement>();
+
+  useEffect(()=>{
+    fetch("/api/brands").then((data)=>(data.json().then( (brandsData:BRAND[]) => {
+      setBrands(brandsData);
+    })))
+  },[])
 
   if (!userData || !shopData) {
     return (<h1>LOADING ....</h1>)
@@ -84,7 +91,7 @@ function ShoeOption({ userData, shopData }: ShopData) {
     return;
   }
 
-  const hadleFormSubmitPOST = async (title: string, quantity: number, price: number, desc: string) => {
+  const hadleFormSubmitPOST = async (title: string, quantity: number, price: number, desc: string,brandId:number) => {
     const fetchResult = await fetch("/api/seller/product", {
       method: "POST",
       headers: { "Content-Type": 'application/json' },
@@ -94,7 +101,8 @@ function ShoeOption({ userData, shopData }: ShopData) {
         price: price,
         hide: false,
         desc: desc,
-        shopId: shopId
+        shopId: shopId,
+        brandId: brandId
       })
     });
     try {
@@ -157,6 +165,9 @@ function ShoeOption({ userData, shopData }: ShopData) {
     const quantity = (inputs.namedItem("quantity") as HTMLInputElement).valueAsNumber;
     const price = (inputs.namedItem("price") as HTMLInputElement).valueAsNumber;
     const hide = (inputs.namedItem("hide") as HTMLInputElement).value;
+    const brandId = Number.parseInt((inputs.namedItem("brand") as HTMLSelectElement).value);
+    console.log(inputs);
+
     const desc = (inputs.namedItem("desc") as HTMLInputElement).value;
     const delCheck = deleteCheck.current?.checked;
 
@@ -184,7 +195,8 @@ function ShoeOption({ userData, shopData }: ShopData) {
     }
 
     //CREATE DATA
-    hadleFormSubmitPOST(title, quantity, price, desc)
+    console.log(brandId)
+    hadleFormSubmitPOST(title, quantity, price, desc,brandId);
     switchFormInput(false);
     isExecuting.current = false;
 
@@ -222,7 +234,7 @@ function ShoeOption({ userData, shopData }: ShopData) {
     (inputs.namedItem("quantity") as HTMLInputElement).valueAsNumber = productData.quantity;
     (inputs.namedItem("price") as HTMLInputElement).valueAsNumber = productData.price;
     (inputs.namedItem("desc") as HTMLInputElement).value = productData.description ? productData.description : "";
-
+    (inputs.namedItem("brand") as HTMLSelectElement).options.selectedIndex = 1
   }
 
   return (<div className={styles["s2h_seller_shoe_option_wrap"]}>
@@ -249,6 +261,17 @@ function ShoeOption({ userData, shopData }: ShopData) {
 
       <label htmlFor="delete">Delete product:</label>
       <input ref={deleteCheck} id="delete" type={"checkbox"} name="delete" onInput={() => { handelDeleteCheck() }}></input>
+
+      <label htmlFor="brandSelect">Brand</label>
+      <select name="brand" id="brandSelect">
+        {
+          brands.map((brand,index)=>{
+            return(<option key={`brand:${index}`} value={brand.brandId}>
+              {brand.brandName}
+            </option>)
+          })
+        }
+      </select>
 
       <textarea name="desc" rows={4} cols={12} placeholder="Product description"></textarea>
       <input name="enter" type="submit"></input>

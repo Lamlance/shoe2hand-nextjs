@@ -12,7 +12,7 @@ import { addCartItem, ItemDisplayInfo, ProductInfo } from "../../helper/CartStor
 interface ShopItemData {
   id: number;
   title:string;
-  price: Decimal | null;
+  price: Decimal | number | null;
   shopId:number,
   quantity:number
 }

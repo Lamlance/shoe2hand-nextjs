@@ -81,6 +81,7 @@ function OrderOption({ userData, shopData }: ShopData) {
       for (let index = 0; index < currOrders.length; index++) {
         if(currOrders[index].orderId === updateData.orderId){
           currOrders[index].deliveringStatus = updateData.deliveringStatus;
+          setSelected(currOrders[index]);
           break;
         }
       }

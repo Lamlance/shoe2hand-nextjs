@@ -14,8 +14,13 @@ import styles from "../styles/Navbar.module.scss";
 import { useStore } from "@nanostores/react";
 import { isCartOpen } from "../helper/CartStore";
 import Link from "next/link";
+import { FormEvent } from "react";
 
-export default function Navbar() {
+interface NavBarProps{
+  submitSearchFunc?: (event:FormEvent<HTMLFormElement>,search?:string) => void 
+}
+
+export default function Navbar({submitSearchFunc}:NavBarProps) {
   const $isCartOpen = useStore(isCartOpen);
   return (
     <div className={styles["nav"]}>
@@ -63,28 +68,20 @@ export default function Navbar() {
             </Link>
           </div>
           <div className={styles["layout_search_box"]}>
-            <form
-              action=""
-              method="GET"
-              onSubmit={(e) => {
-                e.preventDefault();
-              }}
-            >
-              <input
-                type="text"
-                name="q"
-                id="q"
-                placeholder="Seach in Shoes2hand..."
-              />
+            <form action="" method="GET" onSubmit={(e) => {
+              e.preventDefault();
+              if(submitSearchFunc){
+                submitSearchFunc(e);
+              }
+            }}>
+              <input type="text" name="q" id="q" placeholder="Seach in Shoes2hand..."/>
               <button>
                 <Image src={search} alt="search" />
               </button>
             </form>
           </div>
           <div className={styles["s2h_nav_cart"]}
-            onClick={() => {
-              isCartOpen.set(!$isCartOpen);
-            }}
+            onClick={() => { isCartOpen.set(!$isCartOpen);}}
           >
             <a>
               <Image src={shoppingCart} alt="cart" />

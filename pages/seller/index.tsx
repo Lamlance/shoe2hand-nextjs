@@ -64,6 +64,17 @@ const SellerDBoard = () => {
   }
 
   // console.log(user)
+
+  const setShopData = (data:SHOP)=>{
+    if(!$userInfo_inDB){
+      return;
+    }
+    userInfo_inDB.set({
+      user: $userInfo_inDB.user,
+      shop: data
+    })
+  }
+
   const handelOptionClick = (id: number) => {
     if (!optDisplayList.current) {
       return;
@@ -80,7 +91,8 @@ const SellerDBoard = () => {
   });
   const shopInfo = ShopInfo({
     userData: ($userInfo_inDB && $userInfo_inDB.user) ? $userInfo_inDB.user : null,
-    shopData: ($userInfo_inDB && $userInfo_inDB.shop) ? $userInfo_inDB.shop : null
+    shopData: ($userInfo_inDB && $userInfo_inDB.shop) ? $userInfo_inDB.shop : null,
+    setShopDataFunc: setShopData
   });
   const orderOption = OrderOption({
     userData: ($userInfo_inDB && $userInfo_inDB.user) ? $userInfo_inDB.user : null,
@@ -91,7 +103,7 @@ const SellerDBoard = () => {
     <h1>
       {`Hello ${user?.name} - ${user?.name} - 
       UserID: ${$userInfo_inDB?.user.userId} - 
-      Shop:${$userInfo_inDB?.shop?.shopId}`
+      Shop:${$userInfo_inDB?.shop?.shopId} ${$userInfo_inDB?.shop?.shopName}`
       }
     </h1>
     

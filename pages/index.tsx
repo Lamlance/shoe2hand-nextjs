@@ -35,7 +35,6 @@ function Home() {
     productFetch.then((data) => {
       setProducts(data);
     })
-
   }, [])
 
 
@@ -47,7 +46,7 @@ function Home() {
           products.map((item, index) => {
             return (<li key={index}>
               <ShopItem
-                id={item.productId} title={item.title} price={null}
+                id={item.productId} title={item.title} price={item.price}
                 shopId={item.shopId} quantity={item.quantity}
               />
             </li>)
