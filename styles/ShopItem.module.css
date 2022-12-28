@@ -5,11 +5,16 @@
 	display: grid;
 	grid-template-columns: 1fr;
 	grid-template-rows: 2.5fr 0.5fr;
-	background-color: whitesmoke;
+	background-color: #f1f1f1;
 	cursor: pointer;
 	margin: 0.2rem;
 	height: 100%;
 	overflow-wrap: break-word;
+}
+
+.s2h_ShopItemWrapper {
+	border: 1px solid #f1f1f1;
+	border-radius: 10px;
 }
 
 .s2h_ShopItemWrapper .test_shoe:hover {
@@ -52,6 +57,7 @@
 	border: none;
 	border-radius: 10px;
 	font-size: 18px;
+	background-color: #f8f8f8;
 }
 
 .s2h_ShopItemWrapper>.btn_add_to_cart:hover {
