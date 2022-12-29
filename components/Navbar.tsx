@@ -1,4 +1,4 @@
-import React from "react";
+import React, { createRef } from "react";
 import Image from "next/image";
 import s2hLogo from "/public/logo-64.png";
 import facebookLogo from "/public/facebook-16.png";
@@ -14,11 +14,12 @@ import { isCartOpen } from "../helper/CartStore";
 import Link from "next/link";
 import { FormEvent } from "react";
 
-interface NavBarProps{
+export interface NavBarProps{
   submitSearchFunc?: (event:FormEvent<HTMLFormElement>,search?:string) => void 
 }
 
 export default function Navbar({submitSearchFunc}:NavBarProps) {
+  const searchInputRef = createRef<HTMLInputElement>();
   const $isCartOpen = useStore(isCartOpen);
   return (
     <div className={styles["nav"]}>
@@ -39,11 +40,17 @@ export default function Navbar({submitSearchFunc}:NavBarProps) {
           <div className={styles["layout_search_box"]}>
             <form action="" method="GET" onSubmit={(e) => {
               e.preventDefault();
+              // console.log("POI",submitSearchFunc);
               if(submitSearchFunc){
+                const search = searchInputRef.current?.value;
+                if(search){
+                  submitSearchFunc(e,search);
+                  return;
+                }
                 submitSearchFunc(e);
               }
             }}>
-              <input type="text" name="q" id="q" placeholder="Seach in Shoes2hand..."/>
+              <input ref={searchInputRef} type="text" name="q" id="q" placeholder="Seach in Shoes2hand..."/>
               <button>
                 <Image src={loupe} alt="search" width={28} height={28} />
               </button>

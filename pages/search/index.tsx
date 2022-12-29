@@ -1,6 +1,6 @@
 import { useStore } from '@nanostores/react';
 import { useRouter } from 'next/router'
-import React, { createRef, useRef, useState } from 'react';
+import React, { createRef, FormEvent, useRef, useState } from 'react';
 import { isCartOpen } from '../../helper/CartStore';
 import ShopLayout from '../../components/layouts/ShopLayout';
 import ShopCart from '../../components/ShopCart';
@@ -88,9 +88,24 @@ const brand = ({shopId}:SearchProps) => {
     }
   }
 
-  return (<ShopLayout>
+  const handleSearchName = (event:FormEvent<HTMLFormElement>,search?:string) =>{
+    event.preventDefault();
+    if(!searchData || !searchData.current){
+      return;
+    }
+    if(search){
+      console.log(search);
+      searchData.current = {
+        ...searchData.current,
+        name: search
+      }
+    }
+    
+  }
+
+  return (<ShopLayout navProps={{submitSearchFunc: handleSearchName}}>
     <div className={styles["s2h_search_display"]}>
-      <div style={{ gridArea: "products" }}>
+      <div style={{ gridArea: "products",padding:"1rem" }}>
         <p>{brandName ? `Product of brand ${brandName}` : null}</p>
         <ul className={styles["s2h_search_display_product"]}>
           {
