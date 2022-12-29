@@ -56,6 +56,7 @@ export default async function handler(
   switch (req.method) {
     case "GET": {
       const getProduct = GET(req);
+      res.status(200).json(getProduct);
       return;
     }
     case "POST": {

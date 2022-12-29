@@ -17,7 +17,7 @@ function Home() {
 
   const fetchProduct = async () => {
     const rawResponse = await fetch(`/api/products`, {
-      method: "GET",
+      method: "POST",
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",
