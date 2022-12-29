@@ -18,10 +18,10 @@ import Image from "next/image";
 // }
 interface ShopItemData {
   id: number;
-  title:string;
+  title: string;
   price: Decimal | number | null;
-  shopId:number,
-  quantity:number
+  shopId: number,
+  quantity: number
 }
 
 class ShopItem extends React.Component<ShopItemData, {}> {
@@ -52,7 +52,11 @@ class ShopItem extends React.Component<ShopItemData, {}> {
             <Image src={shoes} alt="shoe" className={styles["test_shoe"]} />
             <p>{this.props.title}</p>
             <p className={styles["price"]}>
-              {this.props.price ? `${this.props.price}VND` : "200$"}
+              {
+                this.props.price ?
+                  `${this.props.price.toLocaleString("en-uk", { style: 'currency', currency: 'VND' })}`
+                  : "0"
+              }
             </p>
             <p>Remain:{this.props.quantity}</p>
           </div>
