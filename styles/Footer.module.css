@@ -42,7 +42,7 @@
   transition: 0.3s ease-in-out;
   background-color: initial;
   background-position: 0 0;
-  color: #FF4742;
+  color: #6ca0c8;
 }
 
 .center>ul li:active {
@@ -94,19 +94,19 @@
   transition: 0.3s ease-in-out;
   background-color: initial;
   background-position: 0 0;
-  color: #FF4742;
+  color: #6ca0c8;
 }
 
 .container div ul li:hover {
   transition: 0.3s ease-in-out;
   background-color: initial;
   background-position: 0 0;
-  color: #FF4742;
+  color: #6ca0c8;
 }
 
 .right>div>p:hover {
   transition: 0.3s ease-in-out;
   background-color: initial;
   background-position: 0 0;
-  color: #FF4742;
+  color: #6ca0c8;
 }
