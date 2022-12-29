@@ -43,7 +43,7 @@
 
 .sidebar_navigation>ul>li {
   margin-bottom: .1em;
-  padding: .8em 0em;
+  padding: .8em 1.5em;
 
 }
 
@@ -125,7 +125,6 @@
 }
 
 /* Cart */
-
 
 
 .active {
