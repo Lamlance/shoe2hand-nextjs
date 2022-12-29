@@ -19,8 +19,9 @@ import Image from "next/image";
 interface ShopItemData {
   id: number;
   title: string;
-  price: Decimal | number | null;
+  price: number | null;
   shopId: number,
+  shopName:string
   quantity: number
 }
 
@@ -39,8 +40,9 @@ class ShopItem extends React.Component<ShopItemData, {}> {
         title: this.props.title,
         id: this.props.id,
         quantity: 1,
+        price: (this.props.price) ? (this.props.price) : 0
       };
-      addCartItem(this.props.shopId, itemInfo);
+      addCartItem(this.props.shopId,this.props.shopName ,itemInfo);
     }
   }
   render(): React.ReactNode {

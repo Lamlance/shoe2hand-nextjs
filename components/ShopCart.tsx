@@ -25,7 +25,7 @@ export default function ShopCart() {
         {
           Object.values($cartItems).map((shop, index) => {
             return (<li>
-              <p>{`Shop ID: ${shop.shopId}`}</p>
+              <p>{`Shop ID: ${shop.shopId} - ${shop.shopName}`}</p>
               <ul>
                 {
                   shop.products.map((pInfo) => {

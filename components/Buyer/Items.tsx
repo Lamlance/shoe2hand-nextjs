@@ -1,6 +1,7 @@
 import styles from "/styles/Items.module.css";
 import Image from "next/image";
 import shoesImage from "/public/jordan1.png";
+import { ProductInfo } from "../../helper/CartStore";
 
 const ItemInfo = {
   name: "Giày Mia",
@@ -11,7 +12,12 @@ const ItemInfo = {
   link: "#HOME",
 };
 
-export default function Items() {
+interface ItemProps {
+  info: ProductInfo,
+  shopId: number,
+}
+
+export default function Items({info,shopId}:ItemProps) {
   return (
     <div className={styles["container"]}>
       <div className={styles["main"]}>
@@ -19,21 +25,15 @@ export default function Items() {
           <div className={styles["item_content"]}>
             <div className={styles["item_name_and_image"]}>
               <a href={ItemInfo.link} className={styles["item_infor"]}>
-                <Image
-                  src={shoesImage}
-                  alt="shoe-image"
-                  className={styles["shoes_image"]}
-                  width={80}
-                  height={80}
-                />
+                <Image src={shoesImage} alt="shoe-image" className={styles["shoes_image"]} width={80} height={80}/>
                 <a href={ItemInfo.link} className={styles["item_name"]}>
-                  Air Jordan 1 Mid
+                  {info.title}
                 </a>
               </a>
             </div>
             <div className={styles["item_content_display"]}>
-              <div className={styles["item_price"]}>{ItemInfo.price}</div>
-              <div className={styles["item_quantity"]}>{ItemInfo.quantity}</div>
+              <div className={styles["item_price"]}>{info.price}</div>
+              <div className={styles["item_quantity"]}>{info.quantity}</div>
               <div className={styles["item_manipulation"]}>Xoá</div>
             </div>
           </div>

@@ -10,10 +10,11 @@ import { isCartOpen } from "../helper/CartStore";
 import { useStore } from "@nanostores/react";
 import { useEffect, useState } from "react";
 import { PRODUCT } from "@prisma/client";
+import { ProductRespond } from "./api/products";
 
 function Home() {
   const $isCartOpen = useStore(isCartOpen);
-  const [products, setProducts] = useState<PRODUCT[]>([]);
+  const [products, setProducts] = useState<ProductRespond[]>([]);
 
   const fetchProduct = async () => {
     const rawResponse = await fetch(`/api/products`, {
@@ -46,8 +47,8 @@ function Home() {
             <li key={index}>
               <ShopItem
                 id={item.productId} title={item.title} price={item.price}
-                shopId={item.shopId} quantity={item.quantity}
-              />
+                shopId={item.shopId} quantity={item.quantity} shopName={item.SHOP.shopName}
+                 />
             </li>
           );
         })}

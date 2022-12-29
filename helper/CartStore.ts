@@ -1,15 +1,16 @@
 import { useStore } from "@nanostores/react";
 import { atom, map } from "nanostores";
-import type { ShopItemData } from "../components/ShopItem";
 
 export type ProductInfo = {
   id: number;
   title: string;
   quantity: number;
+  price: number 
 }
 
 export type CartItem = {
   shopId: number;
+  shopName:string;
   products: ProductInfo[]
 };
 export const isCartOpen = atom(false);
@@ -17,7 +18,7 @@ export const cartItems = map<Record<number, CartItem>>({});
 
 export type ItemDisplayInfo = Pick<CartItem, "shopId" | "products">;
 
-export function addCartItem(shopId: number, productData: ProductInfo, replaceFlag: boolean = false) {
+export function addCartItem(shopId: number,shopName:string, productData: ProductInfo, replaceFlag: boolean = false) {
   isCartOpen.set(true);
   const existingEntry = cartItems.get()[shopId];
   if (existingEntry) {
@@ -38,6 +39,7 @@ export function addCartItem(shopId: number, productData: ProductInfo, replaceFla
 
     cartItems.setKey(shopId, {
       shopId: shopId,
+      shopName:shopName,
       products: product
     })
 
@@ -45,6 +47,7 @@ export function addCartItem(shopId: number, productData: ProductInfo, replaceFla
   }
   cartItems.setKey(shopId, {
     shopId: shopId,
+    shopName:shopName,
     products: [productData]
   });
 }
@@ -74,6 +77,7 @@ export function deleteProduct(shopId:number,productId:number){
   }
   cartItems.setKey(shopId,{
     shopId: shopId,
+    shopName:cartItems.get()[shopId].shopName,
     products: newProducts
   })
 }
