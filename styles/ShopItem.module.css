@@ -17,6 +17,11 @@
 	border-radius: 10px;
 }
 
+.s2h_ShopItemWrapper:hover {
+	/* border-radius: 20% 20% / 20% 40%; */
+
+}
+
 .s2h_ShopItemWrapper .test_shoe:hover {
 	scale: 1.1;
 	transition: .3s ease-in-out;

@@ -5,7 +5,7 @@ import instagram from "/public/instagram.svg";
 import facebook from "/public/facebook.svg";
 
 import youtube from "/public/youtube.svg";
-import s2hLogo from "/public/logo-64.png";
+import s2hLogo from "/public/logo2.svg";
 
 import styles from "../styles/Footer.module.css";
 import Link from "next/link";
@@ -52,6 +52,8 @@ export default function Footer() {
                   src={s2hLogo}
                   alt="Logo"
                   className={styles["s2h_logo"]}
+                  width={64}
+                  height={64}
                 />
                 <h3>Shoes2hand</h3>
               </a>

@@ -1,9 +1,6 @@
 import React from "react";
 import Image from "next/image";
-import s2hLogo from "/public/logo-64.png";
-import facebookLogo from "/public/facebook-16.png";
-import instagramLogo from "/public/instagram-16.png";
-import search from "/public/search-3-24.png";
+import s2hLogo from "/public/logo2.svg";
 import shoppingCart from "/public/cart.svg";
 import loupe from "/public/loupe.svg";
 import user from "/public/user.svg";
@@ -27,6 +24,8 @@ export default function Navbar() {
                   src={s2hLogo}
                   alt="Logo"
                   className={styles["s2h_logo"]}
+                  width={64}
+                  height={64}
                 />
                 <h3>Shoes2hand</h3>
               </a>
@@ -62,16 +61,21 @@ export default function Navbar() {
             </a>
           </div>
           <div className={styles["s2h_header_banner"]}>
-            <button className={styles["open_shop"]}>
-              <p>Mở Shop</p>
-            </button>
-            <button className={styles["login"]}>
-              <div>
-                {/* <Image src={user} alt="login" /> */}
+            <Link href={"/seller"}>
+              <button className={styles["open_shop"]}>
+                <p>Mở Shop</p>
+              </button>
+            </Link>
 
-                <p>Đăng Nhập</p>
-              </div>
-            </button>
+            <Link href={"/api/auth/login"}>
+              <button className={styles["login"]}>
+                <div>
+                  {/* <Image src={user} alt="login" /> */}
+
+                  <p>Đăng Nhập</p>
+                </div>
+              </button>
+            </Link>
           </div>
         </div>
       </div>

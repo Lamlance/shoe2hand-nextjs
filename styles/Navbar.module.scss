@@ -67,9 +67,17 @@
 }
 
 .s2h_logo_content{
+  padding: 0 1em;
   flex-basis: 20%;
+  // color: #fff;
+  // background: #FF4742;
+  // border-radius: 20% 20% / 20% 40%;
 }
 
+.s2h_logo_content:hover {
+  transition: 0.2s ease-in-out;
+  transform: scale(1.1);
+}
 
 a.sh2_bar {
   display: flex;
@@ -79,7 +87,7 @@ a.sh2_bar {
 
 a.sh2_bar>h3 {
   font-family: 'Lexend Mega', sans-serif;
-  margin-left: .5em;
+  margin-left: .2em;
 }
 
 .layout_search_box {
@@ -103,7 +111,6 @@ a.sh2_bar>h3 {
   // background-color: #5F6F94;
   position: absolute;
   background-color: #fff;
-  padding: 0 1em 0 0;
   border: none;
   width: 3.4em;
   height: 3.4em;
@@ -111,8 +118,11 @@ a.sh2_bar>h3 {
   border-top-right-radius: 50px;
   border-bottom-right-radius: 50px;
   z-index: 1;
-  margin-left: 41.5em;
+  margin-left: 40em;
+  height: 3.8em;
+  width: 5em;
 }
+
 
 .layout_search_box > form > input[type=text] {
   border-top-left-radius: 50px;
@@ -144,7 +154,7 @@ a.sh2_bar>h3 {
 }
 
 .s2h_nav_cart:hover {
-  transition: 0.35s ease-in-out;
+  transition: 0.2s ease-in-out;
   transform: scale(1.1);
 }
 .s2h_header_banner{
@@ -197,6 +207,8 @@ a.sh2_bar>h3 {
   background-color: initial;
   background-position: 0 0;
   color: #FF4742;
+  transition: 0.2s ease-in-out;
+  transform: scale(1.1);
 }
 
 .open_shop:active, .login:active {
@@ -243,3 +255,4 @@ a.sh2_bar>h3 {
   border-bottom-left-radius: 5px;
   opacity: 1;
 } */
+
