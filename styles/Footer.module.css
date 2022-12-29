@@ -90,8 +90,21 @@
   cursor: pointer;
 }
 
-.sh2_bar:hover,
-.sh2_bar:active {
+.sh2_bar:hover {
+  transition: 0.3s ease-in-out;
+  background-color: initial;
+  background-position: 0 0;
+  color: #FF4742;
+}
+
+.container div ul li:hover {
+  transition: 0.3s ease-in-out;
+  background-color: initial;
+  background-position: 0 0;
+  color: #FF4742;
+}
+
+.right>div>p:hover {
   transition: 0.3s ease-in-out;
   background-color: initial;
   background-position: 0 0;

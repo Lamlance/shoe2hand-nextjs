@@ -58,8 +58,10 @@ export default function Footer() {
                 <h3>Shoes2hand</h3>
               </a>
             </Link>
-            “Since all great journeys start with a single step,
-            <div>You should probably have on a cute pair of shoes”</div>
+            <p>
+              “Since all great journeys start with a single step,
+              <div>You should probably have on a cute pair of shoes”</div>
+            </p>
           </div>
         </div>
       </div>
