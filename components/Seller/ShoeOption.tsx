@@ -2,9 +2,9 @@ import { BRAND, PRODUCT, SHOP, USER } from "@prisma/client";
 import { createRef, FormEvent, useEffect, useRef, useState } from "react";
 import styles from "/styles/seller/ShoeOption.module.css"
 
-import { 
-  SellerProductAPI_POST, SellerProductAPI_GET, 
-  SellerProductAPI_PUT, SellerProductAPI_DELETE 
+import {
+  SellerProductAPI_POST, SellerProductAPI_GET,
+  SellerProductAPI_PUT, SellerProductAPI_DELETE
 } from "../../pages/api/seller/product";
 
 
@@ -15,18 +15,19 @@ export interface ShopData {
 
 function ShoeOption({ userData, shopData }: ShopData) {
   const [products, setProduct] = useState<PRODUCT[]>([]);
-  const [brands,setBrands] = useState<BRAND[]>([]);
+  const [brands, setBrands] = useState<BRAND[]>([]);
   const selectId = useRef<number>(-1);
   const isExecuting = useRef<boolean>(false);
 
   const formRef = createRef<HTMLFormElement>();
   const deleteCheck = createRef<HTMLInputElement>();
+  const ulRef = createRef<HTMLUListElement>();
 
-  useEffect(()=>{
-    fetch("/api/brands").then((data)=>(data.json().then( (brandsData:BRAND[]) => {
+  useEffect(() => {
+    fetch("/api/brands").then((data) => (data.json().then((brandsData: BRAND[]) => {
       setBrands(brandsData);
     })))
-  },[])
+  }, [])
 
   if (!userData || !shopData) {
     return (<h1>LOADING ....</h1>)
@@ -81,8 +82,8 @@ function ShoeOption({ userData, shopData }: ShopData) {
       }
       const productId = newData.data.productId;
       const data = newData.data;
-      oldState.forEach((item,index)=>{
-        if(item.productId === productId){
+      oldState.forEach((item, index) => {
+        if (item.productId === productId) {
           oldState[index] = data;
         }
       })
@@ -91,7 +92,7 @@ function ShoeOption({ userData, shopData }: ShopData) {
     return;
   }
 
-  const hadleFormSubmitPOST = async (title: string, quantity: number, price: number, desc: string,brandId:number) => {
+  const hadleFormSubmitPOST = async (title: string, quantity: number, price: number, desc: string, brandId: number) => {
     const fetchResult = await fetch("/api/seller/product", {
       method: "POST",
       headers: { "Content-Type": 'application/json' },
@@ -133,22 +134,22 @@ function ShoeOption({ userData, shopData }: ShopData) {
       })
     });
     try {
-      const deletedData:SellerProductAPI_DELETE = await fetchResult.json();
+      const deletedData: SellerProductAPI_DELETE = await fetchResult.json();
       const oldState = (products) ? [...products] : null
 
-      if (oldState == null || (typeof deletedData.data === "string") ) {
+      if (oldState == null || (typeof deletedData.data === "string")) {
         switchFormInput(false);
         return;
       }
 
       const productId = deletedData.data.productId;
 
-      const newData = oldState.filter((item)=>{
-        return(item.productId !== productId)
+      const newData = oldState.filter((item) => {
+        return (item.productId !== productId)
       });
       setProduct(newData);
 
-    } catch (error) {console.log(error)}
+    } catch (error) { console.log(error) }
   }
 
   const hadleFormSubmit = async (event: FormEvent<HTMLFormElement>) => {
@@ -196,7 +197,7 @@ function ShoeOption({ userData, shopData }: ShopData) {
 
     //CREATE DATA
     console.log(brandId)
-    hadleFormSubmitPOST(title, quantity, price, desc,brandId);
+    hadleFormSubmitPOST(title, quantity, price, desc, brandId);
     switchFormInput(false);
     isExecuting.current = false;
 
@@ -212,7 +213,7 @@ function ShoeOption({ userData, shopData }: ShopData) {
     (inputs.namedItem("price") as HTMLInputElement).disabled = disable;
     (inputs.namedItem("hide") as HTMLInputElement).disabled = disable;
     (inputs.namedItem("desc") as HTMLInputElement).disabled = disable;
-    // (inputs.namedItem("enter") as HTMLInputElement).disabled = disable;
+    (inputs.namedItem("enter") as HTMLInputElement).disabled = disable;
 
   }
 
@@ -234,15 +235,47 @@ function ShoeOption({ userData, shopData }: ShopData) {
     (inputs.namedItem("quantity") as HTMLInputElement).valueAsNumber = productData.quantity;
     (inputs.namedItem("price") as HTMLInputElement).valueAsNumber = productData.price;
     (inputs.namedItem("desc") as HTMLInputElement).value = productData.description ? productData.description : "";
-    (inputs.namedItem("brand") as HTMLSelectElement).options.selectedIndex = 1
+    (inputs.namedItem("brand") as HTMLSelectElement).options.selectedIndex = 0
+  }
+
+  const setColorLi = (id: number) => {
+    if (!ulRef || !ulRef.current) {
+      return;
+    }
+
+    const liSelect = (ulRef.current.querySelectorAll(".js-shoe-select") as NodeListOf<HTMLLIElement>);
+    liSelect.forEach((li, index) => {
+      li.style.backgroundColor = ((id === index) ? "#56b3ac" : "");
+    })
+  }
+
+  const clearForm = () => {
+    const inputs = formRef.current?.elements;
+    if (!inputs || !products) {
+      return;
+    }
+    (inputs.namedItem("title") as HTMLInputElement).value = "";
+    (inputs.namedItem("quantity") as HTMLInputElement).valueAsNumber = NaN;
+    (inputs.namedItem("price") as HTMLInputElement).valueAsNumber = NaN;
+    (inputs.namedItem("desc") as HTMLInputElement).value = "";
+    (inputs.namedItem("brand") as HTMLSelectElement).options.selectedIndex = 0
   }
 
   return (<div className={styles["s2h_seller_shoe_option_wrap"]}>
-    <ul className={styles["s2h_seller_shoe_option_select"]}>
-      <li onClick={(event) => { handleRefreshData() }}>REFRESH</li>
-      <li onClick={() => { selectId.current = -1 }}>ADD NEW SHOES</li>
+    <ul ref={ulRef} className={styles["s2h_seller_shoe_option_select"]}>
+      <li className={"js-shoe-select"} onClick={(event) => { handleRefreshData(); setColorLi(0) }}>
+        REFRESH
+      </li>
+      <li className={"js-shoe-select"} onClick={() => { selectId.current = -1; setColorLi(1); clearForm() }}>
+        ADD NEW SHOES
+      </li>
       {products?.map((item, index) => {
-        return (<li key={index} onClick={() => { handelProductSelect(index) }}>{item.title}</li>)
+        return (
+          <li className={"js-shoe-select"} key={index}
+            onClick={() => { handelProductSelect(index); setColorLi(index + 2) }}>
+            {item.title}
+          </li>
+        )
       })}
     </ul>
 
@@ -265,8 +298,8 @@ function ShoeOption({ userData, shopData }: ShopData) {
       <label htmlFor="brandSelect">Brand</label>
       <select name="brand" id="brandSelect">
         {
-          brands.map((brand,index)=>{
-            return(<option key={`brand:${index}`} value={brand.brandId}>
+          brands.map((brand, index) => {
+            return (<option key={`brand:${index}`} value={brand.brandId}>
               {brand.brandName}
             </option>)
           })
