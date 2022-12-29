@@ -5,10 +5,11 @@
   display: grid;
   grid-template-columns: 0.5fr 1.5fr;
   grid-template-areas: "select form";
+  height: 100%;
 }
 .s2h_seller_shoe_option_select{
   grid-area: select;
-  background-color: green;
+  background-color: azure;
   list-style-type: none;
 }
 .s2h_seller_shoe_option_select > li{
@@ -16,6 +17,7 @@
   border: 0.2rem solid black;
   padding: 0.2rem;
   cursor: pointer;
+
 }
 .s2h_seller_shoe_option_select > li:hover{
   margin: 0.5rem;
@@ -30,6 +32,7 @@
   grid-template-columns: 0.2fr 1.5fr;
   row-gap: 0.3rem;
   padding: 0.5rem 1rem;
+  margin: auto 0;
 }
 .s2h_seller_shoe_option_form > textarea{
   grid-column: 1 / 3;
@@ -48,6 +51,7 @@
 .s2h_seller_order_option_form{
   background-color: aqua;
   padding: 1.5rem;
+  margin: auto 0;
 }
 .s2h_seller_order_option_form > ul > li >div{
   display: grid;

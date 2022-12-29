@@ -113,14 +113,13 @@ const SellerDBoard = () => {
           <li onClick={() => { handelOptionClick(0) }}>Thông tin shop</li>
           <li onClick={() => { handelOptionClick(1) }}>Giày bạn bán</li>
           <li onClick={() => { handelOptionClick(2) }}>Các đơn hàng</li>
-          <li onClick={() => { handelOptionClick(3) }}>Các thông báo</li>
         </ul>
       </div>
 
       <ul ref={optDisplayList}>
         <li  className={"js-select-display"}>{shopInfo}</li>
-        <li style={{display:"none"}} className={"js-select-display"}>{shoeOption}</li>
-        <li style={{display:"none"}} className={"js-select-display"}>{orderOption}</li>
+        <li style={{display:"none",height:"100%"}} className={"js-select-display"}>{shoeOption}</li>
+        <li style={{display:"none",height:"100%"}} className={"js-select-display"}>{orderOption}</li>
       </ul>
 
     </div>

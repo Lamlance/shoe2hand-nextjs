@@ -3,7 +3,9 @@
   display: grid;
   grid-template-columns: 0.5fr 2.5fr;
   border: 1px solid red;
-  grid-template-areas: "option slect detail";
+  grid-template-areas: "option slect";
+  max-width: 98vw;
+  margin-inline: auto;
   
 }
 .s2h_seller_dboard_wrapper > *{
