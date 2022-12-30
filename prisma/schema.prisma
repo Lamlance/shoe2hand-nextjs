@@ -49,7 +49,7 @@ model USER {
   address   String?
   lastLogin DateTime?
   avatarUrl String?
-  uuid String?
+  uuid      String?
   ORDER     ORDER[]
   REVIEW    REVIEW[]
   SHOP      SHOP?
@@ -64,20 +64,13 @@ model ORDER {
   orderId          Int           @id @default(sequence())
   date             DateTime?
   bill             Int
-  deliveringStatus DeliverStats @default(WAITING)
   userId           Int
   shopId           Int
+  deliveringStatus DeliverStats  @default(WAITING)
   SHOP             SHOP          @relation(fields: [shopId], references: [shopId], onDelete: Cascade)
   USER             USER          @relation(fields: [userId], references: [userId], onDelete: Cascade)
   ORDERDETAIL      ORDERDETAIL[]
-}
-
-enum DeliverStats { 
-  WAITING
-  CONFIRMED
-  DELIVERING
-  DELIVERED
-  CANCELED
+  REVIEW           REVIEW[]
 }
 
 model ORDERDETAIL {
@@ -96,6 +89,16 @@ model REVIEW {
   date       DateTime?
   rating     Float
   comment    String?
+  orderId    Int
   CUSTOMER   USER      @relation(fields: [customerId], references: [userId], onDelete: Cascade)
+  ORDER      ORDER     @relation(fields: [orderId], references: [orderId], onDelete: Cascade)
   PRODUCT    PRODUCT   @relation(fields: [productId], references: [productId], onDelete: Cascade)
+}
+
+enum DeliverStats {
+  WAITING
+  CONFIRMED
+  DELIVERING
+  DELIVERED
+  CANCELED
 }
