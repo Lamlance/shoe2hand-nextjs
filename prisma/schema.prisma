@@ -95,7 +95,6 @@ model REVIEW {
   detailId    Int @unique
 
   CUSTOMER   USER      @relation(fields: [customerId], references: [userId], onDelete: Cascade)
-  ORDER      ORDER     @relation(fields: [orderId], references: [orderId], onDelete: Cascade)
   PRODUCT    PRODUCT   @relation(fields: [productId], references: [productId], onDelete: Cascade)
   ORDERDETAIL ORDERDETAIL @relation(fields: [detailId],references: [orderdetailId],onDelete: Cascade)
 }
@@ -108,10 +107,3 @@ enum DeliverStats {
   CANCELED
 }
 
-enum DeliverStats {
-  WAITING
-  CONFIRMED
-  DELIVERING
-  DELIVERED
-  CANCELED
-}
