@@ -72,7 +72,10 @@ const createOrderDetail = async (
       },
     });
 
-    return orderDetail;
+    return{
+      bill: product.price * quantity,
+      data:orderDetail
+    } ;
   } catch (error) {
     return null;
   }
@@ -81,7 +84,7 @@ const createOrderDetail = async (
 async function handler(req: OrderNextApiRequest, res: NextApiResponse) {
   switch (req.method) {
     case "POST": {
-      const order = await POST(req);
+      const order:(OrderDetailResult | null) = await POST(req);
       if (!order) {
         res.status(404);
         return;
@@ -115,14 +118,15 @@ async function POST(req: OrderNextApiRequest) {
       bill: 0,
       userId: userData.userId,
       shopId: shoppData.shopId,
+      date: new Date()
     },
-  });
-
+  });      
+  
   if (!order) {
     return null;
   }
 
-  const orderDeatilPromise: Promise<ORDERDETAIL | null>[] = [];
+  const orderDeatilPromise: Promise<{bill: number,data: ORDERDETAIL} | null>[] = [];
 
   product.forEach((productInfo) => {
     orderDeatilPromise.push(
@@ -149,9 +153,41 @@ async function POST(req: OrderNextApiRequest) {
     return null;
   }
 
-  const orderDetail = GetOrderById(userData.userId, order.orderId);
+  let totalBill = 0;
+  filter.forEach(item=>{
+    totalBill += (item) ? item.bill : 0;
+  })
 
-  return orderDetail;
+  const updateData = await myPrismaClient.oRDER.update({
+    where:{
+      orderId: order.orderId
+    },
+    data:{
+      bill: totalBill
+    },
+    select: {
+      orderId: true,
+      deliveringStatus:true,
+      SHOP: {
+        select: {
+          shopName: true
+        }
+      },
+      ORDERDETAIL: {
+        select: {
+          PRODUCT: {
+            select: {
+              title: true
+            }
+          },
+          quantity: true
+        }
+      }
+    }
+  })
+
+
+  return updateData;
 }
 
 async function GetOrderById(userIdData: number, orderIdData: number) {
@@ -184,7 +220,7 @@ async function GetOrderById(userIdData: number, orderIdData: number) {
     });
   return orderResult;
 }
-async function GetOrder(userIdData: number, page: number = 0) {
+async function GetOrder(userIdData: number, filter:string, page: number = 0) {
   await myPrismaClient.$connect();
   const orders: OrderDetailResult[] = await myPrismaClient.oRDER.findMany({
     skip: 10 * page,
@@ -213,11 +249,12 @@ async function GetOrder(userIdData: number, page: number = 0) {
   return orders;
 }
 async function GET(req: OrderNextApiRequest) {
-  const { userId, orderId, page } = req.query;
+  const { userId, orderId, page,filter } = req.query;
 
   const userIdData = Number.parseInt(handleQuery(userId));
   const orderIdData = Number.parseInt(handleQuery(orderId));
   const pageData = Number.parseInt(handleQuery(page));
+  const filterData = handleQuery(filter);
 
   if (isNaN(userIdData)) {
     return null;
@@ -225,7 +262,7 @@ async function GET(req: OrderNextApiRequest) {
 
   if (isNaN(orderIdData)) {
     const pageNumber = isNaN(pageData) ? 0 : pageData;
-    const orders = await GetOrder(userIdData, pageNumber);
+    const orders = await GetOrder(userIdData,filterData,pageNumber);
     return orders;
   }
 

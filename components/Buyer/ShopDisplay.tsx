@@ -1,7 +1,7 @@
 import React from "react";
-import ShopItem from "./Buyer/ShopItem";
+import ShopItem from "./ShopItem";
 import styles from "../../styles/ShopDisplay.module.css";
-import ShopCart from "./ShopCart";
+// import ShopCart from "../ShopCart";
 import { PRODUCT } from "@prisma/client";
 
 interface ShopDisplayState {
@@ -15,13 +15,6 @@ class ShopDisplay extends React.Component<{}, ShopDisplayState> {
       items: [],
     };
   }
-  // componentDidMount(): void {
-  //     fetch("/api/test/allProducts").then((res)=>{
-  //       res.json().then((data)=>{
-  //         this.setState({items:data})
-  //       })
-  //     });
-  // }
   render(): React.ReactNode {
 
 

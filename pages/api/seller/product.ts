@@ -4,45 +4,47 @@ import { handleQuery } from "../../../helper/queryHelper";
 import { withApiAuthRequired, getSession } from "@auth0/nextjs-auth0";
 import { PRODUCT } from "@prisma/client";
 interface SellerProductAPI_PUT {
-  data: string | PRODUCT;
+
+  data: string | PRODUCT
 }
 interface SellerProductAPI_DELETE {
-  data: string | PRODUCT;
+  data: string | PRODUCT
 }
 interface SellerProductAPI_POST {
-  data: string | PRODUCT;
+  data: string | PRODUCT
 }
 interface SellerProductAPI_GET {
-  data: string | PRODUCT[];
+  data: string | PRODUCT[]
 }
 
-export type {
-  SellerProductAPI_PUT,
-  SellerProductAPI_POST,
-  SellerProductAPI_GET,
-  SellerProductAPI_DELETE,
-};
+export type { SellerProductAPI_PUT, SellerProductAPI_POST, SellerProductAPI_GET, SellerProductAPI_DELETE }
 
 export async function validateUser(email: string, uuid: string) {
   await myPrismaClient.$connect();
   const user = await myPrismaClient.uSER.findFirst({
     where: {
-      OR: [{ email: { equals: email } }, { uuid: { contains: uuid } }],
+      OR: [
+        { email: { equals: email } },
+        { uuid: { contains: uuid } }
+      ]
     },
     select: {
-      userId: true,
-    },
+      userId: true
+    }
   });
   return user;
 }
 
-async function validateShop(shopId: number, userid: number) {
+export async function validateShop(shopId: number, userid: number) {
   await myPrismaClient.$connect();
   const shop = await myPrismaClient.sHOP.findFirst({
     where: {
-      AND: [{ ownerId: { equals: userid } }, { shopId: { equals: shopId } }],
-    },
-  });
+      AND: [
+        { ownerId: { equals: userid } },
+        { shopId: { equals: shopId } }
+      ]
+    }
+  })
   return shop;
 }
 
@@ -53,8 +55,8 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 
   if (!user || !(email && sub)) {
     res.status(401).json({
-      data: "Login required",
-    });
+      data: "Login required"
+    })
     return;
   }
 
@@ -151,6 +153,34 @@ async function POST(req: NextApiRequest, res: NextApiResponse, userId: number) {
 
   if (isNaN(shopId)) {
     console.log("Shop id not found");
+  return {
+    status: 200,
+    content: product
+  }
+}
+
+interface CreateProductBody extends NextApiRequest {
+  body: {
+    title: string,
+    quantity: number,
+    price: number,
+    hide: false,
+    desc: string,
+    shopId: number,
+    brandId: number
+  }
+}
+
+async function POST(req: CreateProductBody, res: NextApiResponse, userId: number) {
+  const { shopId, title, quantity, price, hide, desc, brandId } = req.body;
+
+  console.log(req.body);
+
+  if (!shopId || !title ||
+    !quantity || !price ||
+    !desc || !brandId
+  ) {
+    console.log("Shop id not found")
     return {
       status: 404,
       content: "Shop id not found",
@@ -184,66 +214,8 @@ async function POST(req: NextApiRequest, res: NextApiResponse, userId: number) {
   };
 }
 
-async function PUT(req: NextApiRequest, res: NextApiResponse, userId: number) {
-  const {
-    shopId: shopQuery,
-    title,
-    quantity,
-    price,
-    hide,
-    desc,
-    productId,
-  } = req.body;
-  const shopId = Number.parseInt(handleQuery(shopQuery));
 
-  const titleData = handleQuery(title);
-  const quantityData = Number.parseInt(handleQuery(quantity));
-  const priceData = Number.parseInt(handleQuery(price));
-  const descData = handleQuery(desc);
-  const hideData = handleQuery(hide) === "true" ? true : false;
-  const productIdData = Number.parseInt(handleQuery(productId));
-
-  if (isNaN(shopId) || isNaN(productIdData)) {
-    // console.log("Shop body not found",shopQuery,selectId,productId)
-    return {
-      status: 404,
-      content: "Shop body not found",
-    };
-  }
-
-  const shop = await validateShop(shopId, userId);
-  if (!shop) {
-    console.log("Shop not found");
-    return {
-      status: 404,
-      content: "Shop not found",
-    };
-  }
-
-  await myPrismaClient.$connect();
-  const updateProduct = await myPrismaClient.pRODUCT.update({
-    where: {
-      productId: productIdData,
-    },
-    data: {
-      title: titleData,
-      quantity: quantityData,
-      price: priceData,
-      description: descData,
-      isHidden: hideData,
-    },
-  });
-  return {
-    status: 200,
-    content: updateProduct,
-  };
-}
-
-async function DELETE(
-  req: NextApiRequest,
-  res: NextApiResponse,
-  userId: number
-) {
+async function DELETE(req: NextApiRequest, res: NextApiResponse, userId: number) {
   const { shopId: shopQuery, productId, selectId } = req.body;
 
   const shopId = Number.parseInt(handleQuery(shopQuery));
@@ -258,7 +230,7 @@ async function DELETE(
 
   const shop = await validateShop(shopId, userId);
   if (!shop) {
-    console.log("Shop not found");
+    console.log("Shop not found")
     return {
       status: 404,
       content: "Shop not found",

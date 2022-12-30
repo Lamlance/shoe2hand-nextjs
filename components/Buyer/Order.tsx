@@ -10,33 +10,35 @@ import { OrderDetailResult } from "../../pages/api/buyer/order";
 //   price: "100.000",
 // };
 
-interface InvoiceProps {
-  belongTo: string,
-  item: {
-    name: string,
-    price: number
-  }[]
-}
-
 export default function Order(props: OrderDetailResult) {
+
+  const stats = props.deliveringStatus;
+
+
   return (
     <div className={styles["container"]}>
       <form action="">
         <div className={styles["title"]}>
-          <div>{props.SHOP.shopName}</div>
+          <div>{props.SHOP.shopName} - OrderId:{props.orderId}</div>
           <div>{props.deliveringStatus}</div>
         </div>
         <ul className={styles["content"]}>
-          {
-            props.ORDERDETAIL.map((iteminfo) => {
-              return (<li>
+          {props.ORDERDETAIL.map((iteminfo, index) => {
+            return (
+              <li key={index}>
                 <div>{`${iteminfo.PRODUCT.title} x${iteminfo.quantity}`}</div>
-              </li>);
-            })
-          }
-
+              </li>
+            );
+          })}
         </ul>
-        <button className={styles["reorder"]}>Đặt Lại</button>
+        <div>
+          {
+            (stats != "DELIVERED" && stats != "CANCELED") ?
+              <button type="button" className={styles["reorder"]}>CANCEL</button> :
+              ""
+          }
+        </div>
+
       </form>
     </div>
   );
