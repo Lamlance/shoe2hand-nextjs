@@ -1,9 +1,10 @@
-import { myPrismaClient } from '../../../helper/prismaClient'
-import type { NextApiRequest, NextApiResponse } from 'next'
-import { handleQuery } from '../../../helper/queryHelper'
-import { withApiAuthRequired, getSession } from '@auth0/nextjs-auth0';
-import { PRODUCT } from '@prisma/client';
+import { myPrismaClient } from "../../../helper/prismaClient";
+import type { NextApiRequest, NextApiResponse } from "next";
+import { handleQuery } from "../../../helper/queryHelper";
+import { withApiAuthRequired, getSession } from "@auth0/nextjs-auth0";
+import { PRODUCT } from "@prisma/client";
 interface SellerProductAPI_PUT {
+
   data: string | PRODUCT
 }
 interface SellerProductAPI_DELETE {
@@ -62,8 +63,8 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
   const userValidation = await validateUser(email, sub);
   if (!userValidation) {
     res.status(404).json({
-      data: "Cant find user on DB"
-    })
+      data: "Cant find user on DB",
+    });
     return;
   }
 
@@ -71,29 +72,35 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
     case "GET": {
       const getContent = await GET(req, res, userValidation.userId);
       res.status(getContent.status).json({
-        data: getContent.content
-      })
+        data: getContent.content,
+      });
       break;
     }
     case "POST": {
       const newContent = await POST(req, res, userValidation.userId);
       res.status(newContent.status).json({
-        data: newContent.content
-      })
+        data: newContent.content,
+      });
       break;
     }
     case "PUT": {
       const updateConent = await PUT(req, res, userValidation.userId);
       res.status(updateConent.status).json({
-        data: (typeof updateConent.content === "string") ? updateConent.content : updateConent.content,
-      })
+        data:
+          typeof updateConent.content === "string"
+            ? updateConent.content
+            : updateConent.content,
+      });
       break;
     }
     case "DELETE": {
       const deleteContent = await DELETE(req, res, userValidation.userId);
       res.status(deleteContent.status).json({
-        data: (typeof deleteContent.content === "string") ? deleteContent.content : deleteContent.content,
-      })
+        data:
+          typeof deleteContent.content === "string"
+            ? deleteContent.content
+            : deleteContent.content,
+      });
       break;
     }
   }
@@ -105,7 +112,7 @@ async function GET(req: NextApiRequest, res: NextApiResponse, userId: number) {
   if (isNaN(shopId)) {
     return {
       status: 404,
-      content: "Shop id not found"
+      content: "Shop id not found",
     };
   }
 
@@ -115,8 +122,8 @@ async function GET(req: NextApiRequest, res: NextApiResponse, userId: number) {
   if (!shop) {
     return {
       status: 404,
-      content: "Shop not found"
-    }
+      content: "Shop not found",
+    };
   }
 
   await myPrismaClient.$connect();
@@ -124,12 +131,28 @@ async function GET(req: NextApiRequest, res: NextApiResponse, userId: number) {
     take: 10,
     skip: 10 * page,
     where: {
-      AND: [
-        { shopId: { equals: shop.shopId } },
-      ]
-    }
-  })
+      AND: [{ shopId: { equals: shop.shopId } }],
+    },
+  });
 
+  return {
+    status: 200,
+    content: product,
+  };
+}
+
+async function POST(req: NextApiRequest, res: NextApiResponse, userId: number) {
+  const { shopId: shopQuery, title, quantity, price, hide, desc } = req.body;
+  const shopId = Number.parseInt(handleQuery(shopQuery));
+
+  const titleData = handleQuery(title);
+  const quantityData = Number.parseInt(handleQuery(quantity));
+  const priceData = Number.parseInt(handleQuery(price));
+  const descData = handleQuery(desc);
+  const hideData = handleQuery(hide) === "true" ? true : false;
+
+  if (isNaN(shopId)) {
+    console.log("Shop id not found");
   return {
     status: 200,
     content: product
@@ -160,84 +183,37 @@ async function POST(req: CreateProductBody, res: NextApiResponse, userId: number
     console.log("Shop id not found")
     return {
       status: 404,
-      content: "Shop id not found"
-    }
+      content: "Shop id not found",
+    };
   }
 
   const shop = await validateShop(shopId, userId);
   if (!shop) {
-    console.log("Shop not found")
+    console.log("Shop not found");
     return {
       status: 404,
-      content: "Shop not found"
-    }
+      content: "Shop not found",
+    };
   }
 
   await myPrismaClient.$connect();
   const newProduct = await myPrismaClient.pRODUCT.create({
     data: {
-      title: title,
-      quantity: quantity,
-      price: price,
-      description: desc,
-      shopId: shopId,
-      isHidden: hide,
-      brandId: brandId
-    }
-  })
-
-  return {
-    status: 200,
-    content: newProduct
-  }
-}
-
-async function PUT(req: NextApiRequest, res: NextApiResponse, userId: number) {
-  const { shopId: shopQuery, title, quantity, price, hide, desc, productId } = req.body;
-  const shopId = Number.parseInt(handleQuery(shopQuery));
-
-  const titleData = handleQuery(title);
-  const quantityData = Number.parseInt(handleQuery(quantity));
-  const priceData = Number.parseInt(handleQuery(price));
-  const descData = handleQuery(desc);
-  const hideData = (handleQuery(hide) === "true") ? true : false;
-  const productIdData = Number.parseInt(handleQuery(productId));
-
-  if (isNaN(shopId) || isNaN(productIdData)) {
-    // console.log("Shop body not found",shopQuery,selectId,productId)
-    return {
-      status: 404,
-      content: "Shop body not found"
-    }
-  }
-
-  const shop = await validateShop(shopId, userId);
-  if (!shop) {
-    console.log("Shop not found")
-    return {
-      status: 404,
-      content: "Shop not found"
-    }
-  }
-
-  await myPrismaClient.$connect();
-  const updateProduct = await myPrismaClient.pRODUCT.update({
-    where: {
-      productId: productIdData,
-    },
-    data: {
       title: titleData,
-      quantity: quantityData,
+      quantity: isNaN(quantityData) ? 0 : quantityData,
       price: priceData,
       description: descData,
-      isHidden: hideData
-    }
-  })
+      shopId: shopId,
+      isHidden: hideData,
+    },
+  });
+
   return {
     status: 200,
-    content: updateProduct
-  }
+    content: newProduct,
+  };
 }
+
 
 async function DELETE(req: NextApiRequest, res: NextApiResponse, userId: number) {
   const { shopId: shopQuery, productId, selectId } = req.body;
@@ -248,8 +224,8 @@ async function DELETE(req: NextApiRequest, res: NextApiResponse, userId: number)
   if (isNaN(shopId) || isNaN(productIdData)) {
     return {
       status: 404,
-      content: "Body not found"
-    }
+      content: "Body not found",
+    };
   }
 
   const shop = await validateShop(shopId, userId);
@@ -257,21 +233,21 @@ async function DELETE(req: NextApiRequest, res: NextApiResponse, userId: number)
     console.log("Shop not found")
     return {
       status: 404,
-      content: "Shop not found"
-    }
+      content: "Shop not found",
+    };
   }
 
   await myPrismaClient.$connect();
   const deleted = await myPrismaClient.pRODUCT.delete({
     where: {
       productId: productIdData,
-    }
+    },
   });
 
   return {
     status: 200,
-    content: deleted
-  }
+    content: deleted,
+  };
 }
 
 export default withApiAuthRequired(handler);
