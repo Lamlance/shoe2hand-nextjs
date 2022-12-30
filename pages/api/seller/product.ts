@@ -4,7 +4,6 @@ import { handleQuery } from "../../../helper/queryHelper";
 import { withApiAuthRequired, getSession } from "@auth0/nextjs-auth0";
 import { PRODUCT } from "@prisma/client";
 interface SellerProductAPI_PUT {
-
   data: string | PRODUCT
 }
 interface SellerProductAPI_DELETE {
@@ -16,7 +15,28 @@ interface SellerProductAPI_POST {
 interface SellerProductAPI_GET {
   data: string | PRODUCT[]
 }
-
+interface CreateProductBody extends NextApiRequest {
+  body: {
+    title: string,
+    quantity: number,
+    price: number,
+    hide: false,
+    desc: string,
+    shopId: number,
+    brandId: number
+  }
+}
+interface UpdateProductBody extends NextApiRequest {
+  body:{
+    productId:number,
+    title:string,
+    quantity: number,
+    price: number,
+    hide?: false,
+    desc?: string,
+    shopId:number
+  }
+}
 export type { SellerProductAPI_PUT, SellerProductAPI_POST, SellerProductAPI_GET, SellerProductAPI_DELETE }
 
 export async function validateUser(email: string, uuid: string) {
@@ -84,13 +104,10 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
       break;
     }
     case "PUT": {
-      const updateConent = await PUT(req, res, userValidation.userId);
-      res.status(updateConent.status).json({
-        data:
-          typeof updateConent.content === "string"
-            ? updateConent.content
-            : updateConent.content,
-      });
+      const updateConent = await PUT(req, userValidation.userId);
+      if(updateConent){
+        res.status(200).json({data: updateConent});
+      }
       break;
     }
     case "DELETE": {
@@ -104,6 +121,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
       break;
     }
   }
+  res.status(404);
 }
 
 async function GET(req: NextApiRequest, res: NextApiResponse, userId: number) {
@@ -140,46 +158,38 @@ async function GET(req: NextApiRequest, res: NextApiResponse, userId: number) {
     content: product,
   };
 }
-
-async function POST(req: NextApiRequest, res: NextApiResponse, userId: number) {
-  const { shopId: shopQuery, title, quantity, price, hide, desc } = req.body;
-  const shopId = Number.parseInt(handleQuery(shopQuery));
-
-  const titleData = handleQuery(title);
-  const quantityData = Number.parseInt(handleQuery(quantity));
-  const priceData = Number.parseInt(handleQuery(price));
-  const descData = handleQuery(desc);
-  const hideData = handleQuery(hide) === "true" ? true : false;
-
-  if (isNaN(shopId)) {
-    console.log("Shop id not found");
-  return {
-    status: 200,
-    content: product
+async function PUT(req: UpdateProductBody, userId: number) {
+  const {productId,quantity,title,price,hide,desc,shopId} = req.body;
+  if( !(productId && shopId) || !( title || quantity || price ) ){
+    return null;
   }
+
+  const shopData = await validateShop(shopId,userId);
+  if(!shopData){
+    return null;
+  }
+  await myPrismaClient.$connect();
+  const update = await myPrismaClient.pRODUCT.update({
+    where:{
+      productId: productId
+    },
+    data:{
+      title: title,
+      quantity: quantity,
+      price: price,
+      description: desc
+    }
+  })
+  return update;
 }
 
-interface CreateProductBody extends NextApiRequest {
-  body: {
-    title: string,
-    quantity: number,
-    price: number,
-    hide: false,
-    desc: string,
-    shopId: number,
-    brandId: number
-  }
-}
 
 async function POST(req: CreateProductBody, res: NextApiResponse, userId: number) {
   const { shopId, title, quantity, price, hide, desc, brandId } = req.body;
 
   console.log(req.body);
 
-  if (!shopId || !title ||
-    !quantity || !price ||
-    !desc || !brandId
-  ) {
+  if (!shopId || !title || !quantity || !price || !desc || !brandId) {
     console.log("Shop id not found")
     return {
       status: 404,
@@ -199,12 +209,12 @@ async function POST(req: CreateProductBody, res: NextApiResponse, userId: number
   await myPrismaClient.$connect();
   const newProduct = await myPrismaClient.pRODUCT.create({
     data: {
-      title: titleData,
-      quantity: isNaN(quantityData) ? 0 : quantityData,
-      price: priceData,
-      description: descData,
+      title: title,
+      quantity: isNaN(quantity) ? 0 : quantity,
+      price: price,
+      description: desc,
       shopId: shopId,
-      isHidden: hideData,
+      isHidden: hide ? true : false,
     },
   });
 
@@ -251,3 +261,5 @@ async function DELETE(req: NextApiRequest, res: NextApiResponse, userId: number)
 }
 
 export default withApiAuthRequired(handler);
+
+

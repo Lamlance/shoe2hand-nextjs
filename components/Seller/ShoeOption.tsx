@@ -69,7 +69,6 @@ function ShoeOption({ userData, shopData }: ShopData) {
         desc: desc,
         shopId: shopId,
         productId: products[selectId.current].productId,
-        selectId: selectId.current
       })
     });
     try {
