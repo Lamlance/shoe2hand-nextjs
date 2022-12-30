@@ -70,6 +70,7 @@ model ORDER {
   SHOP             SHOP          @relation(fields: [shopId], references: [shopId], onDelete: Cascade)
   USER             USER          @relation(fields: [userId], references: [userId], onDelete: Cascade)
   ORDERDETAIL      ORDERDETAIL[]
+  REVIEW           REVIEW[]
 }
 
 model ORDERDETAIL {
@@ -88,7 +89,9 @@ model REVIEW {
   date       DateTime?
   rating     Float
   comment    String?
+  orderId    Int
   CUSTOMER   USER      @relation(fields: [customerId], references: [userId], onDelete: Cascade)
+  ORDER      ORDER     @relation(fields: [orderId], references: [orderId], onDelete: Cascade)
   PRODUCT    PRODUCT   @relation(fields: [productId], references: [productId], onDelete: Cascade)
 }
 
