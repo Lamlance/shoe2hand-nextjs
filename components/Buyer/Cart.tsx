@@ -1,6 +1,6 @@
 import styles from "../../styles/Cart.module.css";
 
-import ShopAndItems from "../../components/Buyer/ShopAndItems";
+import ShopAndItems from "./ShopAndItems";
 import { CartItem } from "../../helper/CartStore";
 
 interface CartProps {

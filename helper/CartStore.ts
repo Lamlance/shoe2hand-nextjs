@@ -71,6 +71,7 @@ export function deleteProduct(shopId:number,productId:number){
       newProducts.push(item);
     }
   })
+  console.log(newProducts);
   if(newProducts.length === 0){
     deleteCartItemByShopId(shopId);
     return;

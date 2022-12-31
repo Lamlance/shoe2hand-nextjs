@@ -16,7 +16,7 @@ import { useStore } from "@nanostores/react";
 import { userInfo_inDB } from "../../helper/userInfo_inDB";
 import { DeliverStats, USER } from "@prisma/client";
 import { OrderDetailResult } from "../api/buyer/order";
-import Cart from "./Cart";
+import Cart from "../../components/Buyer/Cart";
 import { cartItems } from "../../helper/CartStore";
 import ShopLayout from "../../components/layouts/ShopLayout";
 // const UserDisplay = {

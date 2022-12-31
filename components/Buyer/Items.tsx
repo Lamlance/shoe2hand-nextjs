@@ -1,7 +1,7 @@
 import styles from "/styles/Items.module.css";
 import Image from "next/image";
 import shoesImage from "/public/jordan1.png";
-import { ProductInfo } from "../../helper/CartStore";
+import { deleteProduct, ProductInfo } from "../../helper/CartStore";
 
 const ItemInfo = {
   name: "Giày Mia",
@@ -34,7 +34,7 @@ export default function Items({info,shopId}:ItemProps) {
             <div className={styles["item_content_display"]}>
               <div className={styles["item_price"]}>{info.price}</div>
               <div className={styles["item_quantity"]}>{info.quantity}</div>
-              <div className={styles["item_manipulation"]}>Xoá</div>
+              <div className={styles["item_manipulation"]} onClick={()=>{deleteProduct(shopId,info.id)}}>Xoá</div>
             </div>
           </div>
         </div>
