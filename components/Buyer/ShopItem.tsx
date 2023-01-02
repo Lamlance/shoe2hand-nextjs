@@ -48,7 +48,7 @@ class ShopItem extends React.Component<ShopItemData, {}> {
   render(): React.ReactNode {
     return (
       <div className={styles["s2h_ShopItemWrapper"]}>
-        <Link href="/detail">
+        <Link href={`/detail/${this.props.id}`}>
           <div className={styles["s2h_BreifInfo"]}>
             {/* <img alt={"Product img desc"}></img> */}
             <Image src={shoes} alt="shoe" className={styles["test_shoe"]} />

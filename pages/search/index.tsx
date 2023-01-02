@@ -8,6 +8,7 @@ import ShopDisplay from '../../components/Buyer/ShopDisplay';
 import styles from "/styles/Search.module.css"
 import { BRAND, PRODUCT } from '@prisma/client';
 import ShopItem from '../../components/Buyer/ShopItem';
+import { ProductRespond } from '../api/products';
 
 interface SearchProps{
   shopId?:number
@@ -27,7 +28,7 @@ const brand = ({shopId}:SearchProps) => {
   const router = useRouter();
   const { brandName } = router.query;
   const $isCartOpen = useStore(isCartOpen);
-  const [products, setProducts] = useState<PRODUCT[]>([]);
+  const [products, setProducts] = useState<ProductRespond[]>([]);
   const [brands, setBrands] = useState<BRAND[]>([]);
 
   const searchData = useRef<SearchData>({});
@@ -113,7 +114,7 @@ const brand = ({shopId}:SearchProps) => {
               return (<li key={index}>
                 <ShopItem
                   id={item.productId} title={item.title} price={item.price}
-                  shopId={item.shopId} quantity={item.quantity}
+                  shopId={item.shopId} quantity={item.quantity} shopName={item.SHOP.shopName}
                 />
               </li>)
             })

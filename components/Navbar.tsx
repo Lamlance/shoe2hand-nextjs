@@ -14,11 +14,11 @@ import { isCartOpen } from "../helper/CartStore";
 import Link from "next/link";
 import { FormEvent } from "react";
 
-export interface NavBarProps{
-  submitSearchFunc?: (event:FormEvent<HTMLFormElement>,search?:string) => void 
+export interface NavBarProps {
+  submitSearchFunc?: (event: FormEvent<HTMLFormElement>, search?: string) => void
 }
 
-export default function Navbar({submitSearchFunc}:NavBarProps) {
+export default function Navbar({ submitSearchFunc }: NavBarProps) {
   const searchInputRef = createRef<HTMLInputElement>();
   const $isCartOpen = useStore(isCartOpen);
   return (
@@ -41,16 +41,16 @@ export default function Navbar({submitSearchFunc}:NavBarProps) {
             <form action="" method="GET" onSubmit={(e) => {
               e.preventDefault();
               // console.log("POI",submitSearchFunc);
-              if(submitSearchFunc){
+              if (submitSearchFunc) {
                 const search = searchInputRef.current?.value;
-                if(search){
-                  submitSearchFunc(e,search);
+                if (search) {
+                  submitSearchFunc(e, search);
                   return;
                 }
                 submitSearchFunc(e);
               }
             }}>
-              <input ref={searchInputRef} type="text" name="q" id="q" placeholder="Seach in Shoes2hand..."/>
+              <input ref={searchInputRef} type="text" name="q" id="q" placeholder="Seach in Shoes2hand..." />
               <button>
                 <Image src={loupe} alt="search" width={28} height={28} />
               </button>
@@ -67,9 +67,11 @@ export default function Navbar({submitSearchFunc}:NavBarProps) {
             </a>
           </div>
           <div className={styles["s2h_header_banner"]}>
-            <button className={styles["open_shop"]}>
-              <p>Mở Shop</p>
-            </button>
+            <Link href={"/seller"} >
+              <button className={styles["open_shop"]}>
+                <p>Mở Shop</p>
+              </button>
+            </Link>
             <button className={styles["login"]}>
               <div>
                 {/* <Image src={user} alt="login" /> */}

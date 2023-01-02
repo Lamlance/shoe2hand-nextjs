@@ -10,8 +10,8 @@ import user from "../user";
 
 interface RatingNextApiRequest extends NextApiRequest {
   body: {
-    productId: number;
-    orderId: number; //1 review chi ton tai voi dieu kien khi khach hang co dat hang,
+    orderId: number;
+    detailId:number;
     rating: number;
     comment?: string;
   };
@@ -32,66 +32,56 @@ const getOrder = async (orderId: number, userId: number) => {
   await myPrismaClient.$connect();
   const orderData = await myPrismaClient.oRDER.findFirst({
     where: {
-      orderId: orderId,
-      userId: userId,
+      AND:[
+        {orderId: {equals: orderId}},
+        {userId: userId}
+      ]
     },
   });
 
   return orderData;
 };
 
-const createReview = async (
-  productId: number,
-  userId: number,
-  orderId: number,
-  rating: number,
-  comment: string
-) => {
+const createReview = async (orderId:number,detailId:number,userId:number,rating: number,comment: string | null) => {
   await myPrismaClient.$connect();
   const orderDetail = await myPrismaClient.oRDERDETAIL.findFirst({
     where: {
-      AND: [{ orderId: { equals: orderId }, productId: { equals: productId } }],
+      AND: [{ orderId: { equals: orderId }, orderdetailId:{equals: detailId} }],
     },
   });
 
   if (!orderDetail) {
     return null;
   }
+
   try {
     const review = await myPrismaClient.rEVIEW.create({
       data: {
-        productId: productId,
-        orderId: orderId,
+        productId: orderDetail.productId,
         customerId: userId,
         rating: rating,
         comment: comment,
+        detailId: detailId
       },
     });
     return review;
   } catch (error) {
+    console.log(error);
     return null;
   }
 };
 
 async function POST(req: RatingNextApiRequest, userId: number) {
-  const { productId, orderId, rating, comment } = req.body;
-  if (!userId || !productId || !orderId || !rating) {
+  const { orderId, rating, comment,detailId } = req.body;
+  if (!userId || !orderId || !rating) {
     return null;
   }
 
-  const productData = await getProduct(productId);
   const orderData = await getOrder(orderId, userId);
-  if (!productData || !orderData) {
+  if (!orderData) {
     return null;
   }
-
-  const review = await createReview(
-    productData.productId,
-    userId,
-    orderData.orderId,
-    rating,
-    comment ? comment : ""
-  );
+  const review = await createReview(orderData.orderId,detailId,userId,rating,comment ? comment : null);
   return review;
 }
 
@@ -101,7 +91,6 @@ async function handler(req: RatingNextApiRequest, res: NextApiResponse) {
     res.status(403);
     return;
   }
-
   const userData = await validateUser(user.email, user.sub);
   if (!userData) {
     res.status(403);
@@ -112,14 +101,14 @@ async function handler(req: RatingNextApiRequest, res: NextApiResponse) {
     case "POST": {
       const order = await POST(req, userData.userId);
       if (!order) {
-        res.status(404);
+        res.status(404).json(null);
         return;
       }
       res.status(200).json(order);
       return;
     }
   }
-  res.status(404);
+  res.status(404).json(null);
   return;
 }
 
