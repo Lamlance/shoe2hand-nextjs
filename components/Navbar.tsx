@@ -1,4 +1,4 @@
-import React from "react";
+import React, { createRef } from "react";
 import Image from "next/image";
 import s2hLogo from "/public/logo2.svg";
 import shoppingCart from "/public/cart.svg";
@@ -9,10 +9,18 @@ import styles from "../styles/Navbar.module.scss";
 import { useStore } from "@nanostores/react";
 import { isCartOpen } from "../helper/CartStore";
 import Link from "next/link";
-import { setLazyProp } from "next/dist/server/api-utils";
+import { FormEvent } from "react";
+import { useUser } from "@auth0/nextjs-auth0/client";
 
-export default function Navbar() {
+export interface NavBarProps {
+  submitSearchFunc?: (event: FormEvent<HTMLFormElement>, search?: string) => void
+}
+
+export default function Navbar({ submitSearchFunc }: NavBarProps) {
+  const searchInputRef = createRef<HTMLInputElement>();
   const $isCartOpen = useStore(isCartOpen);
+  const {user} = useUser();
+
   return (
     <div className={styles["nav"]}>
       <div className={styles["nav__bar"]}>
@@ -32,19 +40,19 @@ export default function Navbar() {
             </Link>
           </div>
           <div className={styles["layout_search_box"]}>
-            <form
-              action=""
-              method="GET"
-              onSubmit={(e) => {
-                e.preventDefault();
-              }}
-            >
-              <input
-                type="text"
-                name="q"
-                id="q"
-                placeholder="Seach in Shoes2hand..."
-              />
+            <form action="" method="GET" onSubmit={(e) => {
+              e.preventDefault();
+              // console.log("POI",submitSearchFunc);
+              if (submitSearchFunc) {
+                const search = searchInputRef.current?.value;
+                if (search) {
+                  submitSearchFunc(e, search);
+                  return;
+                }
+                submitSearchFunc(e);
+              }
+            }}>
+              <input ref={searchInputRef} type="text" name="q" id="q" placeholder="Seach in Shoes2hand..." />
               <button>
                 <Image src={loupe} alt="search" width={28} height={28} />
               </button>
@@ -61,20 +69,15 @@ export default function Navbar() {
             </a>
           </div>
           <div className={styles["s2h_header_banner"]}>
-            <Link href={"/seller"}>
+            <Link href={"/seller"} >
               <button className={styles["open_shop"]}>
                 <p>Mở Shop</p>
               </button>
             </Link>
-
-            <Link href={"/api/auth/login"}>
-              <button className={styles["login"]}>
-                <div>
-                  {/* <Image src={user} alt="login" /> */}
-
-                  <p>Đăng Nhập</p>
-                </div>
-              </button>
+            <Link href={(user) ? "/buyer" : "/api/auth/login"}>
+            <button className={styles["login"]}>
+              <div><p>{(user) ? (user.name || user.nickname) : "Đăng nhập"}</p></div>
+            </button>
             </Link>
           </div>
         </div>

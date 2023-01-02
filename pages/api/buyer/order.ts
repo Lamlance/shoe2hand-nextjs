@@ -1,51 +1,56 @@
-import { withApiAuthRequired, getSession } from '@auth0/nextjs-auth0';
-import { DeliverStats, ORDERDETAIL } from '@prisma/client';
-import type { NextApiRequest, NextApiResponse } from 'next'
-import { ProductInfo } from '../../../helper/CartStore';
-import { myPrismaClient } from '../../../helper/prismaClient';
-import { handleQuery } from '../../../helper/queryHelper';
+import { withApiAuthRequired, getSession } from "@auth0/nextjs-auth0";
+import { DeliverStats, ORDER, ORDERDETAIL } from "@prisma/client";
+import type { NextApiRequest, NextApiResponse } from "next";
+import { ProductInfo } from "../../../helper/CartStore";
+import { myPrismaClient } from "../../../helper/prismaClient";
+import { handleQuery } from "../../../helper/queryHelper";
 
 interface OrderNextApiRequest extends NextApiRequest {
   body: {
-    userId: number
-    shopId: number,
-    product: ProductInfo[]
-  },
+    userId: number;
+    shopId: number;
+    product: ProductInfo[];
+  };
 }
 
 const getUser = async (userId: number) => {
   await myPrismaClient.$connect();
   const userData = await myPrismaClient.uSER.findUnique({
     where: {
-      userId: userId
-    }
-  })
+      userId: userId,
+    },
+  });
 
   return userData;
-}
+};
 
 const getShop = async (shopId: number) => {
   await myPrismaClient.$connect();
   const shopData = await myPrismaClient.sHOP.findUnique({
     where: {
-      shopId: shopId
-    }
-  })
+      shopId: shopId,
+    },
+  });
 
   return shopData;
-}
+};
 
-const createOrderDetail = async (orderId: number, proudctId: number, quantity: number, shopId: number) => {
+const createOrderDetail = async (
+  orderId: number,
+  proudctId: number,
+  quantity: number,
+  shopId: number
+) => {
   await myPrismaClient.$connect();
   const product = await myPrismaClient.pRODUCT.findFirst({
     where: {
       AND: [
         { productId: { equals: proudctId } },
         { shopId: { equals: shopId } },
-        { quantity: { gte: quantity } }
-      ]
-    }
-  })
+        { quantity: { gte: quantity } },
+      ],
+    },
+  });
 
   if (!product) {
     return null;
@@ -56,29 +61,30 @@ const createOrderDetail = async (orderId: number, proudctId: number, quantity: n
       data: {
         productId: product.productId,
         orderId: orderId,
-        quantity: quantity
-      }
-    })
+        quantity: quantity,
+      },
+    });
     product.quantity = product.quantity - quantity;
     await myPrismaClient.pRODUCT.update({
       data: product,
       where: {
-        productId: product.productId
-      }
-    })
+        productId: product.productId,
+      },
+    });
 
-    return orderDetail;
+    return {
+      bill: product.price * quantity,
+      data: orderDetail
+    };
   } catch (error) {
     return null;
   }
-
-
-}
+};
 
 async function handler(req: OrderNextApiRequest, res: NextApiResponse) {
   switch (req.method) {
     case "POST": {
-      const order = await POST(req);
+      const order: (ORDER | null) = await POST(req);
       if (!order) {
         res.status(404);
         return;
@@ -97,7 +103,7 @@ async function handler(req: OrderNextApiRequest, res: NextApiResponse) {
 async function POST(req: OrderNextApiRequest) {
   const { userId, shopId, product } = req.body;
 
-  if (!shopId || !product || (product.length === 0) || !userId) {
+  if (!shopId || !product || product.length === 0 || !userId) {
     return null;
   }
 
@@ -111,131 +117,133 @@ async function POST(req: OrderNextApiRequest) {
     data: {
       bill: 0,
       userId: userData.userId,
-      shopId: shoppData.shopId
-    }
-  })
+      shopId: shoppData.shopId,
+      date: new Date()
+    },
+  });
 
   if (!order) {
     return null;
   }
 
-  const orderDeatilPromise: Promise<ORDERDETAIL | null>[] = [];
+  const orderDeatilPromise: Promise<{ bill: number, data: ORDERDETAIL } | null>[] = [];
 
   product.forEach((productInfo) => {
-    orderDeatilPromise.push(createOrderDetail(order.orderId, productInfo.id, productInfo.quantity, shoppData.shopId));
-  })
+    orderDeatilPromise.push(
+      createOrderDetail(
+        order.orderId,
+        productInfo.id,
+        productInfo.quantity,
+        shoppData.shopId
+      )
+    );
+  });
 
   const finish = await Promise.all(orderDeatilPromise);
-  const filter = finish.filter((item) => { return (item !== null) })
+  const filter = finish.filter((item) => {
+    return item !== null;
+  });
 
   if (filter.length === 0) {
     await myPrismaClient.oRDER.delete({
       where: {
-        orderId: order.orderId
-      }
-    })
+        orderId: order.orderId,
+      },
+    });
     return null;
   }
 
-  const orderDetail = GetOrderById(userData.userId, order.orderId);
+  let totalBill = 0;
+  filter.forEach(item => {
+    totalBill += (item) ? item.bill : 0;
+  })
 
-  return orderDetail;
-}
-
-async function GetOrderById(userIdData: number, orderIdData: number) {
-  await myPrismaClient.$connect();
-  const orderResult: (OrderDetailResult | null) = await myPrismaClient.oRDER.findFirst({
+  const updateData = await myPrismaClient.oRDER.update({
     where: {
-      orderId: orderIdData,
-      userId: userIdData
+      orderId: order.orderId
     },
-    select: {
-      orderId: true,
-      deliveringStatus:true,
-      SHOP: {
-        select: {
-          shopName: true
-        }
-      },
-      ORDERDETAIL: {
-        select: {
-          PRODUCT: {
-            select: {
-              title: true
-            }
-          },
-          quantity: true
-        }
-      }
+    data: {
+      bill: totalBill
     }
   })
-  return orderResult;
+
+
+  return updateData;
 }
-async function GetOrder(userIdData: number, page: number = 0) {
+
+async function GetOrder(userIdData: number, filter: DeliverStats | null, page: number = 0) {
   await myPrismaClient.$connect();
-  const orders:OrderDetailResult[] = await myPrismaClient.oRDER.findMany({
+  const orders: OrderDetailResult[] = await myPrismaClient.oRDER.findMany({
     skip: 10 * page,
     take: 10,
-    orderBy:[
-      {date:"desc"}
-    ],
+    orderBy: [{ date: "desc" }],
+    where:{
+      userId: userIdData
+    },
     select: {
       orderId: true,
       deliveringStatus: true,
       SHOP: {
         select: {
-          shopName: true
-        }
+          shopName: true,
+        },
       },
       ORDERDETAIL: {
         select: {
           PRODUCT: {
             select: {
-              title: true
+              title: true,
+            },
+          },
+          REVIEW: {
+            select: {
+              rating: true,
+              comment: true
             }
           },
-          quantity: true
-        }
-      }
-    }
-  })
+          quantity: true,
+          orderdetailId:true
+        },
+      },
+
+    },
+  });
   return orders;
 }
 async function GET(req: OrderNextApiRequest) {
-  const { userId, orderId, page } = req.query;
+  const { userId, orderId, page, filter } = req.query;
 
   const userIdData = Number.parseInt(handleQuery(userId));
   const orderIdData = Number.parseInt(handleQuery(orderId));
   const pageData = Number.parseInt(handleQuery(page));
+  const filterData = handleQuery(filter) as DeliverStats;
 
   if (isNaN(userIdData)) {
     return null;
   }
 
-  if (isNaN(orderIdData)) {
-    const pageNumber = isNaN(pageData) ? 0 : pageData;
-    const orders = await GetOrder(userIdData, pageNumber);
-    return orders;
-  }
-
-  const orderResult = await GetOrderById(userIdData, orderIdData);
-
-  return orderResult;
+  const pageNumber = isNaN(pageData) ? 0 : pageData;
+  const orders = await GetOrder(userIdData, (filterData in DeliverStats) ? filterData : null, pageNumber);
+  return orders;
 }
 
 export interface OrderDetailResult {
-  orderId: number;
+  deliveringStatus: DeliverStats;
   SHOP: {
     shopName: string;
   };
   ORDERDETAIL: {
-    quantity: number;
     PRODUCT: {
       title: string;
     };
+    REVIEW: {
+      rating: number;
+      comment: string | null;
+    } | null;
+    quantity: number;
+    orderdetailId:number
   }[];
-  deliveringStatus: DeliverStats;
+  orderId: number;
 }
-
 
 export default withApiAuthRequired(handler);

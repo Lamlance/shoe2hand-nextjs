@@ -1,8 +1,15 @@
 import styles from "../../styles/Cart.module.css";
 
-import ShopAndItems from "../../components/Buyer/ShopAndItems";
+import ShopAndItems from "./ShopAndItems";
+import { CartItem } from "../../helper/CartStore";
 
-export default function Cart() {
+interface CartProps {
+  orders: CartItem[]
+}
+
+export default function Cart({ orders }: CartProps) {
+  
+
   return (
     <div className={styles["container"]}>
       <div className={styles["main"]}>
@@ -15,7 +22,15 @@ export default function Cart() {
           <div className={styles["column_action"]}>Thao Tác</div>
         </div>
 
-        <ShopAndItems />
+        <ul style={{listStyleType:"none"}}>
+          {
+            orders.map((order, id) => {
+              return (<li>
+                <ShopAndItems data={order} />
+              </li>)
+            })
+          }
+        </ul>
 
         <div className={styles["makepayment_sticky"]}></div>
       </div>

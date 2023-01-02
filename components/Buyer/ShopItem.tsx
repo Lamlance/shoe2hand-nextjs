@@ -19,9 +19,10 @@ import Image from "next/image";
 interface ShopItemData {
   id: number;
   title: string;
-  price: Decimal | null;
-  shopId: number;
-  quantity: number;
+  price: number | null;
+  shopId: number,
+  shopName:string
+  quantity: number
 }
 
 class ShopItem extends React.Component<ShopItemData, {}> {
@@ -39,20 +40,25 @@ class ShopItem extends React.Component<ShopItemData, {}> {
         title: this.props.title,
         id: this.props.id,
         quantity: 1,
+        price: (this.props.price) ? (this.props.price) : 0
       };
-      addCartItem(this.props.shopId, itemInfo);
+      addCartItem(this.props.shopId,this.props.shopName ,itemInfo);
     }
   }
   render(): React.ReactNode {
     return (
       <div className={styles["s2h_ShopItemWrapper"]}>
-        <Link href="/detail">
+        <Link href={`/detail/${this.props.id}`}>
           <div className={styles["s2h_BreifInfo"]}>
             {/* <img alt={"Product img desc"}></img> */}
             <Image src={shoes} alt="shoe" className={styles["test_shoe"]} />
             <p>{this.props.title}</p>
             <p className={styles["price"]}>
-              {this.props.price ? `${this.props.price}VND` : "200$"}
+              {
+                this.props.price ?
+                  `${this.props.price.toLocaleString("en-uk", { style: 'currency', currency: 'VND' })}`
+                  : "0"
+              }
             </p>
             <p>Remain:{this.props.quantity}</p>
           </div>

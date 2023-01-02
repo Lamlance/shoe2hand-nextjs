@@ -1,8 +1,10 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&family=Roboto:ital,wght@0,400;0,700;1,400;1,700&display=swap');
-
+.container *{
+  list-style-type: none;
+}
 .container {
   font-size: 14px;
-  margin-right: 25em;
+  margin-right: auto;
   margin-top: 2em;
   width: 100%;
   border: #ccc solid 1px;
@@ -26,7 +28,11 @@
   border: #ccc solid 1px;
   padding: .8em;
 }
-
+.content > li{
+  display: grid;
+  grid-template-columns: repeat(auto-fit,minmax(50px,3fr));
+  text-align: center;
+}
 .reorder {
   margin-top: 1em;
   float: right;
@@ -38,4 +44,24 @@
   opacity: 0.8;
   color: #fff;
   background-color: rgb(34, 154, 187);
+}
+
+.s2h_order_rating_form{
+  display: flex;
+  flex-direction: column;
+  margin: 1rem 0;
+  padding: 0.5rem 1rem;
+  border: 1px solid black;
+}
+.s2h_order_rating_form > *{
+  margin: 0.5rem 0;
+}
+.s2h_order_rating_form > label{
+  display: grid;
+  grid-template-columns: 0.5fr 1.5fr;
+}
+.s2h_order_rating_form > label > input{
+  margin: 0;
+  padding: 0;
+  padding: 0.5rem 0.2rem;
 }

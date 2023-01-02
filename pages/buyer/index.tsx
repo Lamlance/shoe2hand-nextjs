@@ -16,15 +16,20 @@ import { useStore } from "@nanostores/react";
 import { userInfo_inDB } from "../../helper/userInfo_inDB";
 import { DeliverStats, USER } from "@prisma/client";
 import { OrderDetailResult } from "../api/buyer/order";
-import Cart from "./Cart";
+import Cart from "../../components/Buyer/Cart";
+import { cartItems } from "../../helper/CartStore";
+import ShopLayout from "../../components/layouts/ShopLayout";
 // const UserDisplay = {
 //   userDisplayName: "Happy Guy",
 //   userImage: "/public/logo-64.png",
 // };
 
 function UserDashboard() {
+  const $cartItems = useStore(cartItems);
+
   // const [isActive, setIsActive] = useState(false);
   const [orders, setOrders] = useState<OrderDetailResult[]>([]);
+  const orderFilter = useRef<DeliverStats>("WAITING");
 
   const $userInfo_inDB = useStore(userInfo_inDB);
 
@@ -88,126 +93,85 @@ function UserDashboard() {
     try {
       const data: OrderDetailResult[] = await fetchData.json();
       setOrders(data);
-    } catch (error) {}
+    } catch (error) { }
   };
 
   return (
-    <div>
-      {/* <Navbar /> */}
-      <div className={styles["container"]}>
-        <div className={styles["sidebar"]}>
-          <div className={styles["user_infor"]}>
-            {/* test image */}
-            <Image
-              src={userImage}
-              alt="user_image"
-              className={styles["user_image"]}
-            />
-            <h3
-              className={`${styles["user_login_name"]} ${styles["inline_block"]}`}
-            >
-              {$userInfo_inDB?.user.userName}
-            </h3>
-          </div>
-          <div className={styles["sidebar_navigation"]}>
-            <ul>
-              <li
-                onClick={() => {
-                  handleChangeTab(0);
-                }}
+    <ShopLayout>
+      <div>
+        {/* <Navbar /> */}
+        <div className={styles["container"]}>
+          <div className={styles["sidebar"]}>
+            <div className={styles["user_infor"]}>
+              {/* test image */}
+              <Image
+                src={userImage}
+                alt="user_image"
+                className={styles["user_image"]}
+              />
+              <h3
+                className={`${styles["user_login_name"]} ${styles["inline_block"]}`}
               >
-                Thay đổi thông tin tài khoản
-              </li>
-              <li
-                onClick={() => {
-                  handleChangeTab(1);
-                  getOrders(null);
-                }}
-              >
-                Đơn mua
-              </li>
-              <li
-                onClick={() => {
-                  handleChangeTab(2);
-                }}
-              >
-                Giỏ hàng
-              </li>
-            </ul>
-          </div>
-        </div>
-        <div className={styles["sidebar_display"]}>
-          <div
-            ref={changeInfo}
-            className={`${styles["user_change_acount_information"]}`}
-          >
-            <UserChangeInfor />
-          </div>
-
-          <div
-            style={{ display: "none" }}
-            ref={invoice}
-            className={`${styles["user_invoice_information"]}`}
-          >
-            <div className={styles["tab_navigation"]}>
-              <div className={styles["tab_button"]}>
-                <button
-                  onClick={() => {
-                    handleClick();
-                  }}
-                >
-                  Chờ xác nhận
-                </button>
-                <button
-                  onClick={() => {
-                    handleClick();
-                  }}
-                >
-                  Đang giao
-                </button>
-                <button
-                  onClick={() => {
-                    handleClick();
-                  }}
-                >
-                  Đã giao
-                </button>
-                <button
-                  onClick={() => {
-                    handleClick();
-                  }}
-                >
-                  Đã huỷ
-                </button>
-              </div>
-              <ul
-                className={`${styles["user_invoice_information"]} ${styles["active"]}`}
-              >
-                {
-                  orders.map((order, index) => {
-                    return (
-                      <li key={`Order:${index}`}>
-                        <Order {...order} />
-                      </li>
-                    );
-                  })
-                  // Invoice
-                }
+                {$userInfo_inDB?.user.userName}
+              </h3>
+            </div>
+            <div className={styles["sidebar_navigation"]}>
+              <ul>
+                <li onClick={() => { handleChangeTab(0); }}>
+                  Thay đổi thông tin tài khoản
+                </li>
+                <li onClick={() => { handleChangeTab(1); getOrders(null); }}>
+                  Đơn mua
+                </li>
+                <li onClick={() => { handleChangeTab(2); }}>
+                  Giỏ hàng
+                </li>
               </ul>
             </div>
           </div>
+          <div className={styles["sidebar_display"]}>
+            <div ref={changeInfo} className={`${styles["user_change_acount_information"]}`}>
+              <UserChangeInfor />
+            </div>
 
-          <div
-            style={{ display: "none" }}
-            ref={cart}
-            className={`${styles["user_cart_information"]}`}
-          >
-            <Cart />
+            <div style={{ display: "none" }} ref={invoice} className={`${styles["user_invoice_information"]}`}>
+              <div className={styles["tab_navigation"]}>
+                <div className={styles["tab_button"]}>
+                  <button onClick={() => { handleClick(); }}>
+                    Chờ xác nhận
+                  </button>
+                  <button onClick={() => { handleClick(); }}>
+                    Đang giao
+                  </button>
+                  <button onClick={() => { handleClick(); }}>
+                    Đã giao
+                  </button>
+                  <button onClick={() => { handleClick(); }}  >
+                    Đã huỷ
+                  </button>
+                </div>
+                <ul className={`${styles["user_invoice_information"]} ${styles["active"]}`}>
+                  {
+                    orders.map((order, index) => {
+                      return (
+                        <li key={`Order:${index}`}>
+                          <Order {...order} />
+                        </li>
+                      );
+                    })
+                    // Invoice
+                  }
+                </ul>
+              </div>
+            </div>
+
+            <div style={{ display: "none" }} ref={cart} className={`${styles["user_cart_information"]}`}>
+              <Cart orders={Object.values($cartItems)} />
+            </div>
           </div>
         </div>
       </div>
-      <Footer />
-    </div>
+    </ShopLayout>
   );
 }
 

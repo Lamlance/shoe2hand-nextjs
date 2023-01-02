@@ -11,6 +11,7 @@ import { USER, SHOP } from "@prisma/client";
 
 import ShoeOption from "../../components/Seller/ShoeOption";
 import ShopInfo from "../../components/Seller/ShopInfo";
+import OrderOption from "../../components/Seller/ShopOrder";
 
 const SellerDBoard = () => {
   // const [selectedOption, setSelectedOption] = useState(0);
@@ -63,6 +64,17 @@ const SellerDBoard = () => {
   }
 
   // console.log(user)
+
+  const setShopData = (data:SHOP)=>{
+    if(!$userInfo_inDB){
+      return;
+    }
+    userInfo_inDB.set({
+      user: $userInfo_inDB.user,
+      shop: data
+    })
+  }
+
   const handelOptionClick = (id: number) => {
     if (!optDisplayList.current) {
       return;
@@ -79,14 +91,19 @@ const SellerDBoard = () => {
   });
   const shopInfo = ShopInfo({
     userData: ($userInfo_inDB && $userInfo_inDB.user) ? $userInfo_inDB.user : null,
-    shopData: ($userInfo_inDB && $userInfo_inDB.shop) ? $userInfo_inDB.shop : null
+    shopData: ($userInfo_inDB && $userInfo_inDB.shop) ? $userInfo_inDB.shop : null,
+    setShopDataFunc: setShopData
   });
+  const orderOption = OrderOption({
+    userData: ($userInfo_inDB && $userInfo_inDB.user) ? $userInfo_inDB.user : null,
+    shopData: ($userInfo_inDB && $userInfo_inDB.shop) ? $userInfo_inDB.shop : null
+  })
 
   return (<div >
     <h1>
       {`Hello ${user?.name} - ${user?.name} - 
       UserID: ${$userInfo_inDB?.user.userId} - 
-      Shop:${$userInfo_inDB?.shop?.shopId}`
+      Shop:${$userInfo_inDB?.shop?.shopId} ${$userInfo_inDB?.shop?.shopName}`
       }
     </h1>
     
@@ -96,13 +113,13 @@ const SellerDBoard = () => {
           <li onClick={() => { handelOptionClick(0) }}>Thông tin shop</li>
           <li onClick={() => { handelOptionClick(1) }}>Giày bạn bán</li>
           <li onClick={() => { handelOptionClick(2) }}>Các đơn hàng</li>
-          <li onClick={() => { handelOptionClick(3) }}>Các thông báo</li>
         </ul>
       </div>
 
       <ul ref={optDisplayList}>
-        <li className={"js-select-display"}>{shopInfo}</li>
-        <li className={"js-select-display"}>{shoeOption}</li>
+        <li  className={"js-select-display"}>{shopInfo}</li>
+        <li style={{display:"none",height:"100%"}} className={"js-select-display"}>{shoeOption}</li>
+        <li style={{display:"none",height:"100%"}} className={"js-select-display"}>{orderOption}</li>
       </ul>
 
     </div>

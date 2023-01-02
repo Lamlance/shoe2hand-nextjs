@@ -77,8 +77,11 @@ model ORDERDETAIL {
   productId     Int
   orderId       Int
   quantity      Int
+  reviewId Int?
+  
   ORDER         ORDER   @relation(fields: [orderId], references: [orderId], onDelete: Cascade)
   PRODUCT       PRODUCT @relation(fields: [productId], references: [productId], onDelete: Cascade)
+  REVIEW REVIEW?
 }
 
 model REVIEW {
@@ -88,8 +91,12 @@ model REVIEW {
   date       DateTime?
   rating     Float
   comment    String?
+
+  detailId    Int @unique
+
   CUSTOMER   USER      @relation(fields: [customerId], references: [userId], onDelete: Cascade)
   PRODUCT    PRODUCT   @relation(fields: [productId], references: [productId], onDelete: Cascade)
+  ORDERDETAIL ORDERDETAIL @relation(fields: [detailId],references: [orderdetailId],onDelete: Cascade)
 }
 
 enum DeliverStats {
@@ -99,3 +106,4 @@ enum DeliverStats {
   DELIVERED
   CANCELED
 }
+
