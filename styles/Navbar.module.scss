@@ -2,6 +2,7 @@
 
 .nav {
   font-family: 'Poppins', sans-serif;
+  width: 100%;
   background-color: #f1f1f1;
   padding: .8em 0;
   margin-bottom: 3em;
@@ -51,11 +52,11 @@
   /* display: flex;
   place-items: center;
   flex-direction: row; */
-  width: 1200px;
+  width: 100%;
   margin-left: auto;
   margin-right: auto;
   display: grid;
-  grid-template-columns: 0.8fr 2fr 0.4fr 0.8fr;
+  grid-template-columns: .9fr 1.5fr 0.3fr .9fr;
 
   @media (max-width:600px) {
     display: flex;
@@ -66,9 +67,17 @@
 }
 
 .s2h_logo_content{
+  padding: 0 1em;
   flex-basis: 20%;
+  // color: #fff;
+  // background: #FF4742;
+  // border-radius: 20% 20% / 20% 40%;
 }
 
+.s2h_logo_content:hover {
+  transition: 0.2s ease-in-out;
+  transform: scale(1.1);
+}
 
 a.sh2_bar {
   display: flex;
@@ -78,14 +87,15 @@ a.sh2_bar {
 
 a.sh2_bar>h3 {
   font-family: 'Lexend Mega', sans-serif;
-  margin-left: .5em;
+  margin-left: .2em;
+  color: #6ca0c8;
 }
 
 .layout_search_box {
   display: grid;
   place-items: center;
   height: 100%;
-  width: 80%;
+  width: 100%;
 }
 
 .layout_search_box>form {
@@ -102,7 +112,6 @@ a.sh2_bar>h3 {
   // background-color: #5F6F94;
   position: absolute;
   background-color: #fff;
-  padding: 0 1em 0 0;
   border: none;
   width: 3.4em;
   height: 3.4em;
@@ -110,16 +119,20 @@ a.sh2_bar>h3 {
   border-top-right-radius: 50px;
   border-bottom-right-radius: 50px;
   z-index: 1;
-  margin-left: 38em;
+  margin-left: 40em;
+  height: 3.8em;
+  width: 5em;
 }
 
+
 .layout_search_box > form > input[type=text] {
+  font-size: 14px;
   border-top-left-radius: 50px;
   border-bottom-left-radius: 50px;
   border-top-right-radius: 50px;
   border-bottom-right-radius: 50px;
   position: relative;
-  width: 120%;
+  width: 100%;
   height: 2.2em;
   z-index: 0;
   background-color: #fff;
@@ -143,7 +156,7 @@ a.sh2_bar>h3 {
 }
 
 .s2h_nav_cart:hover {
-  transition: 0.35s ease-in-out;
+  transition: 0.2s ease-in-out;
   transform: scale(1.1);
 }
 .s2h_header_banner{
@@ -162,8 +175,8 @@ a.sh2_bar>h3 {
 
 .open_shop, .login {
   font-family: 'Roboto', sans-serif;
-  background: #FF4742;
-  border: 1px solid #FF4742;
+  background: #85acca;
+  border: 1px solid #85acca;
   border-radius: 50px;
   box-shadow: rgba(0, 0, 0, 0.1) 1px 2px 4px;
   box-sizing: border-box;
@@ -195,7 +208,9 @@ a.sh2_bar>h3 {
   transition: 0.3s ease-in-out;
   background-color: initial;
   background-position: 0 0;
-  color: #FF4742;
+  color: #6ca0c8;
+  transition: 0.2s ease-in-out;
+  transform: scale(1.1);
 }
 
 .open_shop:active, .login:active {
@@ -242,3 +257,4 @@ a.sh2_bar>h3 {
   border-bottom-left-radius: 5px;
   opacity: 1;
 } */
+
