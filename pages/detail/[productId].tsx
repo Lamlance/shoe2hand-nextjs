@@ -41,12 +41,21 @@ const ProductDetail = () => {
   function changeProductAmountHandler(increaseFlag: boolean = true) {
     const dataChange = productAmount + (increaseFlag ? 1 : -1);
 
-    if (dataChange < maxProduct && dataChange > 0) {
+    if (dataChange <= maxProduct && dataChange >= 0) {
       setProductAmount(dataChange)
     }
   }
 
   function addToCartHandler() {
+    if (!fetchedData) {
+      return;
+    }
+    addCartItem(fetchedData.shopId, fetchedData.SHOP.shopName, {
+      id: fetchedData.productId,
+      title: fetchedData.title,
+      quantity: productAmount,
+      price: fetchedData.price
+    },true);
   }
 
   return (<ShopLayout>
@@ -60,7 +69,7 @@ const ProductDetail = () => {
         </div>
         <section className={styles["s2h_product_briefing_info"]}>
           <h1>{fetchedData.title}</h1>
-          <h1>Giá {fetchedData.price.toLocaleString("en-uk",{currency:"vnd"})} VND</h1>
+          <h1>Giá {fetchedData.price.toLocaleString("en-uk", { currency: "vnd" })} VND</h1>
           <div className={styles["s2h_product_breifing_add"]}>
             <h3>Số lượng</h3>
             <button onClick={() => { changeProductAmountHandler(false) }}>{"🔽"}</button>
@@ -75,7 +84,7 @@ const ProductDetail = () => {
           </div>
         </section>
       </div>
-      <hr style={{margin:"1rem 0"}}></hr>
+      <hr style={{ margin: "1rem 0" }}></hr>
       <h3>Thông tin sản phẩm</h3>
       <section className={styles["s2h_product_info"]}>
         <h4>Tên shop: </h4><p>{fetchedData.SHOP.shopName}</p>

@@ -22,6 +22,11 @@ export function addCartItem(shopId: number,shopName:string, productData: Product
   isCartOpen.set(true);
   const existingEntry = cartItems.get()[shopId];
   if (existingEntry) {
+    if(productData.quantity === 0 && replaceFlag === true){
+      deleteProduct(shopId,productData.id);
+      return;
+    }
+
     const product = existingEntry.products;
     let editFlag = false;
 

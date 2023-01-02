@@ -13,6 +13,7 @@ import { useStore } from "@nanostores/react";
 import { isCartOpen } from "../helper/CartStore";
 import Link from "next/link";
 import { FormEvent } from "react";
+import { useUser } from "@auth0/nextjs-auth0/client";
 
 export interface NavBarProps {
   submitSearchFunc?: (event: FormEvent<HTMLFormElement>, search?: string) => void
@@ -21,6 +22,8 @@ export interface NavBarProps {
 export default function Navbar({ submitSearchFunc }: NavBarProps) {
   const searchInputRef = createRef<HTMLInputElement>();
   const $isCartOpen = useStore(isCartOpen);
+  const {user} = useUser();
+
   return (
     <div className={styles["nav"]}>
       <div className={styles["nav__bar"]}>
@@ -72,13 +75,11 @@ export default function Navbar({ submitSearchFunc }: NavBarProps) {
                 <p>Mở Shop</p>
               </button>
             </Link>
+            <Link href={(user) ? "/buyer" : "/api/auth/login"}>
             <button className={styles["login"]}>
-              <div>
-                {/* <Image src={user} alt="login" /> */}
-
-                <p>Đăng Nhập</p>
-              </div>
+              <div><p>{(user) ? (user.name || user.nickname) : "Đăng nhập"}</p></div>
             </button>
+            </Link>
           </div>
         </div>
       </div>

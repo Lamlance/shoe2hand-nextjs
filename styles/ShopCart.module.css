@@ -1,11 +1,20 @@
 .sideBar {
   height: 100%;
   min-width: 30vw;
-  background-color: #fff;
   position: fixed !important;
   z-index: 1;
   overflow: auto;
-  background-color: blue;
+  background-color: #e3e5e4;
   bottom: 0;
   right: 0;
+}
+
+.s2h_shopList{
+  border: 1px solid black;
+  margin-top: 0.5rem;
+}
+.s2h_shopList > ul >li{
+  margin: 0.5rem 0.2rem;
+  display: grid;
+  grid-template-columns: 1.4fr 0.4fr 0.2fr;
 }

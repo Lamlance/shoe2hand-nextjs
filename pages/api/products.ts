@@ -71,7 +71,7 @@ export default async function handler(req: GetProductRequest,res: NextApiRespons
       return;
     }
     case "GET":{
-      const getProduct = await GET(req);
+      const getProduct:(ProductGetRespond|null) = await GET(req);
       if(getProduct){
         res.status(200).json(getProduct);
         return;
