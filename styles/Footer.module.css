@@ -1,0 +1,100 @@
+@import url('https://fonts.googleapis.com/css2?family=Lexend+Mega:wght@400;500;600;700&family=Poppins:wght@300;400;600&family=Roboto:ital,wght@0,400;0,700;1,400;1,700&display=swap');
+
+.main {
+  font-family: 'Poppins', sans-serif;
+  width: 100%;
+  height: 120px;
+  background-color: #0F0F0F;
+  color: #fff;
+  padding: 2em 0;
+  margin-top: 3rem;
+}
+
+.main li {
+  list-style-type: none;
+}
+
+.container {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.left>ul li {
+  text-align: center;
+}
+
+.center>ul li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.center>ul li:not(:first-child) {
+  margin-top: 1em;
+}
+
+.center>ul li:hover {
+  cursor: pointer;
+}
+
+.center>ul li:hover,
+.center>ul li:active {
+  transition: 0.3s ease-in-out;
+  background-color: initial;
+  background-position: 0 0;
+  color: #FF4742;
+}
+
+.center>ul li:active {
+  opacity: .5;
+}
+
+.center>ul li p {
+  margin-left: .3em;
+  margin-bottom: .15em;
+}
+
+.Image.logo {
+  margin-right: 1em;
+}
+
+.sh2_bar {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.sh2_bar h3 {
+  margin-left: .2em;
+  font-family: 'Lexend Mega', sans-serif;
+}
+
+.right {
+  display: flex;
+}
+
+.right h4 {
+  align-items: center;
+}
+
+/* .logo {
+  background-color: #7E7E7E;
+  border-radius: 50px;
+} */
+
+.logo:hover {
+  cursor: pointer;
+}
+
+.sh2_bar:hover {
+  cursor: pointer;
+}
+
+.sh2_bar:hover,
+.sh2_bar:active {
+  transition: 0.3s ease-in-out;
+  background-color: initial;
+  background-position: 0 0;
+  color: #FF4742;
+}

@@ -1,80 +1,61 @@
+import React, { createRef } from "react";
 import Image from "next/image";
 import s2hLogo from "/public/logo-64.png";
 import facebookLogo from "/public/facebook-16.png";
 import instagramLogo from "/public/instagram-16.png";
 import search from "/public/search-3-24.png";
-import shoppingCart from "/public/shopping-cart-32.png";
-import topBanner from "/public/top-banner.jpg";
-import loupeSVG from "/public/loupe-search-svg.svg";
-// import { ReactElement } from "react";
-// import { faCartShopping } from "@fortawesome/free-solid-svg-icons";
-// import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import shoppingCart from "/public/cart.svg";
+import loupe from "/public/loupe.svg";
+import user from "/public/user.svg";
 
-import styles from "../styles/Navbar.module.css";
+import styles from "../styles/Navbar.module.scss";
 import { useStore } from "@nanostores/react";
-import { isCartOpen } from "./CartStore";
+import { isCartOpen } from "../helper/CartStore";
+import Link from "next/link";
+import { FormEvent } from "react";
+import { useUser } from "@auth0/nextjs-auth0/client";
 
-export default function Navbar() {
+export interface NavBarProps {
+  submitSearchFunc?: (event: FormEvent<HTMLFormElement>, search?: string) => void
+}
+
+export default function Navbar({ submitSearchFunc }: NavBarProps) {
+  const searchInputRef = createRef<HTMLInputElement>();
   const $isCartOpen = useStore(isCartOpen);
+  const {user} = useUser();
+
   return (
     <div className={styles["nav"]}>
-      <div className={styles["top_banner"]}>
-        {/* <Image src={topBanner} alt="top-banner" /> */}
-        TOP BANNER
-      </div>
       <div className={styles["nav__bar"]}>
-        <div className={styles["top_links_bar"]} id="topActionLinks">
-          <div className={styles["links_list"]}>
-            <div className={styles["top_link_items"]} id="topActionDownload">
-              <a href="#">SAVE MORE ON APP</a>
-            </div>
-            <div className={styles["top_link_items"]} id="topActionSell">
-              <a href="#">SELL ON SHOES2HAND</a>
-            </div>
-            <div
-              className={styles["top_link_items"]}
-              id="topActionCustomerCare"
-            >
-              <a href="#">CUSTOMER CARE</a>
-            </div>
-            <div className={styles["top_link_items"]} id="topActionTrack">
-              <a href="#">TRACK MY ORDER</a>
-            </div>
-            <div className={styles["top_link_items"]} id="topActionLogin">
-              <a href="#">LOGIN</a>
-            </div>
-            <div className={styles["top_link_items"]} id="topActionSignUp">
-              <a href="#">SIGN UP</a>
-            </div>
-            <div className={styles["top_link_items"]} id="topActionSwitchLang">
-              <a href="#">LANGUAGES</a>
-            </div>
-          </div>
-        </div>
         <div className={styles["s2h_logo_bar"]}>
           <div className={styles["s2h_logo_content"]}>
-            <a href="#HOME" className={styles["sh2_bar"]}>
-              <Image src={s2hLogo} alt="Logo" className={styles["s2h_logo"]} />
-              <h3>Shoes2hand</h3>
-            </a>
+            <Link href={"/"}>
+              <a className={styles["sh2_bar"]}>
+                <Image
+                  src={s2hLogo}
+                  alt="Logo"
+                  className={styles["s2h_logo"]}
+                />
+                <h3>Shoes2hand</h3>
+              </a>
+            </Link>
           </div>
           <div className={styles["layout_search_box"]}>
-            <form
-              action=""
-              method="GET"
-              style={{ width: "100%", height: "100%" }}
-              onSubmit={(e) => {
-                e.preventDefault();
-              }}
-            >
-              <input
-                type="text"
-                name="q"
-                id="q"
-                placeholder="Seach in Shoes2hand..."
-              />
-              <button className={styles["btn_search"]}>
-                <Image src={search} alt="search" />
+            <form action="" method="GET" onSubmit={(e) => {
+              e.preventDefault();
+              // console.log("POI",submitSearchFunc);
+              if (submitSearchFunc) {
+                const search = searchInputRef.current?.value;
+                if (search) {
+                  submitSearchFunc(e, search);
+                  return;
+                }
+                submitSearchFunc(e);
+              }
+            }}>
+              <input ref={searchInputRef} type="text" name="q" id="q" placeholder="Seach in Shoes2hand..." />
+              <button>
+                <Image src={loupe} alt="search" width={28} height={28} />
               </button>
             </form>
           </div>
@@ -84,13 +65,21 @@ export default function Navbar() {
               isCartOpen.set(!$isCartOpen);
             }}
           >
-            <a href="#CART">
-              <Image src={shoppingCart} alt="cart" />
-              {/* <FontAwesomeIcon icon={faCartShopping} /> */}
+            <a>
+              <Image src={shoppingCart} alt="cart" width={28} height={28} />
             </a>
           </div>
           <div className={styles["s2h_header_banner"]}>
-            <a href="#CART">BANNER</a>
+            <Link href={"/seller"} >
+              <button className={styles["open_shop"]}>
+                <p>Mở Shop</p>
+              </button>
+            </Link>
+            <Link href={(user) ? "/buyer" : "/api/auth/login"}>
+            <button className={styles["login"]}>
+              <div><p>{(user) ? (user.name || user.nickname) : "Đăng nhập"}</p></div>
+            </button>
+            </Link>
           </div>
         </div>
       </div>

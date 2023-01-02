@@ -1,0 +1,52 @@
+.s2h_seller_dboard_wrapper{
+  width: 100vw;
+  display: grid;
+  grid-template-columns: 0.5fr 2.5fr;
+  /* border: 1px solid red; */
+  grid-template-areas: "option slect";
+  max-width: 98vw;
+  margin-inline: auto;
+  
+}
+.s2h_seller_dboard_wrapper > *{
+  min-height: 80vh;
+  max-height: 90vh;
+  overflow-y: scroll;
+}
+.s2h_seller_dboard_wrapper > ul{
+  /* border: 1px solid ; */
+  list-style-type: none;
+  padding: 0;
+}
+
+/* OPTION SELECT */
+.s2h_seller_dboard_option_select{
+  overflow-y: scroll;
+  grid-area: option;
+  background-color: #303246;
+}
+.s2h_seller_dboard_option_select > ul > li{
+  height: 3rem;
+  margin: 1rem 0 0 0;
+  cursor: pointer;
+  /* background-color: azure; */
+  display: grid;
+  place-items: center;
+  color: white;
+}
+.s2h_seller_dboard_option_select > ul > li:hover{
+  background-color: #ff4742;
+  color: white;
+}
+.s2h_seller_shoes_option_ul{
+  padding: 0;
+  list-style-type: none;
+  overflow-y: scroll;
+}
+.s2h_seller_shoes_option_ul > li{
+  margin: 1rem 0.5rem 1rem 0;
+  display: flex;
+  flex-direction: column;
+  place-items: center;
+  /* border: 1px solid blue; */
+}

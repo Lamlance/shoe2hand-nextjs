@@ -1,20 +1,70 @@
-.ShopItemWrapper {
-    display: grid;
-    grid-template-columns: 1fr;
-    grid-template-rows: 1.5fr 1fr 0.5fr;
-    border: 1px solid red;
-    background-color: red;
-    width: 100%;
+@import url('https://fonts.googleapis.com/css2?family=Lexend+Mega:wght@400;500;600;700&family=Poppins:wght@300;400;600&family=Roboto:ital,wght@0,400;0,700;1,400;1,700&display=swap');
+
+.s2h_ShopItemWrapper {
+	font-family: 'Poppins', sans-serif;
+	display: grid;
+	grid-template-columns: 1fr;
+	grid-template-rows: 2.5fr 0.5fr;
+	background-color: #f1f1f1;
+	cursor: pointer;
+	margin: 0.2rem;
+	height: 100%;
+	overflow-wrap: break-word;
 }
 
-.ShopItemWrapper>img {
-    border: 1px solid black;
-    margin: 0.5rem;
+.s2h_ShopItemWrapper {
+	border: 1px solid #f1f1f1;
+	border-radius: 10px;
 }
 
-.ShopItemWrapper>p {
-    max-height: 4em;
-    margin: 0.5rem;
-    word-break: break-all;
-    overflow: hidden;
+.s2h_ShopItemWrapper .test_shoe:hover {
+	scale: 1.1;
+	transition: .3s ease-in-out;
+}
+
+.s2h_ShopItemWrapper img {
+	min-height: 180px;
+	width: 100%;
+}
+
+.s2h_ShopItemWrapper p {
+	max-height: 4em;
+	margin: 0.5rem;
+	word-wrap: break-word;
+	overflow: hidden;
+	text-align: center;
+}
+
+.price {
+	color: #B20A0A;
+	font-weight: 600;
+}
+
+.s2h_BreifInfo {
+	display: flex;
+	flex-direction: column;
+}
+
+/* .btn_add_to_cart:hover,
+.btn_add_to_cart:active {
+	transition: 0.3s ease-in-out;
+	background-color: initial;
+	background-position: 0 0;
+	color: #FF4742;
+} */
+
+.s2h_ShopItemWrapper>.btn_add_to_cart {
+	border: none;
+	border-radius: 10px;
+	font-size: 18px;
+	background-color: #f8f8f8;
+}
+
+.s2h_ShopItemWrapper>.btn_add_to_cart:hover {
+	cursor: pointer;
+	transition: 0.3s ease-in-out;
+	background-color: initial;
+	background-position: 0 0;
+	color: #fff;
+	background-color: #FF4742;
 }

@@ -1,0 +1,58 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&family=Roboto:ital,wght@0,400;0,700;1,400;1,700&display=swap');
+
+.container {
+  font-family: 'Poppins', sans-serif;
+  background-color: #eee;
+  /* height: 100vh; */
+}
+
+.main {
+  margin-right: auto;
+  width: 100%;
+  /* height: 100vh; */
+  background-color: #fff;
+}
+
+.shop {
+  margin-top: 2em;
+  margin-bottom: 1em;
+  font-size: 14px;
+  padding: 0 1.5em;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  overflow: hidden;
+  box-shadow: 0 1px 1px 0 rgb(0 0 0 / 5%);
+  border-top: 1px solid #eee;
+  border-radius: 3px;
+  height: 5em;
+}
+
+.check_box input[type=checkbox] {
+  width: 1.35em;
+  height: 1.35em;
+}
+
+.content {
+  display: flex;
+  align-items: center;
+}
+
+a.shop_link {
+  display: flex;
+}
+
+.shop_label {
+  color: #fff;
+  background-color: #cd011b;
+  border: 1px solid #eee;
+  width: fit-content;
+  padding: 0 .3em;
+  border: none;
+  border-radius: 5px;
+  font-weight: 600;
+}
+
+.shop_label, .shop_name {
+  margin-left: 1em;
+}
