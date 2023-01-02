@@ -60,7 +60,7 @@ export default function Footer() {
             </Link>
             <p>
               “Since all great journeys start with a single step,
-              <div>You should probably have on a cute pair of shoes”</div>
+              <span>You should probably have on a cute pair of shoes”</span>
             </p>
           </div>
         </div>
