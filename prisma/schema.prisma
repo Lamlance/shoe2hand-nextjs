@@ -45,6 +45,7 @@ model USER {
   userName  String
   birthDay  DateTime?
   email     String    @unique
+  isAdmin Boolean @default(false)
   phone     String?
   address   String?
   lastLogin DateTime?

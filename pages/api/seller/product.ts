@@ -47,9 +47,6 @@ export async function validateUser(email: string, uuid: string) {
         { email: { equals: email } },
         { uuid: { contains: uuid } }
       ]
-    },
-    select: {
-      userId: true
     }
   });
   return user;
