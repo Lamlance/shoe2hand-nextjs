@@ -12,6 +12,7 @@ import { USER, SHOP } from "@prisma/client";
 import ShoeOption from "../../components/Seller/ShoeOption";
 import ShopInfo from "../../components/Seller/ShopInfo";
 import OrderOption from "../../components/Seller/ShopOrder";
+import ShopLayout from "../../components/layouts/ShopLayout";
 
 const SellerDBoard = () => {
   // const [selectedOption, setSelectedOption] = useState(0);
@@ -75,7 +76,7 @@ const SellerDBoard = () => {
     })
   }
 
-  return (<div >
+  return (<ShopLayout>
     <h1>
       {`Hello ${user?.name} - ${user?.name} - 
       UserID: ${$userInfo_inDB?.user.userId} - 
@@ -121,7 +122,7 @@ const SellerDBoard = () => {
       </ul>
 
     </div>
-  </div>)
+  </ShopLayout>)
 }
 
 export default withPageAuthRequired(SellerDBoard);

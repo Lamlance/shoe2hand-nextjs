@@ -4,6 +4,7 @@ import ShopLayout from "../../components/layouts/ShopLayout";
 import styles from "../../styles/ProductDetail.module.scss";
 import { useRouter } from 'next/router'
 import { ProductGetRespond } from "../api/products";
+import Link from "next/link";
 
 
 const ProductDetail = () => {
@@ -87,7 +88,7 @@ const ProductDetail = () => {
       <hr style={{ margin: "1rem 0" }}></hr>
       <h3>Thông tin sản phẩm</h3>
       <section className={styles["s2h_product_info"]}>
-        <h4>Tên shop: </h4><p>{fetchedData.SHOP.shopName}</p>
+        <h4>Tên shop: </h4><Link href={`/search?shop=${fetchedData.shopId}`}><p>{fetchedData.SHOP.shopName}</p></Link>
         <h4>Số lượng: </h4><p>{fetchedData.quantity}</p>
         <h4>Thông tin chi tiết sản phẩm: </h4><p>{fetchedData.description}</p>
       </section>

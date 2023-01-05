@@ -1,5 +1,6 @@
 import { DeliverStats, ORDER, PRODUCT } from "@prisma/client";
 import { createRef, FormEvent, useRef, useState } from "react";
+import { toast } from "react-toastify";
 import { SellerOrderGET,SellerOrderPUT } from "../../pages/api/seller/order";
 import { ShopData } from "./ShoeOption";
 import styles from "/styles/seller/ShoeOption.module.css"
@@ -15,11 +16,13 @@ function OrderOption({ userData, shopData }: ShopData) {
   }
 
   const RefreshOrderData = async () => {
+    toast.info("Fetching order ...");
     const fetchData = await fetch(`/api/seller/order?shopId=${shopData.shopId}`);
     try {
       const data: SellerOrderGET[] = await fetchData.json();
       console.log(data);
       setOrders(data);
+      toast.success("Fetch success ...");
     } catch (error) { console.log(error) }
   }
 
@@ -56,12 +59,15 @@ function OrderOption({ userData, shopData }: ShopData) {
   }
 
   const updateProductData = async (e: FormEvent<HTMLFormElement>)=>{
-    e.preventDefault()
+    e.preventDefault();
+    toast.info("Updating order....");
     if(!selectedOrder || !formRef.current){
+      toast.error("Update failed");
       return;
     }
     const inputs = formRef.current?.elements;
     if (!inputs) {
+      toast.error("Update failed");
       return;
     }
     const status = (inputs.namedItem("status") as HTMLInputElement).value;
@@ -86,6 +92,7 @@ function OrderOption({ userData, shopData }: ShopData) {
         }
       }
       setOrders(currOrders);
+      toast.success("Update success");
     } catch (error) {}
   }
 
