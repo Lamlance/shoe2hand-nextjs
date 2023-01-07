@@ -34,9 +34,8 @@ function Home() {
     const productFetch = fetchProduct();
     productFetch.then((data) => {
       setProducts(data);
-    })
-  }, [])
-
+    });
+  }, []);
 
   return (
     <ShopLayout>
@@ -45,9 +44,13 @@ function Home() {
           return (
             <li key={index}>
               <ShopItem
-                id={item.productId} title={item.title} price={item.price}
-                shopId={item.shopId} quantity={item.quantity} shopName={item.SHOP.shopName}
-                 />
+                id={item.productId}
+                title={item.title}
+                price={item.price}
+                shopId={item.shopId}
+                quantity={item.quantity}
+                shopName={item.SHOP.shopName}
+              />
             </li>
           );
         })}
