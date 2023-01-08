@@ -3,23 +3,6 @@ import type { NextApiRequest, NextApiResponse } from 'next'
 import { handleQuery, handleQueryArray } from '../../helper/queryHelper'
 import { PRODUCT } from '@prisma/client';
 
-// interface QueryObj {
-//   skip: number | 0,
-//   take: number,
-//   where: {
-//     brandID?: number,
-//     AND: [
-//       {price: { lte: number }}?, 
-//       {price: { gte: number }}?,
-//       {title:{contains:string}}?,
-//       {isHidden: boolean}?,
-//       {quantity:{gte:number}}?
-//     ],
-//     OR?:{[index: number]:{brandId:Number}}
-//     shopID?: number
-//   }
-// }
-
 interface ProductRespond {
   shopId: number;
   price: number;
@@ -95,7 +78,7 @@ async function POST(req: GetProductRequest) {
   await myPrismaClient.$connect();
   // console.log("Skip",(page && !isNaN(page)) ? (page * 10) : 0);
   const data = await myPrismaClient.pRODUCT.findMany({
-    take: 10,
+    take: 8,
     skip: (page && !isNaN(page)) ? (page * 10) : 0,
     ...orderObj,
     where: {
