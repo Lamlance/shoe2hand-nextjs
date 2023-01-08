@@ -19,6 +19,7 @@ import { OrderDetailResult } from "../api/buyer/order";
 import Cart from "../../components/Buyer/Cart";
 import { cartItems } from "../../helper/CartStore";
 import ShopLayout from "../../components/layouts/ShopLayout";
+import Link from "next/link";
 // const UserDisplay = {
 //   userDisplayName: "Happy Guy",
 //   userImage: "/public/logo-64.png",
@@ -93,7 +94,7 @@ function UserDashboard() {
     try {
       const data: OrderDetailResult[] = await fetchData.json();
       setOrders(data);
-    } catch (error) { }
+    } catch (error) {}
   };
 
   return (
@@ -117,40 +118,81 @@ function UserDashboard() {
             </div>
             <div className={styles["sidebar_navigation"]}>
               <ul>
-                <li onClick={() => { handleChangeTab(0); }}>
+                <li
+                  onClick={() => {
+                    handleChangeTab(0);
+                  }}
+                >
                   Thay đổi thông tin tài khoản
                 </li>
-                <li onClick={() => { handleChangeTab(1); getOrders(null); }}>
+                <li
+                  onClick={() => {
+                    handleChangeTab(1);
+                    getOrders(null);
+                  }}
+                >
                   Đơn mua
                 </li>
-                <li onClick={() => { handleChangeTab(2); }}>
+                <li
+                  onClick={() => {
+                    handleChangeTab(2);
+                  }}
+                >
                   Giỏ hàng
+                </li>
+                <li className={styles["logout"]}>
+                  <Link href="/api/auth/logout">Đăng xuất</Link>
                 </li>
               </ul>
             </div>
           </div>
           <div className={styles["sidebar_display"]}>
-            <div ref={changeInfo} className={`${styles["user_change_acount_information"]}`}>
+            <div
+              ref={changeInfo}
+              className={`${styles["user_change_acount_information"]}`}
+            >
               <UserChangeInfor />
             </div>
 
-            <div style={{ display: "none" }} ref={invoice} className={`${styles["user_invoice_information"]}`}>
+            <div
+              style={{ display: "none" }}
+              ref={invoice}
+              className={`${styles["user_invoice_information"]}`}
+            >
               <div className={styles["tab_navigation"]}>
                 <div className={styles["tab_button"]}>
-                  <button onClick={() => { handleClick(); }}>
+                  <button
+                    onClick={() => {
+                      handleClick();
+                    }}
+                  >
                     Chờ xác nhận
                   </button>
-                  <button onClick={() => { handleClick(); }}>
+                  <button
+                    onClick={() => {
+                      handleClick();
+                    }}
+                  >
                     Đang giao
                   </button>
-                  <button onClick={() => { handleClick(); }}>
+                  <button
+                    onClick={() => {
+                      handleClick();
+                    }}
+                  >
                     Đã giao
                   </button>
-                  <button onClick={() => { handleClick(); }}  >
+                  <button
+                    onClick={() => {
+                      handleClick();
+                    }}
+                  >
                     Đã huỷ
                   </button>
                 </div>
-                <ul className={`${styles["user_invoice_information"]} ${styles["active"]}`}>
+                <ul
+                  className={`${styles["user_invoice_information"]} ${styles["active"]}`}
+                >
                   {
                     orders.map((order, index) => {
                       return (
@@ -165,7 +207,11 @@ function UserDashboard() {
               </div>
             </div>
 
-            <div style={{ display: "none" }} ref={cart} className={`${styles["user_cart_information"]}`}>
+            <div
+              style={{ display: "none" }}
+              ref={cart}
+              className={`${styles["user_cart_information"]}`}
+            >
               <Cart orders={Object.values($cartItems)} />
             </div>
           </div>

@@ -35,8 +35,8 @@ function Home() {
     const productFetch = fetchProduct();
     productFetch.then((data) => {
       setProducts(data);
-    })
-  }, [])
+    });
+  }, []);
 
   const pageChange = (increase: boolean = true) => {
     if (!increase && page <= 0) {

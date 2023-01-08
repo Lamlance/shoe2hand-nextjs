@@ -21,6 +21,12 @@
   font-weight: 400;
 }
 
+.user_login_name {
+  font-size: 12px;
+  margin-left: .2em;
+  text-transform: uppercase;
+}
+
 /* .user_infor>.user_image {
   position: relative;
 }
@@ -106,7 +112,7 @@
 }
 
 .tab_navigation {
-  margin-left: 10em;
+  margin-left: 9em;
 }
 
 .tab_button>button {
@@ -125,7 +131,9 @@
 }
 
 /* Cart */
-
+.logout {
+  color: #FFCC33;
+}
 
 .active {
   display: block;
