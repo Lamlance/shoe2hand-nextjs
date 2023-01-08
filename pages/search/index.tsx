@@ -56,8 +56,21 @@ const brand = ({ shopId }: SearchProps) => {
     } catch (error) { }
 
   }
+  const fetchBrands = async ()=>{
+    const fetchData = await fetch("/api/brands");
+    try {
+      const brands = await fetchData.json();
+      console.log("Brands",brands);
+      if(brands){
+        setBrands(brands);
+      }
+    } catch (error) {
+      
+    }
+  }
 
   useEffect(()=>{
+    fetchBrands();
     console.log(router.query);
     const name = handleQuery(router.query.name);
     const shop = Number.parseInt(handleQuery(router.query.shop));
@@ -69,6 +82,7 @@ const brand = ({ shopId }: SearchProps) => {
       ...(name ? {name: name} : {})
     }
     fetchSearch();
+    
   },[])
 
   const handleBrand = () => {

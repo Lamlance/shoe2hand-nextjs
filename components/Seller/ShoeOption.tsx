@@ -53,7 +53,7 @@ function ShoeOption({ userData, shopData }: ShopData) {
     toast.success("Refreshing sucess...");
   }
 
-  const hadleFormSubmitPUT = async (title: string, quantity: number, price: number, desc: string) => {
+  const hadleFormSubmitPUT = async (title: string, quantity: number, price: number, desc: string,brandId:number|null = null) => {
     if (!products || !products[selectId.current]) {
       return false;
     }
@@ -68,6 +68,7 @@ function ShoeOption({ userData, shopData }: ShopData) {
         desc: desc,
         shopId: shopId,
         productId: products[selectId.current].productId,
+        ...(brandId ? {brandId:brandId} : {})
       })
     });
     try {
@@ -189,7 +190,7 @@ function ShoeOption({ userData, shopData }: ShopData) {
     //UPDATE DATA
     if (selectId.current != -1) {
       toast.info("Updating data....");
-      const ans = await hadleFormSubmitPUT(title, quantity, price, desc);
+      const ans = await hadleFormSubmitPUT(title, quantity, price, desc,(!isNaN(brandId) ? brandId : null));
       if(ans){
         toast.success("Update success");
       }else{
@@ -210,20 +211,6 @@ function ShoeOption({ userData, shopData }: ShopData) {
 
   }
 
-  // const switchFormInput = async (disable: boolean = true) => {
-  //   const inputs = formRef.current?.elements;
-  //   if (!inputs) {
-  //     return;
-  //   }
-  //   (inputs.namedItem("title") as HTMLInputElement).disabled = disable;
-  //   (inputs.namedItem("quantity") as HTMLInputElement).disabled = disable;
-  //   (inputs.namedItem("price") as HTMLInputElement).disabled = disable;
-  //   (inputs.namedItem("hide") as HTMLInputElement).disabled = disable;
-  //   (inputs.namedItem("desc") as HTMLInputElement).disabled = disable;
-  //   (inputs.namedItem("enter") as HTMLInputElement).disabled = disable;
-
-  // }
-
   const handelDeleteCheck = () => {
     const disable = deleteCheck.current?.checked;
   }
@@ -241,7 +228,7 @@ function ShoeOption({ userData, shopData }: ShopData) {
     (inputs.namedItem("quantity") as HTMLInputElement).valueAsNumber = productData.quantity;
     (inputs.namedItem("price") as HTMLInputElement).valueAsNumber = productData.price;
     (inputs.namedItem("desc") as HTMLInputElement).value = productData.description ? productData.description : "";
-    (inputs.namedItem("brand") as HTMLSelectElement).options.selectedIndex = 0
+    (inputs.namedItem("brand") as HTMLSelectElement).value = productData.brandId.toString();
   }
 
 
@@ -303,7 +290,7 @@ function ShoeOption({ userData, shopData }: ShopData) {
         }
       </select>
 
-      <textarea name="desc" rows={4} cols={12} placeholder="Product description"></textarea>
+      <textarea name="desc" rows={10} cols={12} placeholder="Product description"></textarea>
       <input name="enter" type="submit"></input>
     </form>
 

@@ -34,7 +34,8 @@ interface UpdateProductBody extends NextApiRequest {
     price: number,
     hide?: false,
     desc?: string,
-    shopId:number
+    shopId:number,
+    brandId?:number
   }
 }
 export type { SellerProductAPI_PUT, SellerProductAPI_POST, SellerProductAPI_GET, SellerProductAPI_DELETE }
@@ -156,7 +157,7 @@ async function GET(req: NextApiRequest, res: NextApiResponse, userId: number) {
   };
 }
 async function PUT(req: UpdateProductBody, userId: number) {
-  const {productId,quantity,title,price,hide,desc,shopId} = req.body;
+  const {productId,quantity,title,price,hide,desc,shopId,brandId} = req.body;
   if( !(productId && shopId) || !( title || quantity || price ) ){
     return null;
   }
@@ -174,7 +175,8 @@ async function PUT(req: UpdateProductBody, userId: number) {
       title: title,
       quantity: quantity,
       price: price,
-      description: desc
+      description: desc,
+      ...(brandId ? {brandId: brandId} : {})
     }
   })
   return update;
