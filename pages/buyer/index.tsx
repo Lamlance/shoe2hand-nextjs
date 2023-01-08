@@ -92,9 +92,12 @@ function UserDashboard() {
       `/api/buyer/order?userId=${$userInfo_inDB.user.userId}`
     );
     try {
+      console.log(fetchData);
       const data: OrderDetailResult[] = await fetchData.json();
       setOrders(data);
-    } catch (error) {}
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
