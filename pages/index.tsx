@@ -1,6 +1,9 @@
 import ShopDisplay from "../components/Buyer/ShopDisplay";
 import Navbar from "../components/Navbar";
 import styles from "/styles/ShopDisplay.module.css";
+import Image from "next/image";
+import leftArrow from "/public/left-arrow.png";
+import rightArrow from "/public/right-arrow.png";
 
 import ShopItem from "../components/Buyer/ShopItem";
 import ShopLayout from "../components/layouts/ShopLayout";
@@ -23,13 +26,13 @@ function Home() {
         Accept: "application/json",
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ page: pageFetch })
+      body: JSON.stringify({ page: pageFetch }),
     });
     try {
       const json = await rawResponse.json();
       console.log(json);
       return json;
-    } catch (error) { }
+    } catch (error) {}
     return null;
   };
 
@@ -37,7 +40,7 @@ function Home() {
     const productFetch = fetchProduct();
     productFetch.then((data) => {
       if (data) {
-        setProducts(data);  
+        setProducts(data);
       }
     });
   }, []);
@@ -48,10 +51,10 @@ function Home() {
     }
     setProducts([]);
     setPage(page + (increase ? 1 : -1));
-    fetchProduct(page + (increase ? 1 : -1)).then(data => {
+    fetchProduct(page + (increase ? 1 : -1)).then((data) => {
       setProducts(data);
     });
-  }
+  };
 
   return (
     <ShopLayout>
@@ -61,18 +64,47 @@ function Home() {
             return (
               <li key={index}>
                 <ShopItem
-                  id={item.productId} title={item.title} price={item.price}
-                  shopId={item.shopId} quantity={item.quantity} shopName={item.SHOP.shopName}
+                  id={item.productId}
+                  title={item.title}
+                  price={item.price}
+                  shopId={item.shopId}
+                  quantity={item.quantity}
+                  shopName={item.SHOP.shopName}
                 />
               </li>
             );
           })}
         </ul>
       </section>
-      <div style={{ display: "flex", flexDirection: "row", justifyContent: "center" }}>
-        <button onClick={() => { pageChange(true) }}>{"+"}</button>
-        <span>{page}</span>
-        <button onClick={() => { pageChange(false) }}>{"-"}</button>
+      <div
+        className={styles["page_increase_decrease"]}
+        style={{
+          display: "flex",
+          flexDirection: "row",
+          justifyContent: "center",
+        }}
+      >
+        <button
+          onClick={() => {
+            pageChange(false);
+          }}
+        >
+          <Image src={leftArrow} alt="left arrow" className={styles[""]} />
+        </button>
+        <span
+          style={{
+            color: "#7fb6ff",
+          }}
+        >
+          {page}
+        </span>
+        <button
+          onClick={() => {
+            pageChange(true);
+          }}
+        >
+          <Image src={rightArrow} alt="right arrow" className={styles[""]} />
+        </button>
       </div>
     </ShopLayout>
   );
