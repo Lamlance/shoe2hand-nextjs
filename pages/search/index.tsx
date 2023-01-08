@@ -1,6 +1,6 @@
 import { useStore } from '@nanostores/react';
 import { useRouter } from 'next/router'
-import React, { createRef, FormEvent, useRef, useState } from 'react';
+import React, { createRef, FormEvent, useEffect, useRef, useState } from 'react';
 import { isCartOpen } from '../../helper/CartStore';
 import ShopLayout from '../../components/layouts/ShopLayout';
 import ShopCart from '../../components/ShopCart';
@@ -9,27 +9,28 @@ import styles from "/styles/Search.module.css"
 import { BRAND, PRODUCT } from '@prisma/client';
 import ShopItem from '../../components/Buyer/ShopItem';
 import { ProductRespond } from '../api/products';
+import { handleQuery } from '../../helper/queryHelper';
 
-interface SearchProps{
-  shopId?:number
+interface SearchProps {
+  shopId?: number
 }
 
-interface SearchData{
+interface SearchData {
   page?: number,
   min?: number,
   max?: number,
   brandId?: number,
   shopId?: number,
-  name?:string,
+  name?: string,
   priceSort?: "asc" | "desc"
 }
 
-const brand = ({shopId}:SearchProps) => {
+const brand = ({ shopId }: SearchProps) => {
   const router = useRouter();
-  const { brandName } = router.query;
   const $isCartOpen = useStore(isCartOpen);
   const [products, setProducts] = useState<ProductRespond[]>([]);
   const [brands, setBrands] = useState<BRAND[]>([]);
+  const [page, setPage] = useState<number>(0);
 
   const searchData = useRef<SearchData>({});
 
@@ -37,12 +38,14 @@ const brand = ({shopId}:SearchProps) => {
   const maxRef = createRef<HTMLInputElement>();
   const brandRef = createRef<HTMLSelectElement>();
 
-  const fetchSearch = async () => {
-    const fetchData = await fetch("/api/products",{
-      method:"POST",
+  const fetchSearch = async (pageNum: number = 0) => {
+    console.log()
+    const fetchData = await fetch("/api/products", {
+      method: "POST",
       headers: { "Content-Type": 'application/json' },
       body: JSON.stringify({
-        ...searchData.current
+        ...searchData.current,
+        page: pageNum
       })
     })
 
@@ -50,16 +53,30 @@ const brand = ({shopId}:SearchProps) => {
       const data = await fetchData.json();
       console.log(data);
       setProducts(data);
-    } catch (error) {}
+    } catch (error) { }
 
   }
 
-  const handleBrand = ()=>{
-    if(!brandRef || !brandRef.current){
+  useEffect(()=>{
+    console.log(router.query);
+    const name = handleQuery(router.query.name);
+    const shop = Number.parseInt(handleQuery(router.query.shop));
+    if(!name && !shop ){
+      return;
+    }
+    searchData.current = {
+      ...(isNaN(shop) ? {} : {shopId: shop}),
+      ...(name ? {name: name} : {})
+    }
+    fetchSearch();
+  },[])
+
+  const handleBrand = () => {
+    if (!brandRef || !brandRef.current) {
       return;
     }
     const brandId = Number.parseInt(brandRef.current.value);
-    if(isNaN(brandId)){
+    if (isNaN(brandId)) {
       return;
     }
 
@@ -69,8 +86,8 @@ const brand = ({shopId}:SearchProps) => {
     }
   }
 
-  const handleMin = ()=>{
-    if(!minRef || !minRef.current || isNaN(minRef.current.valueAsNumber)){
+  const handleMin = () => {
+    if (!minRef || !minRef.current || isNaN(minRef.current.valueAsNumber)) {
       return;
     }
     searchData.current = {
@@ -79,8 +96,8 @@ const brand = ({shopId}:SearchProps) => {
     }
   }
 
-  const handleMax = ()=>{
-    if(!maxRef || !maxRef.current || isNaN(maxRef.current.valueAsNumber)){
+  const handleMax = () => {
+    if (!maxRef || !maxRef.current || isNaN(maxRef.current.valueAsNumber)) {
       return;
     }
     searchData.current = {
@@ -89,25 +106,31 @@ const brand = ({shopId}:SearchProps) => {
     }
   }
 
-  const handleSearchName = (event:FormEvent<HTMLFormElement>,search?:string) =>{
+  const handleSearchName = (event: FormEvent<HTMLFormElement>, search?: string) => {
     event.preventDefault();
-    if(!searchData || !searchData.current){
-      return;
-    }
-    if(search){
+    console.log(search);
+    if (search) {
       console.log(search);
       searchData.current = {
         ...searchData.current,
         name: search
       }
     }
-    
+    fetchSearch();
   }
 
-  return (<ShopLayout navProps={{submitSearchFunc: handleSearchName}}>
+  const pageChange = (increase: boolean = true) => {
+    if (!increase && page <= 0) {
+      return;
+    }
+    setProducts([]);
+    setPage(page + (increase ? 1 : -1));
+    fetchSearch(page + (increase ? 1 : -1));
+  }
+  
+  return (<ShopLayout navProps={{ submitSearchFunc: handleSearchName }}>
     <div className={styles["s2h_search_display"]}>
-      <div style={{ gridArea: "products",padding:"1rem" }}>
-        <p>{brandName ? `Product of brand ${brandName}` : null}</p>
+      <div style={{ gridArea: "products", padding: "1rem" }}>
         <ul className={styles["s2h_search_display_product"]}>
           {
             products.map((item, index) => {
@@ -122,7 +145,7 @@ const brand = ({shopId}:SearchProps) => {
         </ul>
       </div>
       <div className={styles["s2h_filter_wrape"]}>
-        <form onSubmit={(e)=>{e.preventDefault();fetchSearch()}}>
+        <form onSubmit={(e) => { e.preventDefault(); fetchSearch() }}>
           <input type={"submit"} value="Filter"></input>
 
           <label htmlFor='min-price'>Giá thấp nhất</label>
@@ -141,6 +164,11 @@ const brand = ({shopId}:SearchProps) => {
           </select>
         </form>
       </div>
+    </div>
+    <div style={{ display: "flex", flexDirection: "row", justifyContent: "center" }}>
+      <button onClick={() => { pageChange(true) }}>{"+"}</button>
+      <span>{page}</span>
+      <button onClick={() => { pageChange(false) }}>{"-"}</button>
     </div>
   </ShopLayout>)
 }

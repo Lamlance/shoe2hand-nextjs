@@ -1,0 +1,36 @@
+.s2h_admin_display_wrapper{
+  min-height: 80vh;
+  width: auto;
+  margin-inline: 1rem;
+  background-color: bisque;
+  display: grid;
+  grid-template-columns: 0.3fr 1.7fr;
+}
+.s2h_admin_tab_display_list_wrapper{
+  height: 100%;
+}
+.s2h_admin_tab_display_list_wrapper > li{
+  height: 100%;
+}
+
+.s2h_admin_tab_display_wrapper{
+  display: grid;
+  grid-template-columns: 0.3fr 1.7fr;
+  height: 100%;
+}
+.s2h_admin_tab_option > li{
+  margin: 1rem 0;
+  display: grid;
+  place-items: center;
+  min-height: 3rem;
+  cursor: pointer;
+}
+.s2h_admin_tab_display{
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  padding: auto 0;
+}
+.s2h_admin_tab_display > *{
+  margin: 0 auto;
+}

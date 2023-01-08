@@ -8,6 +8,7 @@ import { OrderDetailResult } from "../../pages/api/buyer/order";
 import { CartItem, deleteCartItemByShopId, ProductInfo } from "../../helper/CartStore";
 import { useStore } from "@nanostores/react";
 import { userInfo_inDB } from "../../helper/userInfo_inDB";
+import { toast } from "react-toastify";
 
 const shopInfor = {
   name: "MIA.vn Official Store",
@@ -23,6 +24,7 @@ export default function ShopAndItems({ data }: ShopAndItemsProps) {
   const $userInfo_inDB = useStore(userInfo_inDB);
 
   const handleMakeProduct = async (infos:ProductInfo[])=>{
+    toast.info("Placing your order");
     const fetchData = await fetch("/api/buyer/order",{
       method:"POST",
       headers:{"Content-Type":"application/json"},
@@ -34,9 +36,14 @@ export default function ShopAndItems({ data }: ShopAndItemsProps) {
     })
     try {
       const order = await fetchData.json();
+      if(order){
+        toast.success("Place order success, you can see it in your Invoice tab")
+      }
       console.log(order);
       deleteCartItemByShopId(data.shopId);
+      return;
     } catch (error) {console.log(error)}
+    toast.error("Place order failed");
   }
 
   return (
