@@ -49,6 +49,7 @@ export default function UserChangeInfor({ user }: { user: USER }) {
         <div className={styles["user_change_title"]}>
           <h2>Hồ sơ của tôi</h2>
           <p>Quản lý thông tin hồ sơ để bảo mật tài khoản</p>
+          <p>{user.email}</p>
         </div>
         <div className={styles["user_change_information_form_layout"]}>
           <div className={styles["user_change_information_form"]}>

@@ -12,6 +12,7 @@ import Link from "next/link";
 import { FormEvent } from "react";
 import { useUser } from "@auth0/nextjs-auth0/client";
 import { useRouter } from "next/router";
+import { userInfo_inDB } from "../helper/userInfo_inDB";
 
 export interface NavBarProps {
   submitSearchFunc?: (event: FormEvent<HTMLFormElement>, search?: string) => void
@@ -22,7 +23,7 @@ export default function Navbar({ submitSearchFunc }: NavBarProps) {
   const searchInputRef = createRef<HTMLInputElement>();
   const $isCartOpen = useStore(isCartOpen);
   const {user} = useUser();
-
+  const $userInfo_inDB = useStore(userInfo_inDB);
   return (
     <div className={styles["nav"]}>
       <div className={styles["nav__bar"]}>
@@ -80,7 +81,7 @@ export default function Navbar({ submitSearchFunc }: NavBarProps) {
             </Link>
             <Link href={(user) ? "/buyer" : "/api/auth/login"}>
             <button className={styles["login"]}>
-              <div><p>{(user) ? (user.name || user.nickname) : "Đăng nhập"}</p></div>
+              <div><p>{(user) ? ($userInfo_inDB?.user.userName || user.name || user.nickname) : "Đăng nhập"}</p></div>
             </button>
             </Link>
           </div>
