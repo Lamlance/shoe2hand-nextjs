@@ -86,7 +86,7 @@ async function handler(req: OrderNextApiRequest, res: NextApiResponse) {
     case "POST": {
       const order: (ORDER | null) = await POST(req);
       if (!order) {
-        res.status(404);
+        res.status(404).json(null);
         return;
       }
       res.status(200).json(order);
@@ -97,7 +97,7 @@ async function handler(req: OrderNextApiRequest, res: NextApiResponse) {
       res.status(200).json(detail);
     }
   }
-  res.status(404);
+  res.status(404).json(null);
 }
 
 async function POST(req: OrderNextApiRequest) {

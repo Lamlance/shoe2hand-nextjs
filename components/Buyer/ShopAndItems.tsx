@@ -38,6 +38,8 @@ export default function ShopAndItems({ data }: ShopAndItemsProps) {
       const order = await fetchData.json();
       if(order){
         toast.success("Place order success, you can see it in your Invoice tab")
+      }else{
+        toast.error("Place order failed");
       }
       console.log(order);
       deleteCartItemByShopId(data.shopId);
