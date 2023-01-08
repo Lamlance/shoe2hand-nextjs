@@ -178,7 +178,11 @@ const brand = ({ shopId }: SearchProps) => {
               fetchSearch();
             }}
           >
-            <input type={"submit"} value="Filter"></input>
+            <input
+              className={styles["filter"]}
+              type={"submit"}
+              value="Filter"
+            ></input>
 
             <label htmlFor="min-price">Giá thấp nhất</label>
             <input

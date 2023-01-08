@@ -1,15 +1,14 @@
 .s2h_search_display {
   margin-inline: 3rem;
-  border: 1px solid pink;
   display: grid;
   grid-template-columns: 0.4fr 1.6fr;
   grid-template-areas:
     "filter products";
 }
 
-.s2h_filter_wrape {
-  grid-area: filter;
-  background-color: antiquewhite;
+.s2h_filter_wrape input .filter {
+  width: 50%;
+  padding: 10px 10px;
 }
 
 .s2h_filter_wrape>form {
