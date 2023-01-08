@@ -16,7 +16,7 @@ function Home() {
   const [page, setPage] = useState<number>(0);
   const [products, setProducts] = useState<ProductRespond[]>([]);
 
-  const fetchProduct = async (pageFetch:number = 0) => {
+  const fetchProduct = async (pageFetch: number = 0) => {
     const rawResponse = await fetch(`/api/products`, {
       method: "POST",
       headers: {
@@ -25,16 +25,20 @@ function Home() {
       },
       body: JSON.stringify({ page: pageFetch })
     });
-
-    const json = await rawResponse.json();
-    console.log(json);
-    return json;
+    try {
+      const json = await rawResponse.json();
+      console.log(json);
+      return json;
+    } catch (error) { }
+    return null;
   };
 
   useEffect(() => {
     const productFetch = fetchProduct();
     productFetch.then((data) => {
-      setProducts(data);
+      if (data) {
+        setProducts(data);  
+      }
     });
   }, []);
 
@@ -65,10 +69,10 @@ function Home() {
           })}
         </ul>
       </section>
-      <div style={{display:"flex",flexDirection:"row",justifyContent:"center"}}>
-        <button onClick={() => {pageChange(true)}}>{"+"}</button>
+      <div style={{ display: "flex", flexDirection: "row", justifyContent: "center" }}>
+        <button onClick={() => { pageChange(true) }}>{"+"}</button>
         <span>{page}</span>
-        <button onClick={() => {pageChange(false)}}>{"-"}</button>
+        <button onClick={() => { pageChange(false) }}>{"-"}</button>
       </div>
     </ShopLayout>
   );
