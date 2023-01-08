@@ -21,6 +21,12 @@ export default function UserChangeInfor({ user }: { user: USER }) {
     const address = addressRef.current.value;
     console.log(name, phone, address);
     toast.info("Updating profile");
+
+    if(phone.length < 10 || phone.length > 11){
+      toast.error("Invalid phone number");
+      return;
+    }
+
     const fetchData = await fetch("/api/buyer/user", {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
@@ -64,7 +70,7 @@ export default function UserChangeInfor({ user }: { user: USER }) {
                 <label htmlFor="phone_number">
                   Số điện thoại
                   <input type="number" name="phone" id="phone_number" ref={phoneRef}
-                  defaultValue={user.phone ? user.phone : ""} min={1000000000} max={99999999999} required />
+                  defaultValue={user.phone ? user.phone : ""} maxLength={11} minLength={10} required />
                 </label>
                 <div className={styles["inline_block"]}></div>
               </div>
