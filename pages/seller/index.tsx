@@ -12,12 +12,13 @@ import { USER, SHOP } from "@prisma/client";
 import ShoeOption from "../../components/Seller/ShoeOption";
 import ShopInfo from "../../components/Seller/ShopInfo";
 import OrderOption from "../../components/Seller/ShopOrder";
+import ShopLayout from "../../components/layouts/ShopLayout";
 
 const SellerDBoard = () => {
   // const [selectedOption, setSelectedOption] = useState(0);
   const { user, error, isLoading } = useUser();
   const $userInfo_inDB = useStore(userInfo_inDB);
-  const optDisplayList = createRef<HTMLUListElement>();
+  const [tabDisplay, setTabDisplay] = useState<number>(0);
 
   if (isLoading) return <div>Loading...</div>;
   if (error) return <div>{error.message}</div>;
@@ -65,8 +66,8 @@ const SellerDBoard = () => {
 
   // console.log(user)
 
-  const setShopData = (data:SHOP)=>{
-    if(!$userInfo_inDB){
+  const setShopData = (data: SHOP) => {
+    if (!$userInfo_inDB) {
       return;
     }
     userInfo_inDB.set({
@@ -75,55 +76,53 @@ const SellerDBoard = () => {
     })
   }
 
-  const handelOptionClick = (id: number) => {
-    if (!optDisplayList.current) {
-      return;
-    }
-    const displays: NodeListOf<HTMLLIElement> = optDisplayList.current.querySelectorAll(".js-select-display");
-    displays.forEach((li, index) => {
-      li.style.display = (index == id) ? "block" : "none";
-    })
-  }
-
-  const shoeOption = ShoeOption({
-    userData: ($userInfo_inDB && $userInfo_inDB.user) ? $userInfo_inDB.user : null,
-    shopData: ($userInfo_inDB && $userInfo_inDB.shop) ? $userInfo_inDB.shop : null
-  });
-  const shopInfo = ShopInfo({
-    userData: ($userInfo_inDB && $userInfo_inDB.user) ? $userInfo_inDB.user : null,
-    shopData: ($userInfo_inDB && $userInfo_inDB.shop) ? $userInfo_inDB.shop : null,
-    setShopDataFunc: setShopData
-  });
-  const orderOption = OrderOption({
-    userData: ($userInfo_inDB && $userInfo_inDB.user) ? $userInfo_inDB.user : null,
-    shopData: ($userInfo_inDB && $userInfo_inDB.shop) ? $userInfo_inDB.shop : null
-  })
-
-  return (<div >
+  return (<ShopLayout>
     <h1>
       {`Hello ${user?.name} - ${user?.name} - 
       UserID: ${$userInfo_inDB?.user.userId} - 
       Shop:${$userInfo_inDB?.shop?.shopId} ${$userInfo_inDB?.shop?.shopName}`
       }
     </h1>
-    
+
     <div className={styles["s2h_seller_dboard_wrapper"]}>
       <div className={styles["s2h_seller_dboard_option_select"]}>
         <ul className={styles["s2h_seller_shoes_option_ul"]}>
-          <li onClick={() => { handelOptionClick(0) }}>Thông tin shop</li>
-          <li onClick={() => { handelOptionClick(1) }}>Giày bạn bán</li>
-          <li onClick={() => { handelOptionClick(2) }}>Các đơn hàng</li>
+          <li onClick={() => { setTabDisplay(0) }}>Thông tin shop</li>
+          <li onClick={() => { setTabDisplay(1) }}>Giày bạn bán</li>
+          <li onClick={() => { setTabDisplay(2) }}>Các đơn hàng</li>
         </ul>
       </div>
 
-      <ul ref={optDisplayList}>
-        <li  className={"js-select-display"}>{shopInfo}</li>
-        <li style={{display:"none",height:"100%"}} className={"js-select-display"}>{shoeOption}</li>
-        <li style={{display:"none",height:"100%"}} className={"js-select-display"}>{orderOption}</li>
+      <ul>
+        <li style={{ display: (tabDisplay === 0 ? "block" : "none"), height: "100%" }}>
+          {
+            <ShopInfo
+              userData={($userInfo_inDB && $userInfo_inDB.user) ? $userInfo_inDB.user : null}
+              shopData={($userInfo_inDB && $userInfo_inDB.shop) ? $userInfo_inDB.shop : null} 
+              setShopDataFunc={setShopData}
+            />
+          }
+        </li>
+        <li style={{ display: (tabDisplay === 1 ? "block" : "none"), height: "100%" }}>
+          {
+            <ShoeOption
+              userData={($userInfo_inDB && $userInfo_inDB.user) ? $userInfo_inDB.user : null}
+              shopData={($userInfo_inDB && $userInfo_inDB.shop) ? $userInfo_inDB.shop : null}
+            />
+          }
+        </li>
+        <li style={{ display: (tabDisplay === 2 ? "block" : "none"), height: "100%" }}>
+          {
+            <OrderOption
+              userData={($userInfo_inDB && $userInfo_inDB.user) ? $userInfo_inDB.user : null}
+              shopData={($userInfo_inDB && $userInfo_inDB.shop) ? $userInfo_inDB.shop : null}
+            />
+          }
+        </li>
       </ul>
 
     </div>
-  </div>)
+  </ShopLayout>)
 }
 
 export default withPageAuthRequired(SellerDBoard);

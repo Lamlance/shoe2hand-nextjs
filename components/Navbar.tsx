@@ -11,12 +11,14 @@ import { isCartOpen } from "../helper/CartStore";
 import Link from "next/link";
 import { FormEvent } from "react";
 import { useUser } from "@auth0/nextjs-auth0/client";
+import { useRouter } from "next/router";
 
 export interface NavBarProps {
   submitSearchFunc?: (event: FormEvent<HTMLFormElement>, search?: string) => void
 }
 
 export default function Navbar({ submitSearchFunc }: NavBarProps) {
+  const router = useRouter();
   const searchInputRef = createRef<HTMLInputElement>();
   const $isCartOpen = useStore(isCartOpen);
   const {user} = useUser();
@@ -40,9 +42,9 @@ export default function Navbar({ submitSearchFunc }: NavBarProps) {
             </Link>
           </div>
           <div className={styles["layout_search_box"]}>
-            <form action="" method="GET" onSubmit={(e) => {
-              e.preventDefault();
+            <form action="/search" method="GET" onSubmit={(e) => {
               // console.log("POI",submitSearchFunc);
+              e.preventDefault();
               if (submitSearchFunc) {
                 const search = searchInputRef.current?.value;
                 if (search) {
@@ -50,9 +52,11 @@ export default function Navbar({ submitSearchFunc }: NavBarProps) {
                   return;
                 }
                 submitSearchFunc(e);
+              }else{
+                router.push({pathname:"/search",query:{name:searchInputRef.current?.value}})
               }
             }}>
-              <input ref={searchInputRef} type="text" name="q" id="q" placeholder="Seach in Shoes2hand..." />
+              <input ref={searchInputRef} type="text" name="name" id="q" placeholder="Seach in Shoes2hand..." />
               <button>
                 <Image src={loupe} alt="search" width={28} height={28} />
               </button>

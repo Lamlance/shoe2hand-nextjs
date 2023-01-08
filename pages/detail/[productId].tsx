@@ -7,6 +7,7 @@ import { ProductGetRespond } from "../api/products";
 import Image from "next/image";
 import shoes from "../../public/test-shoe.png";
 import addToCart from "../../public/icons8-buy-24.png";
+import Link from "next/link";
 
 const ProductDetail = () => {
   const productNumerInput = useRef<HTMLInputElement>(null);
@@ -151,6 +152,5 @@ const ProductDetail = () => {
       </div>
     </ShopLayout>
   );
-};
-
+}
 export default ProductDetail;

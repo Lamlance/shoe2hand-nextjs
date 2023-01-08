@@ -47,9 +47,6 @@ export async function validateUser(email: string, uuid: string) {
         { email: { equals: email } },
         { uuid: { contains: uuid } }
       ]
-    },
-    select: {
-      userId: true
     }
   });
   return user;
@@ -186,8 +183,6 @@ async function PUT(req: UpdateProductBody, userId: number) {
 
 async function POST(req: CreateProductBody, res: NextApiResponse, userId: number) {
   const { shopId, title, quantity, price, hide, desc, brandId } = req.body;
-
-  console.log(req.body);
 
   if (!shopId || !title || !quantity || !price || !desc || !brandId) {
     console.log("Shop id not found")

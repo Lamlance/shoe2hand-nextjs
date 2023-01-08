@@ -6,6 +6,7 @@ import {
   SellerProductAPI_POST, SellerProductAPI_GET,
   SellerProductAPI_PUT, SellerProductAPI_DELETE
 } from "../../pages/api/seller/product";
+import { toast } from "react-toastify";
 
 
 export interface ShopData {
@@ -16,8 +17,9 @@ export interface ShopData {
 function ShoeOption({ userData, shopData }: ShopData) {
   const [products, setProduct] = useState<PRODUCT[]>([]);
   const [brands, setBrands] = useState<BRAND[]>([]);
+  const [selectTab, setSelectTab] = useState<number>();
+
   const selectId = useRef<number>(-1);
-  const isExecuting = useRef<boolean>(false);
 
   const formRef = createRef<HTMLFormElement>();
   const deleteCheck = createRef<HTMLInputElement>();
@@ -37,26 +39,23 @@ function ShoeOption({ userData, shopData }: ShopData) {
   const shopId = shopData.shopId;
 
   const handleRefreshData = async () => {
-    if (isExecuting.current) {
-      return;
-    }
-
-    isExecuting.current = true;
-    switchFormInput(true);
+    toast.info("Refreshing data...");
     const rawData = await fetch(`/api/seller/product?shopId=${shopId}`);
     try {
       const data = await rawData.json();
       console.log(data)
       setProduct(data.data);
-    } catch (error) { console.log(error) }
-    switchFormInput(false);
-
-    isExecuting.current = false;
+    } catch (error) { 
+      toast.info("Refreshing failed...");
+      console.log(error) ;
+      return;
+    }
+    toast.success("Refreshing sucess...");
   }
 
   const hadleFormSubmitPUT = async (title: string, quantity: number, price: number, desc: string) => {
     if (!products || !products[selectId.current]) {
-      return
+      return false;
     }
     const fetchResult = await fetch("/api/seller/product", {
       method: "PUT",
@@ -76,8 +75,7 @@ function ShoeOption({ userData, shopData }: ShopData) {
       const oldState = (products) ? [...products] : null
 
       if (oldState == null || (typeof newData.data === "string")) {
-        switchFormInput(false);
-        return;
+        return false;
       }
       const productId = newData.data.productId;
       const data = newData.data;
@@ -87,8 +85,9 @@ function ShoeOption({ userData, shopData }: ShopData) {
         }
       })
       setProduct(oldState);
+      return true;
     } catch (error) { console.log(error) }
-    return;
+    return false;
   }
 
   const hadleFormSubmitPOST = async (title: string, quantity: number, price: number, desc: string, brandId: number) => {
@@ -108,20 +107,21 @@ function ShoeOption({ userData, shopData }: ShopData) {
     try {
       const newData: SellerProductAPI_POST = await fetchResult.json();
       if (typeof newData.data === "string") {
-        switchFormInput(false);
-        return;
+        return false;
       }
 
       setProduct([
         newData.data,
         ...((products) ? products : [])
       ])
+      return true;
     } catch (error) { console.log(error, fetchResult) }
+    return false;
   }
 
   const handelForSubmitDELETE = async () => {
     if (!products || !products[selectId.current]) {
-      return
+      return false
     }
     const fetchResult = await fetch("/api/seller/product", {
       method: "DELETE",
@@ -137,8 +137,7 @@ function ShoeOption({ userData, shopData }: ShopData) {
       const oldState = (products) ? [...products] : null
 
       if (oldState == null || (typeof deletedData.data === "string")) {
-        switchFormInput(false);
-        return;
+        return false;
       }
 
       const productId = deletedData.data.productId;
@@ -147,15 +146,14 @@ function ShoeOption({ userData, shopData }: ShopData) {
         return (item.productId !== productId)
       });
       setProduct(newData);
-
+      return true;
     } catch (error) { console.log(error) }
+    return false;
   }
 
   const hadleFormSubmit = async (event: FormEvent<HTMLFormElement>) => {
-    isExecuting.current = true;
 
     event.preventDefault();
-    switchFormInput(true);
 
     const inputs = formRef.current?.elements;
     if (!inputs) {
@@ -173,52 +171,61 @@ function ShoeOption({ userData, shopData }: ShopData) {
 
     //DELETE DATA
     if (delCheck) {
-      handelForSubmitDELETE();
-      switchFormInput(false);
-      isExecuting.current = false;
+      toast.info("Deleting product")
+      const ans = await handelForSubmitDELETE();
+      if(ans){
+        toast.success("Delete success")
+      }else{
+        toast.error("Delete failed")
+      }
       return;
     }
 
     //DATA CHECK
     if (!(title && quantity && price)) {
-      switchFormInput(false);
-      isExecuting.current = false;
       return;
     }
 
     //UPDATE DATA
     if (selectId.current != -1) {
-      hadleFormSubmitPUT(title, quantity, price, desc);
-      switchFormInput(false);
-      isExecuting.current = false;
+      toast.info("Updating data....");
+      const ans = await hadleFormSubmitPUT(title, quantity, price, desc);
+      if(ans){
+        toast.success("Update success");
+      }else{
+        toast.error("Update failed");
+      }
       return
     }
 
     //CREATE DATA
+    toast.info("Creating product ....");
     console.log(brandId)
-    hadleFormSubmitPOST(title, quantity, price, desc, brandId);
-    switchFormInput(false);
-    isExecuting.current = false;
-
-  }
-
-  const switchFormInput = async (disable: boolean = true) => {
-    const inputs = formRef.current?.elements;
-    if (!inputs) {
-      return;
+    const ans = await hadleFormSubmitPOST(title, quantity, price, desc, brandId);
+    if(ans){
+      toast.success("Create success");
+    }else{
+      toast.error("Create failed");
     }
-    (inputs.namedItem("title") as HTMLInputElement).disabled = disable;
-    (inputs.namedItem("quantity") as HTMLInputElement).disabled = disable;
-    (inputs.namedItem("price") as HTMLInputElement).disabled = disable;
-    (inputs.namedItem("hide") as HTMLInputElement).disabled = disable;
-    (inputs.namedItem("desc") as HTMLInputElement).disabled = disable;
-    (inputs.namedItem("enter") as HTMLInputElement).disabled = disable;
 
   }
+
+  // const switchFormInput = async (disable: boolean = true) => {
+  //   const inputs = formRef.current?.elements;
+  //   if (!inputs) {
+  //     return;
+  //   }
+  //   (inputs.namedItem("title") as HTMLInputElement).disabled = disable;
+  //   (inputs.namedItem("quantity") as HTMLInputElement).disabled = disable;
+  //   (inputs.namedItem("price") as HTMLInputElement).disabled = disable;
+  //   (inputs.namedItem("hide") as HTMLInputElement).disabled = disable;
+  //   (inputs.namedItem("desc") as HTMLInputElement).disabled = disable;
+  //   (inputs.namedItem("enter") as HTMLInputElement).disabled = disable;
+
+  // }
 
   const handelDeleteCheck = () => {
     const disable = deleteCheck.current?.checked;
-    switchFormInput(disable);
   }
 
   const handelProductSelect = (pIndex: number) => {
@@ -237,16 +244,6 @@ function ShoeOption({ userData, shopData }: ShopData) {
     (inputs.namedItem("brand") as HTMLSelectElement).options.selectedIndex = 0
   }
 
-  const setColorLi = (id: number) => {
-    if (!ulRef || !ulRef.current) {
-      return;
-    }
-
-    const liSelect = (ulRef.current.querySelectorAll(".js-shoe-select") as NodeListOf<HTMLLIElement>);
-    liSelect.forEach((li, index) => {
-      li.style.backgroundColor = ((id === index) ? "#56b3ac" : "");
-    })
-  }
 
   const clearForm = () => {
     const inputs = formRef.current?.elements;
@@ -262,16 +259,17 @@ function ShoeOption({ userData, shopData }: ShopData) {
 
   return (<div className={styles["s2h_seller_shoe_option_wrap"]}>
     <ul ref={ulRef} className={styles["s2h_seller_shoe_option_select"]}>
-      <li className={"js-shoe-select"} onClick={(event) => { handleRefreshData(); setColorLi(0) }}>
+      <li className={"js-shoe-select"} onClick={(event) => { handleRefreshData();setSelectTab(0) }}>
         REFRESH
       </li>
-      <li className={"js-shoe-select"} onClick={() => { selectId.current = -1; setColorLi(1); clearForm() }}>
+      <li className={"js-shoe-select"} onClick={() => { selectId.current = -1; clearForm();setSelectTab(1) }}>
         ADD NEW SHOES
       </li>
       {products?.map((item, index) => {
         return (
-          <li className={"js-shoe-select"} key={index}
-            onClick={() => { handelProductSelect(index); setColorLi(index + 2) }}>
+          <li key={index}
+            style={((index + 2) === selectTab ? { backgroundColor: "#56b3ac" } : {})}
+            onClick={() => { setSelectTab(index+2);handelProductSelect(index); }}>
             {item.title}
           </li>
         )

@@ -93,6 +93,7 @@ async function POST(req: GetProductRequest) {
   }
 
   await myPrismaClient.$connect();
+  // console.log("Skip",(page && !isNaN(page)) ? (page * 10) : 0);
   const data = await myPrismaClient.pRODUCT.findMany({
     take: 10,
     skip: (page && !isNaN(page)) ? (page * 10) : 0,
