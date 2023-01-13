@@ -1,3 +1,14 @@
+Đồ án Nhập môn công nghệ phần mềm-CSC13002 
+Lớp 20CLC05 - Nhóm 05 - Shoe2Hand
+Thành viên
+<ul>
+  <li>20127035	Dương Thanh Huy</li>
+  <li>20127047	Nguyễn Xuân Hoàng Lâm</li>
+  <li>20127405	Đoàn Duy Phong</li>
+  <li>20127591	Hàn Thọ Nhật Phú</li>
+  <li>20127653	Trần Nguyễn Lan Trinh</li>
+</ul>
+
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
 ## Getting Started
