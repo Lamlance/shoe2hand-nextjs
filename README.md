@@ -1,6 +1,6 @@
-Đồ án Nhập môn công nghệ phần mềm-CSC13002 
-Lớp 20CLC05 - Nhóm 05 - Shoe2Hand
-Thành viên
+<h4>Đồ án Nhập môn công nghệ phần mềm-CSC13002 </h4>
+<p>Lớp 20CLC05 - Nhóm 05 - Shoe2Hand</p>
+<p>Thành viên</p>
 <ul>
   <li>20127035	Dương Thanh Huy</li>
   <li>20127047	Nguyễn Xuân Hoàng Lâm</li>
